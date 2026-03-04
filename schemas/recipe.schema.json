@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "recipe.schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "categories": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "string",
+        "maxLength": 100,
+        "enum": [
+          "Breakfast",
+          "Lunch",
+          "Dinner",
+          "Snack",
+          "Side",
+          "Drink",
+          "Dessert",
+          "Misc"
+        ]
+      }
+    },
+    "prepTime": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "cookTime": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "servings": {
+      "type": "integer"
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      }
+    },
+    "ingredients": {
+      "oneOf": [
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": {
+            "$ref": "#/$defs/ingredient"
+          }
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "ingredients": {
+                "type": "array",
+                "maxItems": 200,
+                "items": {
+                  "$ref": "#/$defs/ingredient"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "ingredients"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    },
+    "instructions": {
+      "oneOf": [
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": {
+            "type": "string",
+            "maxLength": 5000
+          }
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "steps": {
+                "type": "array",
+                "maxItems": 200,
+                "items": {
+                  "type": "string",
+                  "maxLength": 5000
+                }
+              }
+            },
+            "required": [
+              "name",
+              "steps"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    },
+    "macros": {
+      "type": "object",
+      "properties": {
+        "calories": {
+          "type": "number"
+        },
+        "protein": {
+          "type": "number"
+        },
+        "carbs": {
+          "type": "number"
+        },
+        "fat": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "myFitnessPalId": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "videoLink": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 5000
+    },
+    "rating": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down",
+        "neutral"
+      ]
+    },
+    "isFavorite": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "name",
+    "categories",
+    "ingredients",
+    "instructions",
+    "macros"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "ingredient": {
+      "type": "object",
+      "properties": {
+        "ingredient": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "ingredientId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Reference to an IngredientDefinition id"
+        },
+        "quantity": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "measure": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "metric": {
+          "type": "object",
+          "properties": {
+            "quantity": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "measure": {
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "additionalProperties": false
+        },
+        "imperial": {
+          "type": "object",
+          "properties": {
+            "quantity": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "measure": {
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ingredient"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

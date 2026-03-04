@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "icon": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "maintenanceCalories": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 99999
+    },
+    "calorieDeficit": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "proteinPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "carbsPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "fatPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    }
+  },
+  "additionalProperties": false
+}

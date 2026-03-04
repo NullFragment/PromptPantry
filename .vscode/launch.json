@@ -1,0 +1,45 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}/prompt-pantry-app",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["test"],
+      "cwd": "${workspaceFolder}/prompt-pantry-app",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Production Build",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build"],
+      "cwd": "${workspaceFolder}/prompt-pantry-app",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Production Run",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "cwd": "${workspaceFolder}/prompt-pantry-app",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

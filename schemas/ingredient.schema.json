@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ingredient.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for the ingredient"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Canonical name of the ingredient"
+    },
+    "storeSection": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "default": "Unassigned",
+      "description": "Store section where this ingredient is typically found"
+    },
+    "aliases": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "description": "Alternative names or preparations for this ingredient"
+    },
+    "containerSizes": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": ["quantity", "unit"],
+        "additionalProperties": false
+      },
+      "description": "Common container sizes for this ingredient (e.g. gallon, half gallon)"
+    },
+    "conversions": {
+      "type": "object",
+      "properties": {
+        "weightToVolume": {
+          "type": "object",
+          "properties": {
+            "weight": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              },
+              "required": ["quantity", "unit"],
+              "additionalProperties": false
+            },
+            "volume": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              },
+              "required": ["quantity", "unit"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["weight", "volume"],
+          "additionalProperties": false
+        },
+        "portionToVolume": {
+          "type": "object",
+          "properties": {
+            "portion": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              },
+              "required": ["quantity", "description"],
+              "additionalProperties": false
+            },
+            "volume": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              },
+              "required": ["quantity", "unit"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["portion", "volume"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "description": "Unit conversion data for this ingredient"
+    }
+  },
+  "required": ["id", "name", "storeSection"],
+  "additionalProperties": false
+}

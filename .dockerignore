@@ -1,0 +1,14 @@
+node_modules
+dist
+prompt-pantry-app/node_modules
+prompt-pantry-app/dist
+.git
+.vscode
+.idea
+.cursor
+*.log
+.DS_Store
+data
+docs
+hooks
+recipe-parser

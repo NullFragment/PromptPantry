@@ -1,0 +1,38 @@
+---
+version: "2.1"
+services:
+  prompt-pantry:
+    image: ghcr.io/nullfragment/prompt-pantry:latest
+    container_name: prompt-pantry
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DEPLOYED=true
+      - PORT=${PORT:-3001}
+      - JWT_SECRET=${JWT_SECRET}
+      - SECURE_COOKIES=${SECURE_COOKIES:-true}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+    volumes:
+      - /srv/prompt-pantry:/app/data
+    ports:
+      - "${PORT:-3001}:${PORT:-3001}"
+    networks:
+      - proxy
+    labels:
+      - "traefik.docker.network=proxy"
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.prompt-pantry-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.prompt-pantry-secure.entrypoints=https"
+      - "traefik.http.routers.prompt-pantry-secure.rule=Host(`${TRAEFIK_HOST}`)"
+      - "traefik.http.routers.prompt-pantry-secure.service=prompt-pantry"
+      - "traefik.http.routers.prompt-pantry-secure.tls.certresolver=http"
+      - "traefik.http.routers.prompt-pantry-secure.tls=true"
+      - "traefik.http.routers.prompt-pantry.entrypoints=http"
+      - "traefik.http.routers.prompt-pantry.middlewares=prompt-pantry-https-redirect"
+      - "traefik.http.routers.prompt-pantry.rule=Host(`${TRAEFIK_HOST}`)"
+      - "traefik.http.routers.prompt-pantry.service=prompt-pantry"
+      - "traefik.http.services.prompt-pantry.loadbalancer.server.port=${PORT:-3001}"
+
+networks:
+  proxy:
+    external: true

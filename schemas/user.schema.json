@@ -1,0 +1,26 @@
+{
+  "title": "User",
+  "type": "object",
+  "required": [
+    "username",
+    "password",
+    "tier"
+  ],
+  "properties": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64
+    },
+    "password": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["Viewer", "Editor", "Admin"]
+    }
+  },
+  "additionalProperties": false
+}

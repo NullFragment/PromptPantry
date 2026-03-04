@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "multiWeeklyCookPlan.schema.json",
+  "title": "MultiWeeklyCookPlan",
+  "description": "Weekly cook plan keyed by week start date, with recipe instances keyed by UUID",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "description": "A week's cook plan, keyed by recipe instance UUID",
+    "additionalProperties": {
+      "type": "object",
+      "properties": {
+        "recipeName": {
+          "type": "string",
+          "description": "The name of the recipe"
+        },
+        "servings": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total servings available for this instance"
+        },
+        "multiplier": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Number of batches to cook (only for non-transferred items)"
+        },
+        "manualUsed": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Servings marked as consumed manually"
+        },
+        "transferredFromDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Week start date this instance was transferred from (e.g., '2025-02-01')"
+        },
+        "transferredFromId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "UUID of the source instance this was transferred from"
+        }
+      },
+      "required": [
+        "recipeName",
+        "servings"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+

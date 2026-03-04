@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Pre-push hook to automatically increment the patch version number
+# Version format: vMAJOR.MINOR.PATCH (e.g., v0.1.0, v0.1.1, v0.1.999)
+# Only the PATCH number is auto-incremented. Major and minor are set manually.
+
+VERSION_FILE="prompt-pantry-app/version"
+
+# Get the current version from the file
+get_current_version() {
+    if [ -f "$VERSION_FILE" ]; then
+        grep -o "v[0-9]\+\.[0-9]\+\.[-]\?[0-9]\+" "$VERSION_FILE" | head -1
+    else
+        echo ""
+    fi
+}
+
+# Increment the patch version
+increment_patch_version() {
+    local version="$1"
+
+    # Extract major, minor, and patch
+    local major=$(echo "$version" | awk '{split($0,a,"."); print a[1]}')
+    local minor=$(echo "$version" | awk '{split($0,a,"."); print a[2]}')
+    local patch=$(echo "$version" | awk '{split($0,a,"."); print a[3]}')
+
+    # Increment patch
+    local new_patch=$((patch + 1))
+
+    echo "${major}.${minor}.${new_patch}"
+}
+
+# Update the version in the file
+update_version_file() {
+    local new_version="$1"
+
+    # Safety: ensure version is non-empty
+    if [ -z "$new_version" ]; then
+        echo "❌ ERROR: Attempted to update with empty version"
+        return 1
+    fi
+
+    echo "$new_version" > "$VERSION_FILE"
+}
+
+# If run manually without stdin refs, just show what would happen and exit
+if [ -t 0 ]; then
+    CURRENT_VERSION=$(get_current_version)
+    if [ -z "$CURRENT_VERSION" ]; then
+        echo "❌ ERROR: Version not found in $VERSION_FILE"
+        exit 1
+    fi
+    NEW_VERSION=$(increment_patch_version "$CURRENT_VERSION")
+    echo "(dry-run) Would increment version: $CURRENT_VERSION → $NEW_VERSION"
+    exit 0
+fi
+
+# Read stdin for refs being pushed
+while read local_ref local_sha remote_ref remote_sha; do
+    # Skip delete operations
+    if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+        continue
+    fi
+
+    CURRENT_VERSION=$(get_current_version)
+
+    if [ -z "$CURRENT_VERSION" ]; then
+        echo "❌ ERROR: Version not found in $VERSION_FILE"
+        echo "   Please ensure the file contains a line like: v0.1.0"
+        exit 1
+    fi
+
+    # Increment the version
+    NEW_VERSION=$(increment_patch_version "$CURRENT_VERSION")
+
+    # Sanity check that NEW_VERSION matches expected pattern
+    if ! echo "$NEW_VERSION" | grep -q "^v[0-9]\+\.[0-9]\+\.[0-9]\+$"; then
+        echo "❌ ERROR: Computed invalid version: $NEW_VERSION"
+        exit 1
+    fi
+
+    echo "🔄 Auto-incrementing version: $CURRENT_VERSION → $NEW_VERSION"
+
+    # Update the file
+    update_version_file "$NEW_VERSION"
+
+    if [ $? -ne 0 ]; then
+        echo "❌ ERROR: Failed to update version in $VERSION_FILE"
+        exit 1
+    fi
+
+    # Stage the version file change
+    git add "$VERSION_FILE"
+
+    # Amend the last commit to include the version bump
+    git commit --amend --no-edit --no-verify
+
+    if [ $? -ne 0 ]; then
+        echo "❌ ERROR: Failed to amend commit with version update"
+        # Revert the version change
+        echo "$CURRENT_VERSION" > "$VERSION_FILE"
+        exit 1
+    fi
+
+    echo "✅ Version updated and commit amended: $NEW_VERSION"
+
+    # Only process one ref - we've already amended the commit
+    break
+done
+
+exit 0
+
