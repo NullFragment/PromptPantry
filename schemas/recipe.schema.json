@@ -79,6 +79,12 @@
             ],
             "additionalProperties": false
           }
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 0,
+          "description": "Variant recipes use ingredientAdditions; base ingredients come from baseRecipeName."
         }
       ]
     },
@@ -119,6 +125,12 @@
             ],
             "additionalProperties": false
           }
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 0,
+          "description": "Variant recipes use instructionAdditions; base steps come from baseRecipeName."
         }
       ]
     },
@@ -162,15 +174,40 @@
     },
     "isFavorite": {
       "type": "boolean"
+    },
+    "baseRecipeName": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "When set, this recipe is a variant of the named base recipe; ingredients and instructions are inherited from base."
+    },
+    "ingredientAdditions": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/ingredient"
+      },
+      "description": "Variant-only: additional ingredients to append to base recipe."
+    },
+    "instructionAdditions": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "string",
+        "maxLength": 5000
+      },
+      "description": "Variant-only: additional instruction steps to append to base recipe."
     }
   },
-  "required": [
-    "name",
-    "categories",
-    "ingredients",
-    "instructions",
-    "macros"
-  ],
+  "if": {
+    "properties": { "baseRecipeName": { "type": "string", "minLength": 1 } },
+    "required": ["baseRecipeName"]
+  },
+  "then": {
+    "required": ["name", "categories", "macros", "baseRecipeName"]
+  },
+  "else": {
+    "required": ["name", "categories", "ingredients", "instructions", "macros"]
+  },
   "additionalProperties": false,
   "$defs": {
     "ingredient": {

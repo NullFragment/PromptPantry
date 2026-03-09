@@ -80,3 +80,59 @@ describe('Recipes API - Invalid Recipes Handling', () => {
         expect(invalidRecipeInFile).toBeDefined();
     });
 });
+
+describe('Recipes API - Variant recipes', () => {
+    let env: TestEnvironment;
+
+    beforeAll(() => {
+        env = createTestEnvironment('recipes-api-variant');
+    });
+
+    beforeEach(() => {
+        const baseRecipe = {
+            name: 'Overnight Oats',
+            categories: ['Breakfast'],
+            prepTime: '5 min',
+            cookTime: '0',
+            servings: 1,
+            tags: ['oatmeal'],
+            ingredients: [{ingredient: 'Oats', quantity: '1/2', measure: 'cup'}, {ingredient: 'Milk', quantity: '1/2', measure: 'cup'}],
+            instructions: ['Mix oats and milk.', 'Refrigerate overnight.'],
+            macros: {calories: 200, protein: 8, carbs: 30, fat: 5}
+        };
+        writeTestFile(env.files.recipesFile, [baseRecipe]);
+        writeTestFile(env.files.usersFile, [
+            {username: 'testuser', password: '$2a$10$hashedpassword', tier: 'Editor'}
+        ]);
+    });
+
+    afterAll(() => {
+        env.cleanup();
+    });
+
+    it('accepts POST of a variant recipe (baseRecipeName, ingredientAdditions, instructionAdditions)', async () => {
+        const variantRecipe = {
+            name: 'Overnight Oats: Chocolate',
+            categories: ['Breakfast'],
+            prepTime: '5 min',
+            cookTime: '0',
+            servings: 1,
+            tags: ['oatmeal', 'chocolate'],
+            ingredients: [],
+            instructions: [],
+            macros: {calories: 220, protein: 9, carbs: 35, fat: 6},
+            baseRecipeName: 'Overnight Oats',
+            ingredientAdditions: [{ingredient: 'Cocoa powder', quantity: '1', measure: 'tbsp'}],
+            instructionAdditions: ['Stir in cocoa before serving.']
+        };
+        const {app} = env;
+        const res = await request(app)
+            .post('/api/recipes')
+            .send(variantRecipe);
+        expect(res.status).toBe(201);
+        expect(res.body.name).toBe('Overnight Oats: Chocolate');
+        expect(res.body.baseRecipeName).toBe('Overnight Oats');
+        expect(res.body.ingredientAdditions).toHaveLength(1);
+        expect(res.body.instructionAdditions).toHaveLength(1);
+    });
+});

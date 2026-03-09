@@ -3,13 +3,15 @@ import {
     aggregateIngredients,
     extractMeasureFromName,
     flattenIngredients,
+    flattenInstructions,
     normalizeIngredientName,
     parseQuantity,
     renderAggregatedMeasurement,
     renderMeasurement,
-    renderMeasurementWithConversion
+    renderMeasurementWithConversion,
+    resolveVariantRecipe
 } from '../../src/utils/recipeUtils';
-import {Ingredient, IngredientGroup} from '../../src/types';
+import {Ingredient, IngredientGroup, InstructionGroup, Recipe} from '../../src/types';
 
 describe('recipeUtils', () => {
     describe('flattenIngredients', () => {
@@ -32,6 +34,88 @@ describe('recipeUtils', () => {
         it('should return flat ingredients as is', () => {
             const flat: Ingredient[] = [{ingredient: 'Ing 1'} as Ingredient];
             expect(flattenIngredients(flat)).toEqual(flat);
+        });
+    });
+
+    describe('flattenInstructions', () => {
+        it('should handle empty or null instructions', () => {
+            expect(flattenInstructions([])).toEqual([]);
+        });
+
+        it('should flatten grouped instructions', () => {
+            const grouped = [
+                {name: 'Part 1', steps: ['Step A', 'Step B']},
+                {name: 'Part 2', steps: ['Step C']}
+            ];
+            expect(flattenInstructions(grouped)).toEqual(['Step A', 'Step B', 'Step C']);
+        });
+
+        it('should return flat instructions as is', () => {
+            const flat = ['Step 1', 'Step 2'];
+            expect(flattenInstructions(flat)).toEqual(flat);
+        });
+    });
+
+    describe('resolveVariantRecipe', () => {
+        const baseRecipe: Recipe = {
+            name: 'Overnight Oats',
+            categories: ['Breakfast'],
+            prepTime: '5 min',
+            cookTime: '0',
+            servings: 1,
+            tags: ['oatmeal'],
+            ingredients: [{ingredient: 'Oats', quantity: '1/2', measure: 'cup'}, {ingredient: 'Milk', quantity: '1/2', measure: 'cup'}],
+            instructions: ['Mix oats and milk.', 'Refrigerate overnight.'],
+            macros: {calories: 200, protein: 8, carbs: 30, fat: 5}
+        };
+
+        it('should return recipe as-is when baseRecipeName is absent', () => {
+            const recipe: Recipe = {...baseRecipe, name: 'Standalone'};
+            expect(resolveVariantRecipe(recipe, [baseRecipe])).toBe(recipe);
+        });
+
+        it('should return recipe as-is when baseRecipeName is empty string', () => {
+            const recipe: Recipe = {...baseRecipe, name: 'X: Y', baseRecipeName: ''};
+            expect(resolveVariantRecipe(recipe, [baseRecipe])).toBe(recipe);
+        });
+
+        it('should merge base with variant additions in grouped structure', () => {
+            const variant: Recipe = {
+                ...baseRecipe,
+                name: 'Overnight Oats: Chocolate',
+                baseRecipeName: 'Overnight Oats',
+                ingredients: [],
+                instructions: [],
+                ingredientAdditions: [{ingredient: 'Cocoa powder', quantity: '1', measure: 'tbsp'}],
+                instructionAdditions: ['Stir in cocoa.']
+            };
+            const recipes = [baseRecipe, variant];
+            const resolved = resolveVariantRecipe(variant, recipes);
+
+            expect(resolved.name).toBe('Overnight Oats: Chocolate');
+            expect(resolved.ingredients).toHaveLength(2);
+            expect((resolved.ingredients as IngredientGroup[])[0].name).toBe('Base (Overnight Oats)');
+            expect((resolved.ingredients as IngredientGroup[])[0].ingredients).toHaveLength(2);
+            expect((resolved.ingredients as IngredientGroup[])[1].name).toBe('Additions');
+            expect((resolved.ingredients as IngredientGroup[])[1].ingredients).toHaveLength(1);
+            expect((resolved.ingredients as IngredientGroup[])[1].ingredients[0].ingredient).toBe('Cocoa powder');
+
+            expect(resolved.instructions).toHaveLength(2);
+            expect((resolved.instructions as InstructionGroup[])[0].name).toBe('Base (Overnight Oats)');
+            expect((resolved.instructions as InstructionGroup[])[0].steps).toEqual(['Mix oats and milk.', 'Refrigerate overnight.']);
+            expect((resolved.instructions as InstructionGroup[])[1].name).toBe('Additions');
+            expect((resolved.instructions as InstructionGroup[])[1].steps).toEqual(['Stir in cocoa.']);
+        });
+
+        it('should return variant as-is when base is not found (orphaned variant)', () => {
+            const variant: Recipe = {
+                ...baseRecipe,
+                name: 'Overnight Oats: Missing',
+                baseRecipeName: 'Nonexistent Base',
+                ingredients: [],
+                instructions: []
+            };
+            expect(resolveVariantRecipe(variant, [variant])).toBe(variant);
         });
     });
 

@@ -1,5 +1,14 @@
-import {Ingredient, IngredientDefinition, IngredientGroup} from '../types';
+import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe} from '../types';
 import {convertVolume, convertWeight, isImperialUnit, isMetricUnit, isVolumeUnit, isWeightUnit} from './unitConversions';
+
+export const flattenInstructions = (instructions: string[] | InstructionGroup[]): string[] => {
+    if (!instructions || instructions.length === 0) return [];
+    const first = instructions[0];
+    if (first && typeof first === 'object' && 'steps' in first) {
+        return (instructions as InstructionGroup[]).flatMap(group => group.steps);
+    }
+    return instructions as string[];
+};
 
 export const flattenIngredients = (ingredients: Ingredient[] | IngredientGroup[]): Ingredient[] => {
     if (!ingredients || ingredients.length === 0) return [];
@@ -256,3 +265,65 @@ export const getIngredientStoreSection = (
     }
     return 'Unassigned';
 };
+
+/**
+ * Resolves a variant recipe by merging base recipe data with variant additions.
+ * Returns the recipe unchanged if it is not a variant (no baseRecipeName).
+ * Output uses grouped ingredients/instructions: "Base (baseName)" and "Additions".
+ */
+export function resolveVariantRecipe(recipe: Recipe, recipes: Recipe[]): Recipe {
+    const baseName = recipe.baseRecipeName;
+    if (!baseName || !baseName.trim()) {
+        return recipe;
+    }
+
+    const base = recipes.find(r => r.name === baseName);
+    if (!base) {
+        // Orphaned variant: return as-is; caller may have stored ingredients/instructions from before
+        return recipe;
+    }
+
+    const baseIngredients = flattenIngredients(base.ingredients ?? []);
+    const baseInstructions = flattenInstructions(base.instructions ?? []);
+    const additionsIngredients = recipe.ingredientAdditions ?? [];
+    const additionsInstructions = recipe.instructionAdditions ?? [];
+
+    const ingredientGroups: IngredientGroup[] = [];
+    if (baseIngredients.length > 0) {
+        ingredientGroups.push({ name: `Base (${baseName})`, ingredients: baseIngredients });
+    }
+    if (additionsIngredients.length > 0) {
+        ingredientGroups.push({ name: 'Additions', ingredients: additionsIngredients });
+    }
+    if (ingredientGroups.length === 0) {
+        ingredientGroups.push({ name: 'Ingredients', ingredients: [] });
+    }
+
+    const instructionGroups: InstructionGroup[] = [];
+    if (baseInstructions.length > 0) {
+        instructionGroups.push({ name: `Base (${baseName})`, steps: baseInstructions });
+    }
+    if (additionsInstructions.length > 0) {
+        instructionGroups.push({ name: 'Additions', steps: additionsInstructions });
+    }
+    if (instructionGroups.length === 0) {
+        instructionGroups.push({ name: 'Instructions', steps: [] });
+    }
+
+    const baseTags = base.tags ?? [];
+    const variantTags = recipe.tags ?? [];
+    const mergedTags = Array.from(new Set([...baseTags, ...variantTags]));
+
+    return {
+        ...base,
+        name: recipe.name,
+        ingredients: ingredientGroups,
+        instructions: instructionGroups,
+        tags: mergedTags,
+        rating: recipe.rating ?? base.rating,
+        isFavorite: recipe.isFavorite ?? base.isFavorite,
+        notes: recipe.notes !== undefined && recipe.notes !== '' ? recipe.notes : base.notes,
+        videoLink: recipe.videoLink !== undefined && recipe.videoLink !== '' ? recipe.videoLink : base.videoLink,
+        myFitnessPalId: recipe.myFitnessPalId !== undefined && recipe.myFitnessPalId !== '' ? recipe.myFitnessPalId : base.myFitnessPalId
+    };
+}

@@ -1,5 +1,6 @@
 import {addDays, format, parseISO, startOfWeek} from 'date-fns';
 import {CompactMealPlan, CompactMealSlot, Macros, MealPlan, MealSlot, MultiWeeklyCookPlan, Participant, Recipe, WeeklyCookPlan, WeeklyCookPlanItem} from '../types';
+import {resolveVariantRecipe} from './recipeUtils';
 
 export const ALL_MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snacks', 'drinks'] as const;
 export type MealType = typeof ALL_MEAL_TYPES[number];
@@ -277,8 +278,9 @@ export const hydrateMealPlan = (
                         return; // Skip this slot
                     }
 
+                    const resolvedRecipe = resolveVariantRecipe(recipe, recipes);
                     hydratedSlots.push({
-                        recipe,
+                        recipe: resolvedRecipe,
                         servings: slot.servings,
                         participant: slot.participant,
                         recipeInstanceId: slot.recipeInstanceId,

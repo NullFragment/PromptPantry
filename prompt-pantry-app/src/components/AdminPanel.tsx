@@ -36,7 +36,11 @@ const ISSUE_LABELS: Record<AuditIssue['type'], { label: string; color: string }>
     schema_invalid: {label: 'Invalid Schema', color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'},
 };
 
-const RecipeAuditSection: React.FC = () => {
+interface RecipeAuditSectionProps {
+    onEditRecipe: (recipeName: string) => void;
+}
+
+const RecipeAuditSection: React.FC<RecipeAuditSectionProps> = ({onEditRecipe}) => {
     const [audit, setAudit] = useState<AuditResult | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -125,21 +129,35 @@ const RecipeAuditSection: React.FC = () => {
                             <div className="border border-gray-200 dark:border-gray-700 rounded-md divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-auto">
                                 {filteredRecipes.map(r => (
                                     <div key={r.recipeName}>
-                                        <button
+                                        <div
+                                            role="button"
                                             onClick={() => toggleRecipe(r.recipeName)}
-                                            className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                                            className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer"
                                         >
                                             <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate mr-3">{r.recipeName}</span>
-                                            <div className="flex items-center gap-2 shrink-0">
-                                                {Array.from(new Set(r.issues.map(i => i.type))).map(type => (
-                                                    <span key={type} className={`text-xs px-2 py-0.5 rounded-full font-medium ${ISSUE_LABELS[type].color}`}>
-                                                        {ISSUE_LABELS[type].label}
-                                                        <span className="ml-1 opacity-75">({r.issues.filter(i => i.type === type).length})</span>
-                                                    </span>
-                                                ))}
+                                            <div className="flex items-center gap-3 shrink-0">
+                                                <div className="flex items-center gap-1">
+                                                    {Array.from(new Set(r.issues.map(i => i.type))).map(type => (
+                                                        <span key={type} className={`text-xs px-2 py-0.5 rounded-full font-medium ${ISSUE_LABELS[type].color}`}>
+                                                            {ISSUE_LABELS[type].label}
+                                                            <span className="ml-1 opacity-75">({r.issues.filter(i => i.type === type).length})</span>
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onEditRecipe(r.recipeName);
+                                                    }}
+                                                    className="text-xs px-2 py-1 rounded-md bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-300 dark:hover:bg-indigo-900/50 border border-indigo-100 dark:border-indigo-800"
+                                                    aria-label={`Edit recipe ${r.recipeName}`}
+                                                >
+                                                    Edit
+                                                </button>
                                                 <svg className={`w-4 h-4 text-gray-400 transition-transform ${expandedRecipes.has(r.recipeName) ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                             </div>
-                                        </button>
+                                        </div>
                                         {expandedRecipes.has(r.recipeName) && (
                                             <div className="px-4 pb-3 space-y-1">
                                                 {r.issues
@@ -189,6 +207,7 @@ interface AdminPanelProps {
     macroLimits: MacroLimits;
     setMacroLimits: (limits: MacroLimits) => void;
     fetchSettings: () => Promise<void>;
+    onEditRecipeFromAudit: (recipeName: string) => void;
 }
 
 interface MacroLimitsSectionProps {
@@ -448,7 +467,16 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({isOpen, onClose, onSav
     );
 };
 
-export const AdminPanel: React.FC<AdminPanelProps> = ({registrationEnabled, toggleRegistration, advancedMode, setAdvancedMode, macroLimits, setMacroLimits, fetchSettings}) => {
+export const AdminPanel: React.FC<AdminPanelProps> = ({
+    registrationEnabled,
+    toggleRegistration,
+    advancedMode,
+    setAdvancedMode,
+    macroLimits,
+    setMacroLimits,
+    fetchSettings,
+    onEditRecipeFromAudit
+}) => {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -622,7 +650,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({registrationEnabled, togg
                 </div>
             </div>
 
-            <RecipeAuditSection />
+            <RecipeAuditSection onEditRecipe={onEditRecipeFromAudit} />
 
             <CreateUserModal
                 isOpen={createModalOpen}

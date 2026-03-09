@@ -38,7 +38,8 @@ const adminPanelProps = {
     setAdvancedMode: () => {},
     macroLimits: defaultMacroLimits,
     setMacroLimits: () => {},
-    fetchSettings: () => Promise.resolve()
+    fetchSettings: () => Promise.resolve(),
+    onEditRecipeFromAudit: () => {}
 };
 
 const mockFetchResponse = (data: unknown, status = 200) => Promise.resolve({

@@ -6,6 +6,7 @@ import {
     FileEdit,
     Heart,
     Minus,
+    Plus,
     Save,
     ThumbsDown,
     ThumbsUp,
@@ -20,6 +21,7 @@ import {
     ValidationError
 } from '../../types';
 import {getRecipeCookCount} from '../../utils/mealPlanUtils';
+import {resolveVariantRecipe} from '../../utils/recipeUtils';
 import {useAppContext} from '../../hooks/useAppContext';
 import {RecipeViewMode} from './RecipeViewMode';
 import {RecipeEditForm} from './RecipeEditForm';
@@ -27,6 +29,7 @@ import {RecipeJsonEditor} from './RecipeJsonEditor';
 
 interface RecipeModalProps {
     recipe: Recipe | Record<string, unknown>;
+    recipes?: Recipe[];
     onClose: () => void;
     onSave: (recipe: Recipe, originalName: string | null, keepOpen?: boolean) => Promise<void>;
     onSaveRaw?: (recipe: Record<string, unknown>, originalName: string) => Promise<{
@@ -50,21 +53,28 @@ interface RecipeModalProps {
 
 const headerBtnBase = "p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur hover:bg-white dark:hover:bg-gray-700 rounded-full shadow-sm transition-all h-10 w-10 flex items-center justify-center flex-shrink-0";
 
-function RecipeModalHeader({ isEditing, canEdit, recipe, onDelete, onEdit, onClose, onToggleFavorite, onSetRating }: {
+function RecipeModalHeader({ isEditing, canEdit, recipe, onDelete, onEdit, onCreateVariant, onClose, onToggleFavorite, onSetRating }: {
     isEditing: boolean;
     canEdit: boolean;
     recipe: Recipe;
     onDelete: () => void;
     onEdit: () => void;
+    onCreateVariant?: () => void;
     onClose: () => void;
     onToggleFavorite: () => void;
     onSetRating: (rating: 'up' | 'down' | 'neutral') => void;
 }) {
+    const isBaseRecipe = !!(recipe.name && !recipe.baseRecipeName);
     return (
         <div className="absolute right-4 top-4 z-10 flex flex-col items-end space-y-2">
             <div className="flex items-center justify-between w-full">
                 {!isEditing && canEdit ? (
                     <>
+                        {isBaseRecipe && onCreateVariant && (
+                            <button onClick={onCreateVariant} className={`${headerBtnBase} text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20`} title="Create variant of this recipe">
+                                <Plus className="h-5 w-5"/>
+                            </button>
+                        )}
                         <button onClick={onDelete} className={`${headerBtnBase} text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400`} title="Delete Recipe">
                             <Trash className="h-5 w-5"/>
                         </button>
@@ -106,6 +116,7 @@ function RecipeModalHeader({ isEditing, canEdit, recipe, onDelete, onEdit, onClo
 
 export function RecipeModal({
     recipe,
+    recipes = [],
     onClose,
     onSave,
     onSaveRaw,
@@ -263,6 +274,29 @@ export function RecipeModal({
                     recipe={editedRecipe}
                     onDelete={() => onDelete(editedRecipe.name)}
                     onEdit={() => { setOriginalName(editedRecipe.name); setIsEditing(true); }}
+                    onCreateVariant={() => {
+                        const base = editedRecipe as Recipe;
+                        const variantDraft: Recipe = {
+                            ...base,
+                            name: base.name + ': ',
+                            baseRecipeName: base.name,
+                            ingredientAdditions: [],
+                            instructionAdditions: [],
+                            ingredients: [],
+                            instructions: []
+                        };
+                        setEditedRecipe(variantDraft);
+                        setMacroInputs({
+                            calories: String(base.macros?.calories ?? ''),
+                            protein: String(base.macros?.protein ?? ''),
+                            carbs: String(base.macros?.carbs ?? ''),
+                            fat: String(base.macros?.fat ?? '')
+                        });
+                        setServingsInput(String(base.servings ?? ''));
+                        setOriginalName(null);
+                        setIsEditing(true);
+                        setEditMode('form');
+                    }}
                     onClose={onClose}
                     onToggleFavorite={handleToggleFavorite}
                     onSetRating={handleSetRating}
@@ -357,6 +391,16 @@ export function RecipeModal({
                                     firstInputRef={firstInputRef}
                                     handleToggleFavorite={handleToggleFavorite}
                                     handleSetRating={handleSetRating}
+                                    availableRecipes={recipes}
+                                    onVariantBaseSelected={(base) => {
+                                        setMacroInputs({
+                                            calories: String(base.macros?.calories ?? ''),
+                                            protein: String(base.macros?.protein ?? ''),
+                                            carbs: String(base.macros?.carbs ?? ''),
+                                            fat: String(base.macros?.fat ?? '')
+                                        });
+                                        setServingsInput(String(base.servings ?? ''));
+                                    }}
                                 />
                             )}
 
@@ -371,7 +415,7 @@ export function RecipeModal({
                         </div>
                     ) : (
                         <RecipeViewMode
-                            recipe={editedRecipe}
+                            recipe={resolveVariantRecipe(editedRecipe as Recipe, recipes)}
                             unitSystem={unitSystem}
                             highlightedIngredients={highlightedIngredients}
                             cookCount={cookCount}

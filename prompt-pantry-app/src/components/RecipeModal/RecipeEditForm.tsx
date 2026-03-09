@@ -1,6 +1,7 @@
 import React from 'react';
 import {Heart, Minus, Plus, ThumbsDown, ThumbsUp, Trash, X} from 'lucide-react';
 import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe} from '../../types';
+import {flattenIngredients, flattenInstructions} from '../../utils/recipeUtils';
 import {IngredientAutocomplete} from '../IngredientAutocomplete';
 
 interface IngredientRowProps {
@@ -97,6 +98,10 @@ interface RecipeEditFormProps {
     firstInputRef: React.Ref<HTMLInputElement>;
     handleToggleFavorite: () => void;
     handleSetRating: (rating: 'up' | 'down' | 'neutral') => void;
+    /** All recipes (for "Create as variant of" dropdown); only non-variant recipes are offered as base. */
+    availableRecipes?: Recipe[];
+    /** When user selects a base recipe for a variant, call so modal can sync macro/servings state. */
+    onVariantBaseSelected?: (base: Recipe) => void;
 }
 
 export function RecipeEditForm({
@@ -115,10 +120,23 @@ export function RecipeEditForm({
     onAddIngredientAlias,
     firstInputRef,
     handleToggleFavorite,
-    handleSetRating
+    handleSetRating,
+    availableRecipes = [],
+    onVariantBaseSelected
 }: RecipeEditFormProps) {
-    const isIngredientsGrouped = editedRecipe.ingredients.length > 0 && 'ingredients' in editedRecipe.ingredients[0];
-    const isInstructionsGrouped = editedRecipe.instructions.length > 0 && typeof editedRecipe.instructions[0] === 'object' && 'steps' in editedRecipe.instructions[0];
+    const isVariant = !!editedRecipe.baseRecipeName;
+    const baseRecipe = availableRecipes.find(r => r.name === editedRecipe.baseRecipeName);
+    const baseIngredients = baseRecipe ? flattenIngredients(baseRecipe.ingredients ?? []) : [];
+    const baseInstructions = baseRecipe ? flattenInstructions(baseRecipe.instructions ?? []) : [];
+    const baseRecipesForDropdown = availableRecipes.filter(r => !r.baseRecipeName && r.name);
+    const isIngredientsGrouped = !isVariant && editedRecipe.ingredients.length > 0 && 'ingredients' in editedRecipe.ingredients[0];
+    const isInstructionsGrouped = !isVariant && editedRecipe.instructions.length > 0 && typeof editedRecipe.instructions[0] === 'object' && 'steps' in editedRecipe.instructions[0];
+    const variantIngredientAdditions = editedRecipe.ingredientAdditions ?? [];
+    const variantInstructionAdditions = editedRecipe.instructionAdditions ?? [];
+
+    const variantName = isVariant && editedRecipe.name.startsWith(editedRecipe.baseRecipeName + ': ')
+        ? editedRecipe.name.slice(editedRecipe.baseRecipeName!.length + 2)
+        : '';
 
     const addTag = (tag: string) => {
         const clean = tag.trim();
@@ -222,16 +240,72 @@ export function RecipeEditForm({
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
+                    {!isVariant && editedRecipe.name === '' && baseRecipesForDropdown.length > 0 && (
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Create as variant of</label>
+                            <select
+                                className="w-full p-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                value=""
+                                onChange={e => {
+                                    const baseName = e.target.value;
+                                    if (!baseName) return;
+                                    const base = baseRecipesForDropdown.find(r => r.name === baseName);
+                                    if (base) {
+                                        setEditedRecipe({
+                                            ...base,
+                                            name: base.name + ': ',
+                                            baseRecipeName: base.name,
+                                            ingredientAdditions: [],
+                                            instructionAdditions: [],
+                                            ingredients: [],
+                                            instructions: []
+                                        });
+                                        onVariantBaseSelected?.(base);
+                                    }
+                                }}
+                            >
+                                <option value="">— New recipe (not a variant) —</option>
+                                {baseRecipesForDropdown.map(r => (
+                                    <option key={r.name} value={r.name}>{r.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
                     <div>
-                        <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Recipe Name</label>
-                        <input
-                            ref={firstInputRef}
-                            type="text"
-                            className="w-full p-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-                            value={editedRecipe.name}
-                            onChange={e => setEditedRecipe({...editedRecipe, name: e.target.value})}
-                            placeholder="e.g. Chicken Shawarma"
-                        />
+                        <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
+                            {isVariant ? 'Variant name' : 'Recipe Name'}
+                        </label>
+                        {isVariant ? (
+                            <div className="flex items-stretch rounded-lg border dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
+                                <span className="flex items-center px-3 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80 border-r dark:border-gray-700 shrink-0">
+                                    {editedRecipe.baseRecipeName}:
+                                </span>
+                                <input
+                                    ref={firstInputRef}
+                                    type="text"
+                                    className="flex-1 min-w-0 p-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none focus:ring-1 focus:ring-indigo-500"
+                                    value={variantName}
+                                    onChange={e => {
+                                        const val = e.target.value;
+                                        if (val.includes(':')) return;
+                                        setEditedRecipe(prev => ({
+                                            ...prev,
+                                            name: (prev.baseRecipeName || '') + ': ' + val
+                                        }));
+                                    }}
+                                    placeholder="e.g. Chocolate"
+                                />
+                            </div>
+                        ) : (
+                            <input
+                                ref={firstInputRef}
+                                type="text"
+                                className="w-full p-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                value={editedRecipe.name}
+                                onChange={e => setEditedRecipe({...editedRecipe, name: e.target.value})}
+                                placeholder="e.g. Chicken Shawarma"
+                            />
+                        )}
                     </div>
                     <div>
                         <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Categories</label>
@@ -440,17 +514,75 @@ export function RecipeEditForm({
             <div>
                 <div className="flex justify-between items-center mb-2">
                     <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Ingredients</label>
-                    <div className="flex gap-2">
-                        <button onClick={handleAddGroup} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
-                            <Plus className="h-3 w-3 mr-1"/> Add Group
+                    {!isVariant && (
+                        <div className="flex gap-2">
+                            <button onClick={handleAddGroup} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
+                                <Plus className="h-3 w-3 mr-1"/> Add Group
+                            </button>
+                            <button onClick={handleAddIngredient} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
+                                <Plus className="h-3 w-3 mr-1"/> Add Ingredient
+                            </button>
+                        </div>
+                    )}
+                    {isVariant && (
+                        <button
+                            onClick={() => setEditedRecipe(prev => ({ ...prev, ingredientAdditions: [...(prev.ingredientAdditions ?? []), { ingredient: '', quantity: '', measure: '' }] }))}
+                            className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center"
+                        >
+                            <Plus className="h-3 w-3 mr-1"/> Add ingredient to Additions
                         </button>
-                        <button onClick={handleAddIngredient} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
-                            <Plus className="h-3 w-3 mr-1"/> Add Ingredient
-                        </button>
-                    </div>
+                    )}
                 </div>
                 <div className="space-y-4 max-h-[40vh] overflow-y-auto border dark:border-gray-700 rounded-lg p-4 transition-colors duration-300">
-                    {isIngredientsGrouped ? (
+                    {isVariant ? (
+                        <>
+                            {baseIngredients.length > 0 && (
+                                <div className="space-y-2 p-4 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200 dark:border-gray-700">
+                                    <h5 className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">
+                                        Base ({editedRecipe.baseRecipeName}) — read-only
+                                    </h5>
+                                    <ul className="space-y-1.5 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                                        {baseIngredients.map((ing, idx) => (
+                                            <li key={idx} className="text-sm text-gray-700 dark:text-gray-300">
+                                                {[ing.quantity, ing.measure].filter(Boolean).join(' ')}
+                                                {[ing.quantity, ing.measure].some(Boolean) ? ' ' : ''}
+                                                {ing.ingredient}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
+                                <h5 className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-2">Additions</h5>
+                                <div className="space-y-2 pl-4 border-l-2 border-indigo-100 dark:border-indigo-900/50">
+                                    {variantIngredientAdditions.map((ing, idx) => (
+                                        <IngredientRow
+                                            key={idx}
+                                            ing={ing}
+                                            ingredientDefinitions={ingredientDefinitions}
+                                            storeSections={storeSections}
+                                            onCreateIngredient={onCreateIngredient}
+                                            onAddIngredientAlias={onAddIngredientAlias}
+                                            onSelect={(name, id) => {
+                                                const next = [...variantIngredientAdditions];
+                                                next[idx] = { ...next[idx], ingredient: name, ingredientId: id };
+                                                setEditedRecipe(prev => ({ ...prev, ingredientAdditions: next }));
+                                            }}
+                                            onUpdate={(field, value) => {
+                                                const next = [...variantIngredientAdditions];
+                                                next[idx] = { ...next[idx], [field]: value };
+                                                setEditedRecipe(prev => ({ ...prev, ingredientAdditions: next }));
+                                            }}
+                                            onDelete={() => {
+                                                const next = variantIngredientAdditions.filter((_, i) => i !== idx);
+                                                setEditedRecipe(prev => ({ ...prev, ingredientAdditions: next }));
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </>
+                    ) : isIngredientsGrouped ? (
                         (editedRecipe.ingredients as IngredientGroup[]).map((group, gIdx) => (
                             <div key={gIdx} className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
                                 <div className="flex gap-2 items-center mb-1">
@@ -556,17 +688,71 @@ export function RecipeEditForm({
             <div>
                 <div className="flex justify-between items-center mb-2">
                     <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Instructions</label>
-                    <div className="flex gap-2">
-                        <button onClick={handleAddInstructionGroup} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
-                            <Plus className="h-3 w-3 mr-1"/> Add Group
+                    {!isVariant && (
+                        <div className="flex gap-2">
+                            <button onClick={handleAddInstructionGroup} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
+                                <Plus className="h-3 w-3 mr-1"/> Add Group
+                            </button>
+                            <button onClick={handleAddInstructionStep} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
+                                <Plus className="h-3 w-3 mr-1"/> Add Step
+                            </button>
+                        </div>
+                    )}
+                    {isVariant && (
+                        <button
+                            onClick={() => setEditedRecipe(prev => ({ ...prev, instructionAdditions: [...(prev.instructionAdditions ?? []), ''] }))}
+                            className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center"
+                        >
+                            <Plus className="h-3 w-3 mr-1"/> Add step to Additions
                         </button>
-                        <button onClick={handleAddInstructionStep} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold flex items-center">
-                            <Plus className="h-3 w-3 mr-1"/> Add Step
-                        </button>
-                    </div>
+                    )}
                 </div>
                 <div className="space-y-4">
-                    {isInstructionsGrouped ? (
+                    {isVariant ? (
+                        <>
+                            {baseInstructions.length > 0 && (
+                                <div className="space-y-2 p-4 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200 dark:border-gray-700">
+                                    <h5 className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">
+                                        Base ({editedRecipe.baseRecipeName}) — read-only
+                                    </h5>
+                                    <ol className="space-y-2 pl-6 list-decimal border-l-2 border-gray-200 dark:border-gray-700">
+                                        {baseInstructions.map((step, idx) => (
+                                            <li key={idx} className="text-sm text-gray-700 dark:text-gray-300">{step}</li>
+                                        ))}
+                                    </ol>
+                                </div>
+                            )}
+                            <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
+                                <h5 className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-2">Additions</h5>
+                                <div className="space-y-2 pl-4 border-l-2 border-indigo-100 dark:border-indigo-900/50">
+                                    {variantInstructionAdditions.map((step, idx) => (
+                                        <InstructionRow
+                                            key={idx}
+                                            step={step}
+                                            index={idx}
+                                            variant="grouped"
+                                            onChange={(value) => {
+                                                const next = [...variantInstructionAdditions];
+                                                next[idx] = value;
+                                                setEditedRecipe(prev => ({ ...prev, instructionAdditions: next }));
+                                            }}
+                                            onDelete={() => {
+                                                const next = variantInstructionAdditions.filter((_, i) => i !== idx);
+                                                setEditedRecipe(prev => ({ ...prev, instructionAdditions: next }));
+                                            }}
+                                        />
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={() => setEditedRecipe(prev => ({ ...prev, instructionAdditions: [...(prev.instructionAdditions ?? []), ''] }))}
+                                        className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold flex items-center mt-2"
+                                    >
+                                        <Plus className="h-3 w-3 mr-1"/> Add step
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    ) : isInstructionsGrouped ? (
                         (editedRecipe.instructions as InstructionGroup[]).map((group, gIdx) => (
                             <div key={gIdx} className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
                                 <div className="flex gap-2 items-center mb-1">

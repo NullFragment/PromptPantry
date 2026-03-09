@@ -94,6 +94,12 @@ export interface Recipe {
     notes?: string;
     rating?: 'up' | 'down' | 'neutral';
     isFavorite?: boolean;
+    /** When set, this recipe is a variant of the named base recipe. */
+    baseRecipeName?: string;
+    /** Variant-only: additional ingredients to append to base. */
+    ingredientAdditions?: Ingredient[];
+    /** Variant-only: additional instruction steps to append to base. */
+    instructionAdditions?: string[];
 }
 
 /** Compact storage format for meal slots - only stores references, not full recipe data */

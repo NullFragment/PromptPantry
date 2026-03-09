@@ -439,13 +439,20 @@ function App() {
                         macroLimits={macroLimits}
                         setMacroLimits={setMacroLimits}
                         fetchSettings={fetchSettings}
+                        onEditRecipeFromAudit={(recipeName: string) => {
+                            const recipe = recipes.find(r => r.name === recipeName);
+                            if (recipe) {
+                                setSelectedRecipe({recipe});
+                            }
+                        }}
                     />
                 )}
             </main>
 
             {selectedRecipeData && (
                 <RecipeModal
-                    recipe={selectedRecipeData.recipe}
+                    recipe={recipes.find(r => r.name === selectedRecipeData.recipe.name) ?? selectedRecipeData.recipe}
+                    recipes={recipes}
                     onClose={() => setSelectedRecipe(null)}
                     onSave={saveRecipe}
                     onDelete={removeRecipe}
