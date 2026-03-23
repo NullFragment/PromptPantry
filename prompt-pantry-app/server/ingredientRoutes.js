@@ -58,17 +58,6 @@ export function registerIngredientRoutes(app, { dataAccess, middleware, validato
         res.json({ recipeCount: recipeNames.length, recipeNames });
     });
 
-    app.get('/api/store-sections', authenticate, (req, res) => {
-        const ingredients = readIngredients();
-        const sections = [...new Set(ingredients.map(i => i.storeSection).filter(Boolean))];
-        const sorted = sections.sort((a, b) => {
-            if (a === 'Unassigned') return 1;
-            if (b === 'Unassigned') return -1;
-            return a.localeCompare(b);
-        });
-        res.json(sorted);
-    });
-
     app.post('/api/ingredients', authenticate, requireEditor, (req, res) => {
         const ingredient = req.body;
 
@@ -196,6 +185,21 @@ export function registerIngredientRoutes(app, { dataAccess, middleware, validato
         }
 
         targetIngredient.aliases = mergedAliases;
+
+        const allContainers = [
+            ...(targetIngredient.containerSizes || []),
+            ...sourceIngredients.flatMap(s => s.containerSizes || [])
+        ];
+        const seen = new Set();
+        targetIngredient.containerSizes = allContainers.filter(c => {
+            const key = `${c.quantity}:${c.unit}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+        if (targetIngredient.containerSizes.length === 0) {
+            delete targetIngredient.containerSizes;
+        }
 
         const sourceIdSet = new Set(sourceIds);
         const recipes = readRecipes('all');

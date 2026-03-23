@@ -121,18 +121,20 @@ describe('Ingredients API', () => {
     });
 
     describe('GET /api/store-sections', () => {
-        it('returns unique store sections sorted with Unassigned last', async () => {
+        it('returns store sections from storeSections.json as objects with name and emoji', async () => {
             const {app} = env;
-            writeTestFile(env.files.ingredientsFile, [
-                {id: '1', name: 'milk', storeSection: 'Dairy'},
-                {id: '2', name: 'apple', storeSection: 'Produce'},
-                {id: '3', name: 'mystery', storeSection: 'Unassigned'},
-                {id: '4', name: 'cheese', storeSection: 'Dairy'}
-            ]);
 
             const res = await request(app).get('/api/store-sections');
             expect(res.status).toBe(200);
-            expect(res.body).toEqual(['Dairy', 'Produce', 'Unassigned']);
+            expect(Array.isArray(res.body)).toBe(true);
+            // Each section should be an object with at least a name field
+            expect(res.body.length).toBeGreaterThan(0);
+            expect(res.body[0]).toHaveProperty('name');
+            // Verify some known sections are present
+            const names = res.body.map((s: { name: string }) => s.name);
+            expect(names).toContain('Dairy');
+            expect(names).toContain('Produce');
+            expect(names).toContain('Unassigned');
         });
     });
 
@@ -416,6 +418,45 @@ describe('Ingredients API', () => {
             const targetIng = ingredients.find(i => i.id === target.id);
             expect(targetIng?.aliases).toContain('rocket');
             expect(targetIng?.aliases).toContain('rucola');
+        });
+
+        it('merges container sizes from source into target, deduplicating by quantity+unit', async () => {
+            const {app} = env;
+            const source = {
+                id: '550e8400-e29b-41d4-a716-446655440010',
+                name: 'baby bella mushrooms',
+                storeSection: 'Produce',
+                containerSizes: [
+                    {quantity: 8, unit: 'oz', label: '8 oz pack'},
+                    {quantity: 16, unit: 'oz'}
+                ]
+            };
+            const target = {
+                id: '550e8400-e29b-41d4-a716-446655440011',
+                name: 'baby portabella mushrooms',
+                storeSection: 'Produce',
+                containerSizes: [
+                    {quantity: 16, unit: 'oz', label: '1 lb pack'},
+                    {quantity: 32, unit: 'oz'}
+                ]
+            };
+
+            writeTestFile(env.files.ingredientsFile, [source, target]);
+
+            await request(app)
+                .post('/api/ingredients/merge')
+                .send({sourceIds: [source.id], targetId: target.id});
+
+            const ingredients = readTestFile<Array<{id: string; containerSizes?: Array<{quantity: number; unit: string; label?: string}>}>>(env.files.ingredientsFile);
+            const targetIng = ingredients.find(i => i.id === target.id);
+
+            // 16 oz duplicate should be deduplicated (target's entry kept, source's discarded)
+            expect(targetIng?.containerSizes).toHaveLength(3);
+            expect(targetIng?.containerSizes).toEqual(expect.arrayContaining([
+                {quantity: 8, unit: 'oz', label: '8 oz pack'},
+                {quantity: 16, unit: 'oz', label: '1 lb pack'},
+                {quantity: 32, unit: 'oz'}
+            ]));
         });
 
         it('rejects when targetId is in sourceIds', async () => {

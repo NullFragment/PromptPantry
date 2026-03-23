@@ -15,6 +15,16 @@ On mount, `App` calls `GET /api/me` to check for an existing JWT session:
 - **Test mode**: Bypasses auth check for testing
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 stateDiagram-v2
     [*] --> AuthChecking: Mount
     AuthChecking --> LoggedIn: Valid JWT
@@ -28,6 +38,15 @@ stateDiagram-v2
         FetchData --> Ready: Data loaded
         Ready --> ViewRouting
     }
+
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+    classDef red fill:#C86060,stroke:#A84040
+    classDef blue fill:#4A90D9,stroke:#3570B0
+
+    AuthChecking:::amber
+    LoggedIn:::green
+    LoggedOut:::red
 ```
 
 ### AppContext / AppProvider

@@ -34,6 +34,11 @@ export interface ContainerSize {
     label?: string;
 }
 
+export interface StoreSectionDefinition {
+    name: string;
+    emoji?: string;
+}
+
 export interface IngredientDefinition {
     id: string; // UUID
     name: string; // Canonical name, unique

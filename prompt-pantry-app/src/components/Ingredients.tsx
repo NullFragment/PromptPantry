@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { ContainerSize, IngredientDefinition } from '../types';
+import type { ContainerSize, IngredientDefinition, StoreSectionDefinition } from '../types';
 import {
     Check,
     ChevronDown,
@@ -7,6 +7,7 @@ import {
     Package,
     Plus,
     Search,
+    Settings,
     Square,
     Trash2,
     X
@@ -21,6 +22,7 @@ import { IngredientCard } from './ingredients/IngredientCard';
 import { IngredientEditForm } from './ingredients/IngredientEditForm';
 import { DEFAULT_FORM_DATA, type EditFormData } from './ingredients/ingredientFormTypes';
 import { IngredientMergeDialog } from './IngredientMergeDialog';
+import { ManageSectionsModal } from './ingredients/ManageSectionsModal';
 import { IngredientDetailPopup } from './IngredientDetailPopup';
 import { SelectionActionBar } from './SelectionActionBar';
 import { useAppContext } from '../hooks/useAppContext';
@@ -101,7 +103,9 @@ function IngredientsToolbar({
 
 interface IngredientsProps {
     ingredients: IngredientDefinition[];
-    storeSections: string[];
+    storeSections: StoreSectionDefinition[];
+    onSaveSection?: (section: Partial<StoreSectionDefinition> & { name: string }, isNew: boolean) => Promise<{ success: boolean; error?: string; section?: StoreSectionDefinition }>;
+    onDeleteSection?: (name: string, action: 'uncategorize' | 'merge', targetSection?: string) => Promise<{ success: boolean; error?: string }>;
     onSave: (ingredient: Partial<IngredientDefinition> & { name: string; storeSection: string }, isNew: boolean) => Promise<{ success: boolean; error?: string }>;
     onDelete: (id: string) => Promise<{ success: boolean; error?: string }>;
     onCheckUsage: (id: string) => Promise<{ recipeCount: number; recipeNames: string[] } | null>;
@@ -115,7 +119,9 @@ interface IngredientsProps {
 
 export function Ingredients({
     ingredients,
-    storeSections,
+    storeSections: storeSectionDefs,
+    onSaveSection,
+    onDeleteSection,
     onSave,
     onDelete,
     onCheckUsage,
@@ -127,10 +133,12 @@ export function Ingredients({
     onMergeAlias
 }: IngredientsProps) {
     const { canEdit } = useAppContext();
+    const storeSections = useMemo(() => storeSectionDefs.map(s => s.name), [storeSectionDefs]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sectionFilter, setSectionFilter] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
+    const [showManageSections, setShowManageSections] = useState(false);
     const [formData, setFormData] = useState<EditFormData>(DEFAULT_FORM_DATA);
     const [formError, setFormError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -529,13 +537,22 @@ export function Ingredients({
                     <span className="ml-2 text-lg font-normal text-gray-400">({ingredients.length})</span>
                 </h1>
                 {canEdit && !isAddingNew && (
-                    <button
-                        onClick={startAddingNew}
-                        className="flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg font-bold text-sm hover:bg-indigo-700 transition-colors shadow-sm"
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Ingredient
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setShowManageSections(true)}
+                            className="flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                        >
+                            <Settings className="h-4 w-4 mr-2" />
+                            Manage Sections
+                        </button>
+                        <button
+                            onClick={startAddingNew}
+                            className="flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg font-bold text-sm hover:bg-indigo-700 transition-colors shadow-sm"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Add Ingredient
+                        </button>
+                    </div>
                 )}
             </div>
 
@@ -702,6 +719,17 @@ export function Ingredients({
                     onMerge={handleMerge}
                     onCheckUsage={onCheckUsage}
                     onClose={() => setShowMergeDialog(false)}
+                />
+            )}
+
+            {/* Manage Sections Modal */}
+            {showManageSections && onSaveSection && onDeleteSection && (
+                <ManageSectionsModal
+                    storeSections={storeSectionDefs}
+                    ingredients={ingredients}
+                    onSaveSection={onSaveSection}
+                    onDeleteSection={onDeleteSection}
+                    onClose={() => setShowManageSections(false)}
                 />
             )}
 

@@ -67,16 +67,50 @@ Auth endpoints (`/api/register`, `/api/login`) are rate-limited to 20 requests p
 ## Request/Response Validation
 
 ```mermaid
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 flowchart TD
-    Request[Client Request] --> Auth{JWT Valid?}
-    Auth -->|No| Reject["401 Unauthorized"]
-    Auth -->|Yes| Tier{Tier Check}
-    Tier -->|Insufficient| Forbidden["403 Forbidden"]
-    Tier -->|OK| Validator{AJV Validator}
-    Validator -->|Valid| Process[Process Request]
-    Validator -->|Invalid| Error["400 Error with details"]
-    Process --> File["Atomic write to JSON"]
-    File --> Response[Success Response]
+    subgraph RequestValidation["Request/Response Validation"]
+        Request[Client Request]:::blue --> Auth{"JWT Valid?"}:::amber
+        Auth -->|No| Reject["401 Unauthorized"]:::red
+        Auth -->|Yes| Tier{"Tier Check"}:::amber
+        Tier -->|Insufficient| Forbidden["403 Forbidden"]:::red
+        Tier -->|OK| Validator{"AJV Validator"}:::teal
+        Validator -->|Valid| Process[Process Request]:::purple
+        Validator -->|Invalid| Error["400 Error with details"]:::rose
+        Process --> File["Atomic write to JSON"]:::green
+        File --> Response[Success Response]:::green
+    end
+
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+    classDef purple fill:#7B68EE,stroke:#5B48CE
+    classDef teal fill:#48A8A0,stroke:#288888
+    classDef red fill:#C86060,stroke:#A84040
+    classDef rose fill:#C86888,stroke:#A84868
+
+    style RequestValidation fill:#88888814,stroke:#888888
+
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#C8A040
+    linkStyle 2 stroke:#C8A040
+    linkStyle 3 stroke:#C8A040
+    linkStyle 4 stroke:#C8A040
+    linkStyle 5 stroke:#48A8A0
+    linkStyle 6 stroke:#48A8A0
+    linkStyle 7 stroke:#7B68EE
+    linkStyle 8 stroke:#4EA882
 ```
 
 All write endpoints validate payloads against the corresponding JSON Schema before persistence. Validation error

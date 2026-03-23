@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react';
 import {Check, ChevronDown, ChevronLeft, ChevronRight, Copy, ShoppingCart, Utensils} from 'lucide-react';
 import {addDays, addWeeks, endOfWeek, format, startOfWeek, subWeeks} from 'date-fns';
-import {Ingredient, IngredientDefinition, MealPlan, MultiWeeklyCookPlan, Participant, Recipe} from '../types';
+import {Ingredient, IngredientDefinition, MealPlan, MultiWeeklyCookPlan, Participant, Recipe, StoreSectionDefinition} from '../types';
 import {
     aggregateIngredients,
     type AggregatedTotals,
@@ -13,8 +13,8 @@ import {
     resolveCanonicalName
 } from '../utils/recipeUtils';
 import {
-    calculateContainerNeeds,
-    formatContainerRecommendation
+    calculateContainerNeedsWithConversions,
+    formatContainerLabel
 } from '../utils/containerUtils';
 import { normalizeToPreferredUnit } from '../utils/unitConversions';
 import { isTransferredItem } from '../utils/mealPlanUtils';
@@ -39,17 +39,17 @@ function ShoppingListItemRow({
 }) {
     const { name, totals, ingredientDef } = item;
     const primary = getPrimaryQuantityAndUnit(totals);
-    const containerRec =
+    const containerItems =
         ingredientDef?.containerSizes?.length && primary
-            ? formatContainerRecommendation(
-                  calculateContainerNeeds(
-                      primary.quantity,
-                      primary.unit,
-                      ingredientDef.containerSizes,
-                      true
-                  )
+            ? calculateContainerNeedsWithConversions(
+                  primary.quantity,
+                  primary.unit,
+                  ingredientDef.containerSizes,
+                  ingredientDef,
+                  true
               )
-            : null;
+            : [];
+    const containerLabel = formatContainerLabel(containerItems);
     const preferMetric = unitSystem === 'metric';
     const normalized =
         ingredientDef?.conversions && primary
@@ -74,23 +74,30 @@ function ShoppingListItemRow({
         <div className="p-4 flex flex-col gap-0.5 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <div className="flex justify-between items-center">
                 <span className="capitalize font-medium dark:text-gray-200">{name}</span>
-                <div
-                    className="text-sm text-gray-600 dark:text-gray-400 text-right font-semibold"
-                    title={conversionTooltip}
-                >
-                    {displayMeasurement}
-                    {showConverted && (
-                        <span className="ml-1 text-indigo-500 dark:text-indigo-400" title={conversionTooltip} aria-label={conversionTooltip}>
-                            ●
-                        </span>
+                <div className="flex items-center text-right" title={conversionTooltip}>
+                    {containerLabel ? (
+                        <>
+                            <span className="text-xs text-gray-500 dark:text-gray-500 mr-1">
+                                ({displayMeasurement})
+                            </span>
+                            <span className="text-sm font-bold text-gray-200 dark:text-gray-200">
+                                {containerLabel}
+                            </span>
+                        </>
+                    ) : (
+                        <>
+                            <span className="text-sm text-gray-600 dark:text-gray-400 font-semibold">
+                                {displayMeasurement}
+                            </span>
+                            {showConverted && (
+                                <span className="ml-1 text-indigo-500 dark:text-indigo-400" title={conversionTooltip} aria-label={conversionTooltip}>
+                                    ●
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
-            {containerRec && (
-                <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">
-                    {containerRec}
-                </p>
-            )}
         </div>
     );
 }
@@ -104,6 +111,8 @@ interface ShoppingListProps {
     setSelectedDate: (d: Date) => void;
     setSelectedRecipe: (data: { recipe: Recipe, highlightedIngredients?: string[] } | null) => void;
     ingredients: IngredientDefinition[];
+    storeSections?: StoreSectionDefinition[];
+    onSaveSection?: (section: { name: string; emoji?: string }, isNew: boolean) => Promise<{ success: boolean }>;
 }
 
 export function ShoppingList({
@@ -114,12 +123,23 @@ export function ShoppingList({
                                  selectedDate,
                                  setSelectedDate,
                                  setSelectedRecipe,
-                                 ingredients
+                                 ingredients,
+                                 storeSections = [],
+                                 onSaveSection
                              }: ShoppingListProps) {
-    const { unitSystem } = useAppContext();
+    const { unitSystem, canEdit } = useAppContext();
     const [copied, setCopied] = useState(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+    const [editingEmojiSection, setEditingEmojiSection] = useState<string | null>(null);
+    const [emojiInputValue, setEmojiInputValue] = useState('');
+
+    // Build lookup map for store section definitions by name
+    const storeSectionsByName = useMemo(() => {
+        const map = new Map<string, StoreSectionDefinition>();
+        storeSections.forEach(s => map.set(s.name, s));
+        return map;
+    }, [storeSections]);
     const weekStart = startOfWeek(selectedDate, {weekStartsOn: 0});
     const weekStartStr = format(weekStart, 'yyyy-MM-dd');
     const weekEnd = endOfWeek(selectedDate, {weekStartsOn: 0});
@@ -420,14 +440,17 @@ export function ShoppingList({
                         const isCollapsed = collapsedSections.has(section);
                         const isUnassigned = section === 'Unassigned';
                         
+                        const sectionDef = storeSectionsByName.get(section);
+                        const isEditingEmoji = editingEmojiSection === section;
+
                         return (
                             <div key={section} className="app-panel overflow-hidden">
                                 {/* Section Header */}
                                 <button
                                     onClick={() => toggleSection(section)}
                                     className={`w-full p-4 flex justify-between items-center transition-colors ${
-                                        isUnassigned 
-                                            ? 'bg-gray-100 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400' 
+                                        isUnassigned
+                                            ? 'bg-gray-100 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400'
                                             : 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
                                     } hover:opacity-80`}
                                 >
@@ -436,6 +459,26 @@ export function ShoppingList({
                                             <ChevronRight className="h-5 w-5"/>
                                         ) : (
                                             <ChevronDown className="h-5 w-5"/>
+                                        )}
+                                        {canEdit && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (isEditingEmoji) {
+                                                        setEditingEmojiSection(null);
+                                                    } else {
+                                                        setEditingEmojiSection(section);
+                                                        setEmojiInputValue(sectionDef?.emoji ?? '');
+                                                    }
+                                                }}
+                                                className="text-base leading-none w-6 h-6 flex items-center justify-center rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors shrink-0"
+                                                title="Edit emoji"
+                                            >
+                                                {sectionDef?.emoji ?? <span className="text-xs opacity-40">?</span>}
+                                            </button>
+                                        )}
+                                        {!canEdit && sectionDef?.emoji && (
+                                            <span className="text-base leading-none">{sectionDef.emoji}</span>
                                         )}
                                         <span className="font-bold">{section}</span>
                                         <span className={`text-xs px-2 py-0.5 rounded-full ${
@@ -447,6 +490,53 @@ export function ShoppingList({
                                         </span>
                                     </div>
                                 </button>
+
+                                {/* Emoji edit popover */}
+                                {isEditingEmoji && canEdit && (
+                                    <div
+                                        tabIndex={-1}
+                                        className="px-4 py-2 flex items-center gap-2 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900"
+                                        onClick={(e) => e.stopPropagation()}
+                                        onBlur={(e) => {
+                                            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                                                setEditingEmojiSection(null);
+                                            }
+                                        }}
+                                    >
+                                        <input
+                                            autoFocus
+                                            type="text"
+                                            maxLength={2}
+                                            value={emojiInputValue}
+                                            onChange={(e) => setEmojiInputValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    onSaveSection?.({ name: section, emoji: emojiInputValue }, false)
+                                                        .then(() => setEditingEmojiSection(null));
+                                                } else if (e.key === 'Escape') {
+                                                    setEditingEmojiSection(null);
+                                                }
+                                            }}
+                                            placeholder="emoji"
+                                            className="w-16 text-center border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                                        />
+                                        <button
+                                            onClick={() => {
+                                                onSaveSection?.({ name: section, emoji: emojiInputValue }, false)
+                                                    .then(() => setEditingEmojiSection(null));
+                                            }}
+                                            className="px-3 py-1 text-xs font-bold bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                                        >
+                                            Save
+                                        </button>
+                                        <button
+                                            onClick={() => setEditingEmojiSection(null)}
+                                            className="px-3 py-1 text-xs font-bold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                )}
                                 
                                 {/* Section Items */}
                                 {!isCollapsed && (

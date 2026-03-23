@@ -77,7 +77,23 @@ IngredientDefinition {
 ### Merge Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant Ingredients
     participant API

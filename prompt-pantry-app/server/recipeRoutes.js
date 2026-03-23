@@ -75,7 +75,7 @@ export function registerRecipeRoutes(app, { dataAccess, middleware, validators }
     });
 
     app.post('/api/recipes', authenticate, requireEditor, (req, res) => {
-        const recipe = req.body;
+        const {_isValid, _errors, ...recipe} = req.body;
         if (!validateOrFail(res, recipeValidator, recipe, 'recipe', req)) return;
         const recipes = readRecipes('all');
         if (recipes.find(r => r.name === recipe.name)) {
@@ -89,7 +89,7 @@ export function registerRecipeRoutes(app, { dataAccess, middleware, validators }
     app.put('/api/recipes/:name', authenticate, requireEditor, (req, res) => {
         const name = safeDecodeURIComponent(req.params.name);
         if (name === null) return res.status(400).json({error: 'Invalid URL encoding'});
-        const recipe = req.body;
+        const {_isValid, _errors, ...recipe} = req.body;
         if (!validateOrFail(res, recipeValidator, recipe, 'recipe', req)) return;
         const recipes = readRecipes('all');
         const idx = recipes.findIndex(r => r.name === name);

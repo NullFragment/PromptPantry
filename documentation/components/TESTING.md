@@ -3,7 +3,7 @@
 Testing strategy and component-to-test mapping.
 
 For the full testing architecture (tooling, workspace, coverage), see
-[docs/architecture/TESTING.md](../architecture/TESTING.md).
+[architecture/testing.md](../architecture/testing.md).
 
 ## Component Test Matrix
 

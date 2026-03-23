@@ -5,27 +5,64 @@ Express.js backend structure: the factory pattern, data access layer, middleware
 ## Overview
 
 ```mermaid
-graph TD
-    SF["serverFactory.js"] -->|"creates"| App["Express App"]
-    SF -->|"loads"| Schemas["JSON Schemas (AJV)"]
-    SF -->|"builds"| DA["dataAccess"]
-    SF -->|"builds"| MW["middleware"]
-    SF -->|"passes ctx"| Routes["Route Modules"]
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
+flowchart TD
+    subgraph ServerFactory["Server Factory"]
+        SF["serverFactory.js"]:::blue -->|"creates"| App["Express App"]:::teal
+        SF -->|"loads"| Schemas["JSON Schemas (AJV)"]:::amber
+        SF -->|"builds"| DA["dataAccess"]:::green
+        SF -->|"builds"| MW["middleware"]:::purple
+        SF -->|"passes ctx"| Routes["Route Modules"]:::purple
 
-    subgraph ctx["Context Object"]
-        DA2[dataAccess]
-        MW2[middleware]
-        V[validators]
+        subgraph ctx["Context Object"]
+            DA2[dataAccess]:::green
+            MW2[middleware]:::purple
+            V[validators]:::amber
+        end
+
+        Routes --> AuthR[authRoutes]:::slate
+        Routes --> SettingsR[settingsRoutes]:::slate
+        Routes --> IngR[ingredientRoutes]:::slate
+        Routes --> RecR[recipeRoutes]:::slate
+        Routes --> MPR[mealPlanRoutes]:::slate
+        Routes --> UserR[userRoutes]:::slate
+
+        IngR --> IH[ingredientHelpers]:::teal
     end
 
-    Routes --> AuthR[authRoutes]
-    Routes --> SettingsR[settingsRoutes]
-    Routes --> IngR[ingredientRoutes]
-    Routes --> RecR[recipeRoutes]
-    Routes --> MPR[mealPlanRoutes]
-    Routes --> UserR[userRoutes]
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef purple fill:#7B68EE,stroke:#5B48CE
+    classDef teal fill:#48A8A0,stroke:#288888
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+    classDef slate fill:#808898,stroke:#606878
 
-    IngR --> IH[ingredientHelpers]
+    style ServerFactory fill:#88888814,stroke:#888888
+    style ctx fill:#7B68EE14,stroke:#7B68EE
+
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#4A90D9
+    linkStyle 2 stroke:#4A90D9
+    linkStyle 3 stroke:#4A90D9
+    linkStyle 4 stroke:#4A90D9
+    linkStyle 5 stroke:#7B68EE
+    linkStyle 6 stroke:#7B68EE
+    linkStyle 7 stroke:#7B68EE
+    linkStyle 8 stroke:#7B68EE
+    linkStyle 9 stroke:#7B68EE
+    linkStyle 10 stroke:#7B68EE
+    linkStyle 11 stroke:#808898
 ```
 
 ## serverFactory.js
@@ -109,7 +146,7 @@ Authentication and authorization middleware.
 | `requireAdmin`      | Middleware     | `requireTier(['Admin'])`                        |
 | `safeDecodeURIComponent` | Helper   | Safe URL decode (returns original on error)     |
 
-See [AUTH.md](AUTH.md) for detailed authentication flow documentation.
+See [auth.md](auth.md) for detailed authentication flow documentation.
 
 ## Route Modules
 

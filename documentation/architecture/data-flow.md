@@ -6,7 +6,23 @@ shopping list generation.
 ## Authentication Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant App
     participant API
@@ -37,7 +53,23 @@ sequenceDiagram
 ## Registration Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant App
     participant API
@@ -61,7 +93,23 @@ sequenceDiagram
 ## Recipe Management Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant RecipeView
     participant RecipeModal
@@ -87,7 +135,23 @@ sequenceDiagram
 ## Ingredient Management Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant Ingredients
     participant useIngredients
@@ -108,7 +172,23 @@ sequenceDiagram
 ### Ingredient Merge Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant Ingredients
     participant API
@@ -124,7 +204,23 @@ sequenceDiagram
 ## Meal Planning Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant WeeklyPlanner
     participant useMealPlan
@@ -145,7 +241,23 @@ sequenceDiagram
 ### Leftover Handling Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant WeeklyPlanner
     participant useLeftoverPrompt
@@ -170,7 +282,23 @@ sequenceDiagram
 ## Settings Sync Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant AdminPanel
     participant useUIState
     participant API
@@ -187,13 +315,44 @@ sequenceDiagram
 ## Shopping List Aggregation Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 flowchart TD
-    CookPlan["Multi-Week Cook Plan<br/>(recipes + multipliers)"] --> Lookup["Look up recipe ingredients"]
-    Lookup --> Scale["Scale by multiplier"]
-    Scale --> Aggregate["Aggregate by ingredient name<br/>(normalize + combine quantities)"]
-    Aggregate --> Resolve["Resolve ingredient definitions<br/>(store section, conversions)"]
-    Resolve --> Convert["Convert units based on<br/>user preference (metric/imperial/both)"]
-    Convert --> Group["Group by store section"]
-    Group --> Container["Calculate container<br/>recommendations"]
-    Container --> Display["Render shopping list<br/>with collapsible sections"]
+    subgraph ShoppingListAggregation["Shopping List Aggregation Flow"]
+        CookPlan["Multi-Week Cook Plan<br/>(recipes + multipliers)"]:::blue --> Lookup["Look up recipe ingredients"]:::purple
+        Lookup --> Scale["Scale by multiplier"]:::purple
+        Scale --> Aggregate["Aggregate by ingredient name<br/>(normalize + combine quantities)"]:::teal
+        Aggregate --> Resolve["Resolve ingredient definitions<br/>(store section, conversions)"]:::teal
+        Resolve --> Convert["Convert units based on<br/>user preference (metric/imperial/both)"]:::teal
+        Convert --> Group["Group by store section"]:::amber
+        Group --> Container["Calculate container<br/>recommendations"]:::amber
+        Container --> Display["Render shopping list<br/>with collapsible sections"]:::green
+    end
+
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef purple fill:#7B68EE,stroke:#5B48CE
+    classDef teal fill:#48A8A0,stroke:#288888
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+
+    style ShoppingListAggregation fill:#88888814,stroke:#888888
+
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#7B68EE
+    linkStyle 2 stroke:#7B68EE
+    linkStyle 3 stroke:#48A8A0
+    linkStyle 4 stroke:#48A8A0
+    linkStyle 5 stroke:#48A8A0
+    linkStyle 6 stroke:#C8A040
+    linkStyle 7 stroke:#C8A040
 ```

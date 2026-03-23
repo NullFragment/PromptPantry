@@ -20,13 +20,42 @@ Handled by `POST /api/register` in `authRoutes.js`.
 - When registration is disabled, only Admins can create new accounts through the Admin Panel
 
 ```mermaid
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 flowchart TD
-    Register["POST /api/register"] --> HasUsers{"Any users exist?"}
-    HasUsers -->|No| Admin["Create as Admin"]
-    HasUsers -->|Yes| Viewer["Create as Viewer"]
-    Admin --> Hash["Hash password with bcrypt"]
-    Viewer --> Hash
-    Hash --> Save["Save to users.json"]
+    subgraph RegistrationFlow["Registration Flow"]
+        Register["POST /api/register"]:::blue --> HasUsers{"Any users exist?"}:::amber
+        HasUsers -->|No| Admin["Create as Admin"]:::green
+        HasUsers -->|Yes| Viewer["Create as Viewer"]:::slate
+        Admin --> Hash["Hash password with bcrypt"]:::teal
+        Viewer --> Hash
+        Hash --> Save["Save to users.json"]:::green
+    end
+
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+    classDef slate fill:#808898,stroke:#606878
+    classDef teal fill:#48A8A0,stroke:#288888
+
+    style RegistrationFlow fill:#88888814,stroke:#888888
+
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#C8A040
+    linkStyle 2 stroke:#C8A040
+    linkStyle 3 stroke:#4EA882
+    linkStyle 4 stroke:#808898
+    linkStyle 5 stroke:#48A8A0
 ```
 
 ## Login
@@ -69,16 +98,48 @@ Defined in `server/middleware.js`:
 ### authenticate Middleware
 
 ```mermaid
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 flowchart TD
-    Request[Incoming Request] --> Cookie{"Has token cookie?"}
-    Cookie -->|No| Unauth["401 Unauthorized"]
-    Cookie -->|Yes| Verify{"jwt.verify(token, secret)"}
-    Verify -->|Invalid| Unauth
-    Verify -->|Valid| LoadUser["Load user from users.json"]
-    LoadUser --> Found{"User exists?"}
-    Found -->|No| Unauth
-    Found -->|Yes| SetReq["Set req.user = { username, isAdmin, tier }"]
-    SetReq --> Next[Next middleware]
+    subgraph AuthMiddleware["authenticate Middleware"]
+        Request[Incoming Request]:::blue --> Cookie{"Has token cookie?"}:::amber
+        Cookie -->|No| Unauth["401 Unauthorized"]:::red
+        Cookie -->|Yes| Verify{"jwt.verify(token, secret)"}:::amber
+        Verify -->|Invalid| Unauth
+        Verify -->|Valid| LoadUser["Load user from users.json"]:::teal
+        LoadUser --> Found{"User exists?"}:::amber
+        Found -->|No| Unauth
+        Found -->|Yes| SetReq["Set req.user = { username, isAdmin, tier }"]:::green
+        SetReq --> Next[Next middleware]:::blue
+    end
+
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+    classDef red fill:#C86060,stroke:#A84040
+    classDef teal fill:#48A8A0,stroke:#288888
+
+    style AuthMiddleware fill:#88888814,stroke:#888888
+
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#C8A040
+    linkStyle 2 stroke:#C8A040
+    linkStyle 3 stroke:#C8A040
+    linkStyle 4 stroke:#C8A040
+    linkStyle 5 stroke:#48A8A0
+    linkStyle 6 stroke:#C8A040
+    linkStyle 7 stroke:#C8A040
+    linkStyle 8 stroke:#4EA882
 ```
 
 ### Test Mode Bypass

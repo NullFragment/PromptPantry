@@ -1,5 +1,5 @@
-import type { ContainerSize } from '../types';
-import { convertVolume } from './unitConversions';
+import type { ContainerSize, IngredientDefinition } from '../types';
+import { convertVolume, isVolumeUnit, isWeightUnit, convertUsingIngredient } from './unitConversions';
 
 function toMl(quantity: number, unit: string): number {
     if (!unit?.trim()) return quantity;
@@ -70,4 +70,73 @@ export function formatContainerRecommendation(items: ContainerRecommendationItem
         return count === 1 ? label : `${count} ${label}`;
     });
     return `Buy: ${parts.join(' + ')}`;
+}
+
+/**
+ * Format a container recommendation as a short label without the "Buy: " prefix,
+ * e.g. "½ gal" or "2 half gallon + 1 quart".
+ */
+export function formatContainerLabel(items: ContainerRecommendationItem[]): string {
+    if (!items.length) return '';
+    const parts = items.map(({ containerSize, count }) => {
+        const label = containerSize.label?.trim() || `${containerSize.quantity} ${containerSize.unit}`;
+        return count === 1 ? label : `${count} ${label}`;
+    });
+    return parts.join(' + ');
+}
+
+/**
+ * Like calculateContainerNeeds but handles cross-domain unit mismatches (e.g. recipe in cups,
+ * containers in lb). Uses ingredientDef.conversions.weightToVolume to convert the recipe
+ * quantity into the container's unit domain before matching.
+ */
+export function calculateContainerNeedsWithConversions(
+    quantity: number,
+    unit: string,
+    containerSizes: ContainerSize[],
+    ingredientDef: IngredientDefinition | null,
+    preferFewerContainers: boolean = true
+): ContainerRecommendationItem[] {
+    if (!containerSizes?.length || quantity <= 0) return [];
+
+    const recipeIsVolume = isVolumeUnit(unit);
+    const recipeIsWeight = isWeightUnit(unit);
+
+    // Determine container domain from first valid container
+    const validContainers = containerSizes.filter(c => c.quantity > 0 && c.unit?.trim());
+    if (!validContainers.length) return [];
+
+    const containerUnit = validContainers[0].unit;
+    const containerIsVolume = isVolumeUnit(containerUnit);
+    const containerIsWeight = isWeightUnit(containerUnit);
+
+    // Same domain (or both "each") — pass through directly
+    const sameDomain =
+        (recipeIsVolume && containerIsVolume) ||
+        (recipeIsWeight && containerIsWeight) ||
+        (!recipeIsVolume && !recipeIsWeight && !containerIsVolume && !containerIsWeight);
+
+    if (sameDomain) {
+        return calculateContainerNeeds(quantity, unit, containerSizes, preferFewerContainers);
+    }
+
+    // Cross-domain: use ingredientDef's weightToVolume conversion ratio
+    const conv = ingredientDef?.conversions?.weightToVolume;
+    if (conv) {
+        if (recipeIsWeight && containerIsVolume) {
+            const converted = convertUsingIngredient(quantity, unit, conv.volume.unit, ingredientDef!);
+            if (converted != null) {
+                return calculateContainerNeeds(converted, conv.volume.unit, containerSizes, preferFewerContainers);
+            }
+        }
+        if (recipeIsVolume && containerIsWeight) {
+            const converted = convertUsingIngredient(quantity, unit, conv.weight.unit, ingredientDef!);
+            if (converted != null) {
+                return calculateContainerNeeds(converted, conv.weight.unit, containerSizes, preferFewerContainers);
+            }
+        }
+    }
+
+    // Fallback: attempt direct conversion (may be inaccurate for cross-domain)
+    return calculateContainerNeeds(quantity, unit, containerSizes, preferFewerContainers);
 }

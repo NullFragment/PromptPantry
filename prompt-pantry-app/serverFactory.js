@@ -18,6 +18,7 @@ import { registerAuthRoutes } from './server/authRoutes.js';
 import { registerSettingsRoutes } from './server/settingsRoutes.js';
 import { registerRecipeRoutes } from './server/recipeRoutes.js';
 import { registerIngredientRoutes } from './server/ingredientRoutes.js';
+import { registerStoreSectionRoutes } from './server/storeSectionRoutes.js';
 import { registerMealPlanRoutes } from './server/mealPlanRoutes.js';
 import { registerUserRoutes } from './server/userRoutes.js';
 
@@ -69,6 +70,8 @@ const userSchema = loadSchema('user.schema.json');
 const userValidator = ajv.compile(userSchema);
 const ingredientSchema = loadSchema('ingredient.schema.json');
 const ingredientValidator = ajv.compile(ingredientSchema);
+const storeSectionSchema = loadSchema('storeSection.schema.json');
+const storeSectionValidator = ajv.compile(storeSectionSchema);
 
 const validators = {
     recipeValidator,
@@ -76,7 +79,8 @@ const validators = {
     mealPlanValidator,
     multiWeeklyCookPlanValidator,
     userValidator,
-    ingredientValidator
+    ingredientValidator,
+    storeSectionValidator
 };
 
 /**
@@ -131,6 +135,7 @@ export function createApp(dataDir = DEFAULT_DATA_DIR) {
     // Register all route modules
     registerAuthRoutes(app, ctx);
     registerSettingsRoutes(app, ctx);
+    registerStoreSectionRoutes(app, ctx);
     registerIngredientRoutes(app, ctx);
     registerRecipeRoutes(app, ctx);
     registerMealPlanRoutes(app, ctx);

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "storeSection.schema.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["name"],
+    "properties": {
+      "name":  { "type": "string", "minLength": 1 },
+      "emoji": { "type": "string" }
+    },
+    "additionalProperties": false
+  }
+}

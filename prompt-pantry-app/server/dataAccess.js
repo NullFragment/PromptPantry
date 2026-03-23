@@ -17,8 +17,9 @@ export function createDataAccess(dataDir, validators) {
     const USERS_FILE = path.join(dataDir, 'users.json');
     const SETTINGS_FILE = path.join(dataDir, 'settings.json');
     const INGREDIENTS_FILE = path.join(dataDir, 'ingredients.json');
+    const STORE_SECTIONS_FILE = path.join(dataDir, 'storeSections.json');
 
-    const { recipeValidator } = validators;
+    const { recipeValidator, storeSectionValidator } = validators;
 
     const readJsonFile = (filePath, fallback) => {
         try {
@@ -85,6 +86,19 @@ export function createDataAccess(dataDir, validators) {
     const saveIngredients = (ingredients) => {
         const sortedIngredients = [...ingredients].sort((a, b) => a.name.localeCompare(b.name));
         writeJsonFile(INGREDIENTS_FILE, sortedIngredients);
+    };
+
+    const readStoreSections = () => {
+        const data = readJsonFile(STORE_SECTIONS_FILE, []);
+        if (!Array.isArray(data)) return [];
+        return data;
+    };
+
+    const writeStoreSections = (data) => {
+        if (storeSectionValidator && !storeSectionValidator(data)) {
+            throw new Error('Store sections data failed schema validation');
+        }
+        writeJsonFile(STORE_SECTIONS_FILE, data);
     };
 
     const readUsers = () => {
@@ -154,10 +168,9 @@ export function createDataAccess(dataDir, validators) {
      */
     const validateOrFail = (res, validator, data, errorLabel, req) => {
         if (!validator || !validator(data)) {
-            const isAdmin = req?.user?.isAdmin === true;
+            const errorDetails = validator?.errors?.map(err => `${err.instancePath || '(root)'} ${err.message}`).join('; ') || '';
             res.status(400).json({
-                error: `Invalid ${errorLabel}`,
-                ...(isAdmin ? { details: validator?.errors || [] } : {})
+                error: errorDetails ? `Invalid ${errorLabel}: ${errorDetails}` : `Invalid ${errorLabel}`,
             });
             return false;
         }
@@ -169,6 +182,8 @@ export function createDataAccess(dataDir, validators) {
         saveRecipes,
         readIngredients,
         saveIngredients,
+        readStoreSections,
+        writeStoreSections,
         readUsers,
         saveUsers,
         readSettings,

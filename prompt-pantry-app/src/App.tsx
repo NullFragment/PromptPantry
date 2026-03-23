@@ -17,6 +17,7 @@ import {useMealPlan} from './hooks/useMealPlan'
 import {useUIState} from './hooks/useUIState'
 import {useRecipeFilters} from './hooks/useRecipeFilters'
 import {useIngredients} from './hooks/useIngredients'
+import {useStoreSections} from './hooks/useStoreSections'
 import {AppProvider} from './contexts/AppContext'
 import {useConfirmation} from './hooks/useConfirmation'
 
@@ -33,7 +34,7 @@ function App() {
     const {participants, fetchParticipants, saveParticipants: saveParticipantsApi} = useParticipants();
     const {
         ingredients,
-        storeSections,
+        storeSections: ingredientSections,
         fetchIngredients,
         saveIngredient: saveIngredientApi,
         deleteIngredient: deleteIngredientApi,
@@ -44,6 +45,12 @@ function App() {
         deleteAlias: deleteAliasApi,
         mergeAlias: mergeAliasApi
     } = useIngredients();
+    const {
+        storeSections,
+        fetchStoreSections,
+        saveSection,
+        deleteSection
+    } = useStoreSections();
     const {
         mealPlan,
         setMealPlan,
@@ -142,8 +149,9 @@ function App() {
             fetchRecipes(advancedMode);
             fetchParticipants();
             fetchIngredients();
+            fetchStoreSections();
         }
-    }, [user, fetchRecipes, fetchParticipants, fetchIngredients, advancedMode]);
+    }, [user, fetchRecipes, fetchParticipants, fetchIngredients, fetchStoreSections, advancedMode]);
 
     const handleSaveParticipants = async (updatedParticipants: Participant[], showSuccess = true) => {
         const success = await saveParticipantsApi(updatedParticipants);
@@ -403,6 +411,8 @@ function App() {
                         setSelectedDate={setSelectedDate}
                         setSelectedRecipe={setSelectedRecipe}
                         ingredients={ingredients}
+                        storeSections={storeSections}
+                        onSaveSection={saveSection}
                     />
                 )}
 
@@ -410,6 +420,8 @@ function App() {
                     <Ingredients
                         ingredients={ingredients}
                         storeSections={storeSections}
+                        onSaveSection={saveSection}
+                        onDeleteSection={deleteSection}
                         onSave={saveIngredientApi}
                         onDelete={deleteIngredientApi}
                         onCheckUsage={checkIngredientUsage}
@@ -461,7 +473,7 @@ function App() {
                     multiWeeklyCookPlan={multiWeeklyCookPlan}
                     allTags={allTags}
                     ingredientDefinitions={ingredients}
-                    storeSections={storeSections}
+                    storeSections={ingredientSections}
                     onCreateIngredient={handleCreateIngredient}
                     onAddIngredientAlias={handleAddIngredientAlias}
                 />

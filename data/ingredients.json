@@ -1,0 +1,5788 @@
+[
+  {
+    "id": "a7b631ef-5813-48b5-a918-42313b72fc40",
+    "name": "⚠️ Scoop",
+    "storeSection": "Unassigned",
+    "aliases": [
+      "scoop (25-35g) protein powder, chocolate",
+      "scoop (25-35g) protein powder, vanilla",
+      "Scoops",
+      "scoops (35-50g) protein powder, vanilla"
+    ]
+  },
+  {
+    "name": "2% Milk",
+    "storeSection": "Dairy",
+    "id": "5079765e-94c4-48a2-b5bb-76832194a452",
+    "containerSizes": [
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "1 qt"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "½ gal"
+      },
+      {
+        "quantity": 128,
+        "unit": "fl oz",
+        "label": "1 gal"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "6d9a5c17-38da-4e83-825e-913f4c0fe335",
+    "name": "All-purpose Flour",
+    "storeSection": "Baking",
+    "aliases": [
+      "Flour"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      },
+      {
+        "quantity": 10,
+        "unit": "lb",
+        "label": "10 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4.25,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "a69c93b6-1c48-4089-b158-eb964d7a8cb4",
+    "name": "Almond Butter",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz jar"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.56,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "650afe11-d62b-4dbc-821a-0ab90fb54481",
+    "name": "Almond Milk",
+    "storeSection": "Beverages",
+    "aliases": [
+      "almond milk, unsweetened"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "1 qt"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "½ gal"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "efbafc64-695b-4985-a150-636959db7e26",
+    "name": "Apple Cider Vinegar",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz bottle"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "64 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "b998e85c-76d7-400f-8c5f-488101f946d3",
+    "name": "Arrabbiata",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz jar"
+      }
+    ]
+  },
+  {
+    "id": "4427521f-4ffd-4955-9fe9-680f829c67d8",
+    "name": "Asian Noodles",
+    "storeSection": "International",
+    "containerSizes": [
+      {
+        "quantity": 14,
+        "unit": "oz",
+        "label": "14 oz pack"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz pack"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "65ae3dd9-0681-46b6-9370-bfaa9ceb5aae",
+    "name": "Avocado",
+    "storeSection": "Produce",
+    "aliases": [
+      "small avocado, mashed"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 4,
+        "unit": "each",
+        "label": "bag of 4"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium avocado"
+        },
+        "volume": {
+          "quantity": 0.75,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Baby Portabella Mushrooms",
+    "storeSection": "Produce",
+    "aliases": [
+      "Baby Bella Mushrooms"
+    ],
+    "id": "7e3fcedd-6afe-47eb-b91e-4a032ccd5b6b"
+  },
+  {
+    "id": "aa4f64b2-419a-4094-b16e-0af823362919",
+    "name": "Baking Powder",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz tin"
+      },
+      {
+        "quantity": 8.1,
+        "unit": "oz",
+        "label": "8.1 oz tin"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz tin"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.14,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "e5c02cc1-313d-4494-aa8d-919d81f4de39",
+    "name": "Banana",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 1.5,
+        "unit": "lb",
+        "label": "bunch (~5-6)"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium banana"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "06740da2-2db2-4ad0-97bf-d1fbfc6b8b86",
+    "name": "Barilla Protein Pasta",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "85a1d883-f9bf-45fc-b021-d0a205a3f7df",
+    "name": "Basil",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 0.75,
+        "unit": "oz",
+        "label": "small bunch"
+      },
+      {
+        "quantity": 2.5,
+        "unit": "oz",
+        "label": "large bunch"
+      },
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "potted plant"
+      }
+    ],
+    "aliases": [
+      "Basil, chopped"
+    ]
+  },
+  {
+    "id": "8b1cd72f-8acd-430d-9a95-ce1c4cbd74b1",
+    "name": "Basmati Rice",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      },
+      {
+        "quantity": 10,
+        "unit": "lb",
+        "label": "10 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "59e7fc2b-9417-4bed-ab59-f286bf6cbdb6",
+    "name": "Bbq Sauce",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 18,
+        "unit": "oz",
+        "label": "18 oz bottle"
+      },
+      {
+        "quantity": 28,
+        "unit": "oz",
+        "label": "28 oz bottle"
+      }
+    ]
+  },
+  {
+    "id": "588a76bb-e823-4e43-ad64-f8f467998fa3",
+    "name": "Beetroot",
+    "storeSection": "Produce",
+    "aliases": [
+      "medium beetroot, grated & cooked"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "bunch (~3-4)"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium beetroot"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "3e627cc9-96d5-4803-a0de-a824050ba33b",
+    "name": "Berries",
+    "storeSection": "Produce",
+    "aliases": [
+      "berries, fresh",
+      "dried berries",
+      "fresh or frozen berries",
+      "frozen berries"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz clamshell"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz clamshell"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb frozen bag"
+      }
+    ]
+  },
+  {
+    "name": "Black Pepper",
+    "storeSection": "Spices",
+    "aliases": [
+      "Pepper",
+      "pepper, to taste",
+      "pepper, to tatse"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1.85,
+        "unit": "oz",
+        "label": "1.85 oz jar"
+      },
+      {
+        "quantity": 3,
+        "unit": "oz",
+        "label": "3 oz jar"
+      },
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz jar"
+      },
+      {
+        "quantity": 1,
+        "unit": "oz",
+        "label": "1 oz tin"
+      },
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz tin"
+      },
+      {
+        "quantity": 3.12,
+        "unit": "oz",
+        "label": "3.12 oz shaker"
+      },
+      {
+        "quantity": 7.4,
+        "unit": "oz",
+        "label": "7.4 oz container"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.07,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    },
+    "id": "716f446b-a7d7-40d5-8414-7a21742574ae"
+  },
+  {
+    "name": "Blackberries",
+    "storeSection": "Produce",
+    "id": "dfdd155d-41c3-460d-ada7-f93e94ef9f6d",
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz clamshell"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz clamshell"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4.3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "890fa317-11cd-4dc0-bc9c-eeb643fde1aa",
+    "name": "Blueberries",
+    "storeSection": "Produce",
+    "aliases": [
+      "frozen blueberries"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz clamshell"
+      },
+      {
+        "quantity": 18,
+        "unit": "oz",
+        "label": "18 oz clamshell"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb frozen bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5.1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "c6d54df0-3a83-42c1-b599-9bb056415903",
+    "name": "Box Goodles",
+    "storeSection": "Pantry",
+    "aliases": [
+      "Box of Goodles"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "box",
+        "label": "1 box (6 oz)"
+      }
+    ]
+  },
+  {
+    "id": "905a8bcd-a0e8-4946-8bc5-a74587ca4885",
+    "name": "Bread Crumbs",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz canister"
+      },
+      {
+        "quantity": 15,
+        "unit": "oz",
+        "label": "15 oz canister"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "567f406e-4c3a-4c44-b200-718d6720d5db",
+    "name": "Broccoli",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single head"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag florets"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium head broccoli"
+        },
+        "volume": {
+          "quantity": 4,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "c055f4f0-9aea-406c-ae50-e77acdcd1ceb",
+    "name": "Broccoli Florets",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "83c4c014-32fd-437b-b522-9c71700edaed",
+    "name": "Brown Rice",
+    "storeSection": "Pantry",
+    "aliases": [
+      "brown rice (washed, uncooked)",
+      "cooked brown rice"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "6968ed32-2af5-4bee-9945-be5f61c2d931",
+    "name": "Brown Sugar",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 4,
+        "unit": "lb",
+        "label": "4 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 7.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "f58b39da-67e8-4d3a-8239-8dfc53b1227b",
+    "name": "Buckwheat Flour",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb bag"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4.2,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "5029f69c-6079-46a7-b8f2-069e28d6b963",
+    "name": "Buffalo Sauce",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz bottle"
+      }
+    ]
+  },
+  {
+    "id": "3d653ddf-5e2f-48a0-9d85-a5198f8b073e",
+    "name": "Butter",
+    "storeSection": "Dairy",
+    "containerSizes": [
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "1 stick"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "4 sticks"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    },
+    "aliases": [
+      "Unsalted Butter"
+    ]
+  },
+  {
+    "id": "131ab3e1-c510-4e78-a6f8-390262284003",
+    "name": "Cajun Seasoning",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz jar"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "d79cc88b-e1c1-4da1-bb8e-95be33c4275b",
+    "name": "Canned Pineapple Bits",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz can"
+      },
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz can"
+      }
+    ]
+  },
+  {
+    "id": "462ef720-bf3e-4747-8e33-3d3bd9b978e1",
+    "name": "Carrot",
+    "storeSection": "Produce",
+    "aliases": [
+      "Carrots",
+      "carrot, grated",
+      "medium carrots, grated"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb bag"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium carrot"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "ecf9e626-1d8e-49f4-ab02-4091441fb801",
+    "name": "Cayenne Pepper",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 1.5,
+        "unit": "oz",
+        "label": "1.5 oz jar"
+      },
+      {
+        "quantity": 2.5,
+        "unit": "oz",
+        "label": "2.5 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "51fdf8b2-c6ce-4a34-89d7-60e0fddc9483",
+    "name": "Cereal",
+    "storeSection": "Snacks",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz box"
+      },
+      {
+        "quantity": 18,
+        "unit": "oz",
+        "label": "18 oz box"
+      },
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "a1251e60-a70d-4d4f-ad39-586f4be81dbd",
+    "name": "Cheddar",
+    "storeSection": "Dairy",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz block"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz block"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz block"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "870b6c85-3a8e-4e89-9083-cdd9f5f59199",
+    "name": "Cheddar Powder",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 7,
+        "unit": "oz",
+        "label": "7 oz container"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz container"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.25,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "637f399e-4538-4565-a47f-0dc92010ac6a",
+    "name": "Cheese",
+    "storeSection": "Deli",
+    "aliases": [
+      "low fat cheese"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz pack"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz block"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz block"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "a5c49152-d351-45e1-9fd7-76295bf1ad96",
+    "name": "Chia Seeds",
+    "storeSection": "Health & Supplements",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.42,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "name": "Chicken Breast",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "Chicken Breasts",
+      "Boneless Skinless Chicken Breast"
+    ],
+    "id": "046ec889-1479-48ee-97f5-06a3f8b5a1f6",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb pack"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb pack"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb pack"
+      }
+    ]
+  },
+  {
+    "id": "c34285f5-13d8-4ddb-8483-0e146a3889b8",
+    "name": "Chicken Broth",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 14.5,
+        "unit": "fl oz",
+        "label": "14.5 fl oz can"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz carton"
+      },
+      {
+        "quantity": 48,
+        "unit": "fl oz",
+        "label": "48 fl oz carton"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "c4cec848-b3a4-462d-8eac-6b7e74519f47",
+    "name": "Chicken Stock",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 14.5,
+        "unit": "fl oz",
+        "label": "14.5 fl oz can"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz carton"
+      },
+      {
+        "quantity": 48,
+        "unit": "fl oz",
+        "label": "48 fl oz carton"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Chicken Thighs",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "Boneless, Skinless Chicken Thighs",
+      "Skinless Chicken Thighs"
+    ],
+    "id": "3434e2f9-4e40-480b-b323-60f5a9f02db7",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb pack"
+      },
+      {
+        "quantity": 2.5,
+        "unit": "lb",
+        "label": "family pack (~8 thighs)"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "boneless skinless chicken thigh (cooked, shredded)"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "df78a35e-8f1f-461d-8323-94f39beda6e0",
+    "name": "Chili Pepper",
+    "storeSection": "Produce",
+    "aliases": [
+      "small chili pepper"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 0.5,
+        "unit": "lb",
+        "label": "small bag"
+      }
+    ]
+  },
+  {
+    "name": "Chili Powder",
+    "storeSection": "Spices",
+    "aliases": [
+      "chili powder, to taste"
+    ],
+    "id": "dcc4c0f6-d51f-4ead-9247-c17595aba0ba",
+    "containerSizes": [
+      {
+        "quantity": 2.5,
+        "unit": "oz",
+        "label": "2.5 oz jar"
+      },
+      {
+        "quantity": 3.12,
+        "unit": "oz",
+        "label": "3.12 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "ccd92861-83ca-4675-9c4a-0dcfd82ff82f",
+    "name": "Chipotle In Adobo",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 7,
+        "unit": "oz",
+        "label": "7 oz can"
+      }
+    ]
+  },
+  {
+    "id": "ed2aefe1-8a88-4878-bf44-7a9a036ca8c8",
+    "name": "Cilantro",
+    "storeSection": "Produce",
+    "aliases": [
+      "Coriander",
+      "Coriander Leaves",
+      "Fresh Cilantro",
+      "cilantro, finely chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "bunch"
+      }
+    ]
+  },
+  {
+    "id": "46b1d4f4-8e27-4e22-a40e-69aee3c37951",
+    "name": "Coconut Milk",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 13.5,
+        "unit": "fl oz",
+        "label": "13.5 fl oz can"
+      },
+      {
+        "quantity": 14,
+        "unit": "fl oz",
+        "label": "14 fl oz can"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "41b85a5e-0936-439f-bf8c-8750039b9ec0",
+    "name": "Coconut Oil",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 14,
+        "unit": "oz",
+        "label": "14 oz jar"
+      },
+      {
+        "quantity": 30,
+        "unit": "oz",
+        "label": "30 oz jar"
+      },
+      {
+        "quantity": 56,
+        "unit": "oz",
+        "label": "56 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 7.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "4bc1412c-450a-4d12-8646-6f4e4072a4d5",
+    "name": "Coconut Sugar",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag"
+      },
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "ab713fe5-48af-4484-8fe0-e58f1a8f0cae",
+    "name": "Coconut Water",
+    "storeSection": "Beverages",
+    "containerSizes": [
+      {
+        "quantity": 11.1,
+        "unit": "fl oz",
+        "label": "11.1 fl oz carton"
+      },
+      {
+        "quantity": 33.8,
+        "unit": "fl oz",
+        "label": "1 liter carton"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "ab59f0f2-d918-4514-9d93-d26e7fd5b585",
+    "name": "Cornstarch",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz box"
+      },
+      {
+        "quantity": 35,
+        "unit": "oz",
+        "label": "35 oz container"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.11,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "40c28324-2991-49ff-8e43-58e7744b1dee",
+    "name": "Cottage Cheese",
+    "storeSection": "Dairy",
+    "aliases": [
+      "2% Cottage Cheese",
+      "Cottage Cheese (blended)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz tub"
+      },
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz tub"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz tub"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "0079259c-178c-41c0-ab15-aec5fc777bdb",
+    "name": "Couscous",
+    "storeSection": "Pantry",
+    "aliases": [
+      "Cooked couscous"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "oz",
+        "label": "10 oz box"
+      },
+      {
+        "quantity": 17.6,
+        "unit": "oz",
+        "label": "17.6 oz box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "cdf8cfd7-d95e-452f-b215-041aa4065fca",
+    "name": "Cranberries",
+    "storeSection": "Produce",
+    "aliases": [
+      "dried cranberries"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag (fresh)"
+      },
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz bag (dried)"
+      },
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz bag (frozen)"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.9,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "f4ab332c-9316-4c0f-9c91-744b876929b4",
+    "name": "Cream Cheese",
+    "storeSection": "Dairy",
+    "aliases": [
+      "Cream Cheese, 1/3 Fat",
+      "Light Cream Cheese",
+      "fat free cream cheese"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz block"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz block"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.2,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "7e3598be-dfd4-4cb4-9709-f422f242929c",
+    "name": "Croissant",
+    "storeSection": "Bakery",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 4,
+        "unit": "each",
+        "label": "4-pack"
+      },
+      {
+        "quantity": 6,
+        "unit": "each",
+        "label": "6-pack"
+      }
+    ]
+  },
+  {
+    "id": "a5a813b2-1f48-4712-96cb-ec7534ca75f5",
+    "name": "Crushed Tomatoes",
+    "storeSection": "Canned Goods",
+    "aliases": [
+      "Canned Crushed Tomatoes"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 14.5,
+        "unit": "oz",
+        "label": "14.5 oz can"
+      },
+      {
+        "quantity": 28,
+        "unit": "oz",
+        "label": "28 oz can"
+      }
+    ]
+  },
+  {
+    "id": "b890a3ba-57a3-40c3-9eae-4ce2cb60c0e7",
+    "name": "Cucumber",
+    "storeSection": "Produce",
+    "aliases": [
+      "Cucumbers",
+      "chopped cucumbers",
+      "cucumber, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 3,
+        "unit": "each",
+        "label": "bag of 3"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium cucumber, sliced"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "f5720559-bae3-455e-a6b1-84354ab087a7",
+    "name": "Dijon Mustard",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz jar"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz jar"
+      }
+    ]
+  },
+  {
+    "name": "Egg",
+    "storeSection": "Dairy",
+    "aliases": [
+      "Whole Egg"
+    ],
+    "id": "715287f2-f04b-4d1d-96ef-ff6e3e7560bc",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "each",
+        "label": "1 dozen"
+      },
+      {
+        "quantity": 18,
+        "unit": "each",
+        "label": "18-count"
+      },
+      {
+        "quantity": 24,
+        "unit": "each",
+        "label": "2 dozen"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "large egg"
+        },
+        "volume": {
+          "quantity": 0.25,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "fc84ec60-3910-4624-afa2-25a3ae00860d",
+    "name": "Egg Whites",
+    "storeSection": "Dairy",
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz carton"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz carton"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 2,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "cd6fc63d-84f4-4192-83da-5974d9efede9",
+    "name": "English Muffins",
+    "storeSection": "Bakery",
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "each",
+        "label": "6-pack"
+      },
+      {
+        "quantity": 12,
+        "unit": "each",
+        "label": "12-pack"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "English muffin"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "054ffdd2-f03b-43e3-b3dc-f508961e62e1",
+    "name": "Espresso",
+    "storeSection": "Unassigned",
+    "containerSizes": []
+  },
+  {
+    "name": "Evaporated Milk",
+    "storeSection": "Canned Goods",
+    "id": "fc9e172d-10b8-412e-bbb5-c796c734387b",
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "fl oz",
+        "label": "5 fl oz can"
+      },
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz can"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.9,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "d3d0f351-2622-4185-89e2-6259868bbfb3",
+    "name": "Feta",
+    "storeSection": "Dairy",
+    "aliases": [
+      "Crumbled Feta",
+      "Feta Crumbles"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz package"
+      },
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz package"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz block"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "fbd7665a-5477-4d6a-963b-080469e2cbaa",
+    "name": "Fish Sauce",
+    "storeSection": "International",
+    "containerSizes": [
+      {
+        "quantity": 6.76,
+        "unit": "fl oz",
+        "label": "200 ml bottle"
+      },
+      {
+        "quantity": 23.7,
+        "unit": "fl oz",
+        "label": "700 ml bottle"
+      }
+    ]
+  },
+  {
+    "id": "0a374de2-49dc-4feb-82cf-14453bab0258",
+    "name": "Fried Egg",
+    "storeSection": "Dairy"
+  },
+  {
+    "id": "b954f5b8-5ec3-40df-96aa-1dc7c9424ae3",
+    "name": "Fries",
+    "storeSection": "Frozen",
+    "containerSizes": [
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz bag"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz bag"
+      }
+    ]
+  },
+  {
+    "name": "Frozen Chicken Sausage Patties",
+    "storeSection": "Frozen",
+    "id": "bf67f387-500f-4818-a356-586b2c1db583",
+    "containerSizes": [
+      {
+        "quantity": 9.6,
+        "unit": "oz",
+        "label": "9.6 oz box (8 patties)"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz box"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "sausage patty"
+        },
+        "volume": {
+          "quantity": 0.25,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "52b0ed9c-4332-4a5a-8ce8-f5b5f6d1e9f4",
+    "name": "Garam Masala",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 1.87,
+        "unit": "oz",
+        "label": "1.87 oz jar"
+      },
+      {
+        "quantity": 3,
+        "unit": "oz",
+        "label": "3 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "b6fb1b87-94cc-4bed-8050-65b2a9a236e9",
+    "name": "Garlic",
+    "storeSection": "Produce",
+    "aliases": [
+      "Garlic Cloves",
+      "Garlic, minced",
+      "garlic cloves, crushed",
+      "garlic, minced",
+      "garlic, sliced",
+      "Minced Garlic"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single head"
+      },
+      {
+        "quantity": 3,
+        "unit": "each",
+        "label": "3-pack"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium clove, minced"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "bd9cfe4a-c2d1-4efa-89e8-fb6b4c3c16c4",
+    "name": "Garlic Powder",
+    "storeSection": "Spices",
+    "aliases": [
+      "garlic powder, to taste",
+      "garlic powder,to taste"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 3.12,
+        "unit": "oz",
+        "label": "3.12 oz jar"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz jar"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.11,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "name": "Ginger",
+    "storeSection": "Produce",
+    "aliases": [
+      "ginger, grated"
+    ],
+    "id": "abe6615c-6701-40f8-8920-b196084d310b",
+    "containerSizes": [
+      {
+        "quantity": 0.5,
+        "unit": "lb",
+        "label": "~0.5 lb hand"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "~1 lb hand"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "1-inch piece, grated"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "750bdc39-9616-4c7d-93bd-ff532a2d6e52",
+    "name": "Gochujang",
+    "storeSection": "International",
+    "aliases": [
+      "Gochujan"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 7.05,
+        "unit": "oz",
+        "label": "200g tub"
+      },
+      {
+        "quantity": 17.6,
+        "unit": "oz",
+        "label": "500g tub"
+      }
+    ]
+  },
+  {
+    "id": "a55d2553-84cb-442c-abff-fdadd6fc1059",
+    "name": "Granola",
+    "storeSection": "Snacks",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz bag"
+      }
+    ]
+  },
+  {
+    "id": "96b769a2-6413-4df0-804e-6d597d193600",
+    "name": "Greek Yogurt",
+    "storeSection": "Dairy",
+    "aliases": [
+      "Greek Yogurt (plain)",
+      "fat free greek yogurt, plain"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 5.3,
+        "unit": "oz",
+        "label": "single-serve cup"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb tub"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "2 lb tub"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Green Onions",
+    "storeSection": "Produce",
+    "aliases": [
+      "green onions, chopped"
+    ],
+    "id": "f5b68257-8b1e-46c2-a540-5f0de64ea3e0",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single bunch (~6 stalks)"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium stalk, sliced"
+        },
+        "volume": {
+          "quantity": 2,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "7871a348-4aae-4548-9f1d-f50e41a959d3",
+    "name": "Ground Beef",
+    "storeSection": "Meat & Seafood",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb pack"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb pack"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb chub"
+      }
+    ]
+  },
+  {
+    "id": "f7b15552-5608-4f02-86a3-74b42f99026b",
+    "name": "Ground Cinnamon",
+    "storeSection": "Spices",
+    "aliases": [
+      "Cinnamon"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2.37,
+        "unit": "oz",
+        "label": "2.37 oz jar"
+      },
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz jar"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "50f03bfa-ab9c-41d5-acd2-15515d31ba3e",
+    "name": "Ground Cumin",
+    "storeSection": "Spices",
+    "aliases": [
+      "Cumin"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz jar"
+      },
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz jar"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "db05d1f7-edd8-43e7-a320-bc4923a4242d",
+    "name": "Ground Pork",
+    "storeSection": "Meat & Seafood",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb pack"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb pack"
+      }
+    ]
+  },
+  {
+    "id": "2b934f55-f347-4436-ad64-8fc3f82f928b",
+    "name": "Ground Turkey",
+    "storeSection": "Meat & Seafood",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb package"
+      },
+      {
+        "quantity": 1.3,
+        "unit": "lb",
+        "label": "1.3 lb package"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb package"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "d050abcb-f032-418c-bb05-8cd39cf19a21",
+    "name": "Hamburger Buns",
+    "storeSection": "Bakery",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "each",
+        "label": "8-count pack"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "hamburger bun"
+        },
+        "volume": {
+          "quantity": 0.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "aa0939e1-5f99-421f-be7e-7f8ec779f94a",
+    "name": "Heavy Cream",
+    "storeSection": "Dairy",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "fl oz",
+        "label": "half-pint"
+      },
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "pint"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "1 qt"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "86d1683a-3217-4781-b209-787b1f7dcddd",
+    "name": "Hoisin",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 8.5,
+        "unit": "oz",
+        "label": "8.5 oz jar"
+      },
+      {
+        "quantity": 15,
+        "unit": "oz",
+        "label": "15 oz jar"
+      }
+    ]
+  },
+  {
+    "id": "ac5682dd-dec3-485f-9ea4-74c4455daa36",
+    "name": "Honey",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bottle"
+      },
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 12,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "639e3a3f-9d42-4838-b136-085bbe87d647",
+    "name": "Hot Sauce",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "fl oz",
+        "label": "2 fl oz bottle"
+      },
+      {
+        "quantity": 5,
+        "unit": "fl oz",
+        "label": "5 fl oz bottle"
+      },
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      }
+    ]
+  },
+  {
+    "id": "06220ef5-39c7-4c8c-af42-c048f899c76d",
+    "name": "Ice Cubes",
+    "storeSection": "Unassigned",
+    "aliases": [
+      "of ice cubes"
+    ],
+    "containerSizes": []
+  },
+  {
+    "id": "72d3bd20-4fd0-45e1-a449-44177a0fc185",
+    "name": "Italian Seasoning",
+    "storeSection": "Spices",
+    "aliases": [
+      "italian seasoning, to taste"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 0.75,
+        "unit": "oz",
+        "label": "0.75 oz bottle"
+      },
+      {
+        "quantity": 1,
+        "unit": "oz",
+        "label": "1 oz bottle"
+      },
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.04,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "name": "Jasmine Rice",
+    "storeSection": "Pantry",
+    "id": "fcb67b71-772c-4db8-bbb8-389adc15959a"
+  },
+  {
+    "name": "Jumbo Pasta Shells",
+    "storeSection": "Pantry",
+    "id": "4e1514c4-d0d1-4da0-a7ad-4f0cec346a00",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "6929906d-6e06-45ac-b5fe-de469bbb0fcc",
+    "name": "Ketchup",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz bottle"
+      },
+      {
+        "quantity": 64,
+        "unit": "oz",
+        "label": "64 oz bottle"
+      }
+    ]
+  },
+  {
+    "id": "ce3ee9bb-76c6-4a73-bc1a-0cde140d8a3c",
+    "name": "Kind Bar",
+    "storeSection": "Snacks",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single bar (1.4 oz)"
+      },
+      {
+        "quantity": 6,
+        "unit": "each",
+        "label": "6-count box"
+      },
+      {
+        "quantity": 12,
+        "unit": "each",
+        "label": "12-count box"
+      }
+    ]
+  },
+  {
+    "id": "1290b783-f160-45ff-bdc6-3d342180c075",
+    "name": "Lemon Juice",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 4,
+        "unit": "fl oz",
+        "label": "4 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "194430ef-9903-4d16-85fc-3c8dfc71c673",
+    "name": "Lemon Zest",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single lemon"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium lemon"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "57f45716-38a5-45af-9c80-54ac46cf1e81",
+    "name": "Lentils",
+    "storeSection": "Pantry",
+    "aliases": [
+      "can lentils, drained"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 15,
+        "unit": "oz",
+        "label": "15 oz can"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "1f6de6ee-67ab-4db3-ae09-a8b563802f3c",
+    "name": "Light Mayo",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 11.5,
+        "unit": "oz",
+        "label": "11.5 oz jar"
+      },
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz jar"
+      },
+      {
+        "quantity": 30,
+        "unit": "oz",
+        "label": "30 oz jar"
+      }
+    ]
+  },
+  {
+    "id": "7d0f66a8-9b65-4a06-83ce-bf10049f1af9",
+    "name": "Lime",
+    "storeSection": "Produce",
+    "aliases": [
+      "lime, juiced"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium lime"
+        },
+        "volume": {
+          "quantity": 2,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "name": "Lime Juice",
+    "storeSection": "Produce",
+    "aliases": [
+      "Juice of a lime"
+    ],
+    "id": "52b729cb-eaae-42c5-b32d-8dd6a84ebdc9",
+    "containerSizes": [
+      {
+        "quantity": 4,
+        "unit": "fl oz",
+        "label": "4 fl oz bottle"
+      },
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "48f8e7bd-7e8c-4454-a1bb-bc5d275d0aca",
+    "name": "Limes",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium lime"
+        },
+        "volume": {
+          "quantity": 2,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "9914d3ad-72bd-47cd-b3f9-6d1497786a58",
+    "name": "Low Sodium Soy Sauce",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "fl oz",
+        "label": "10 fl oz bottle"
+      },
+      {
+        "quantity": 15,
+        "unit": "fl oz",
+        "label": "15 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "fc8a231f-3986-4894-9355-97f95ee89b90",
+    "name": "Low-fat Cheese",
+    "storeSection": "Dairy",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz package"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz package"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Mango",
+    "storeSection": "Produce",
+    "aliases": [
+      "Mango Chunks",
+      "diced mango",
+      "mango, peeled"
+    ],
+    "id": "3459a8ad-9955-44ca-8bd7-ee9c98fe07c2",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 3,
+        "unit": "each",
+        "label": "bag of 3"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium mango, diced"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "0fc0222b-2bb3-4b3d-9a31-b21949a65781",
+    "name": "Maple Syrup",
+    "storeSection": "Pantry",
+    "aliases": [
+      "SF maple syrup (or 1 tsp honey)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "fl oz",
+        "label": "8 fl oz bottle"
+      },
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 11.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "02f09894-51d3-4384-9cdc-edc2cb776577",
+    "name": "Marmalade",
+    "storeSection": "Condiments",
+    "aliases": [
+      "marmalade (low sugar)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz jar"
+      },
+      {
+        "quantity": 18,
+        "unit": "oz",
+        "label": "18 oz jar"
+      }
+    ]
+  },
+  {
+    "name": "Marsala Wine",
+    "storeSection": "Unassigned",
+    "id": "98a48c58-b985-426f-b64c-1b7ddd9b54fa"
+  },
+  {
+    "id": "3532d5e0-8d21-4186-ab5b-6b079988e593",
+    "name": "Mayo",
+    "storeSection": "Condiments",
+    "aliases": [
+      "low fat mayo (optional)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 11.5,
+        "unit": "fl oz",
+        "label": "11.5 fl oz squeeze"
+      },
+      {
+        "quantity": 30,
+        "unit": "fl oz",
+        "label": "30 fl oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "804aa482-44be-4004-9bea-cfe774a31296",
+    "name": "Milk",
+    "storeSection": "Dairy",
+    "aliases": [
+      "Splash of milk"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "1 qt"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "½ gal"
+      },
+      {
+        "quantity": 128,
+        "unit": "fl oz",
+        "label": "1 gal"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "2104208b-d957-4a09-bef2-0ed4323f4340",
+    "name": "Mint",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 0.75,
+        "unit": "oz",
+        "label": "0.75 oz clamshell"
+      }
+    ]
+  },
+  {
+    "id": "e2f5ff19-1a88-4fed-a3e2-9746bd911295",
+    "name": "Mirin",
+    "storeSection": "International",
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "fl oz",
+        "label": "10 fl oz bottle"
+      },
+      {
+        "quantity": 23.6,
+        "unit": "fl oz",
+        "label": "23.6 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 9,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "055817d2-0f31-4085-a63f-eb7c34ab62a9",
+    "name": "Mixed Veggies",
+    "storeSection": "Frozen",
+    "aliases": [
+      "mixed veggies, fresh or frozen"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "oz",
+        "label": "10 oz frozen bag"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz frozen bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz frozen bag"
+      }
+    ]
+  },
+  {
+    "id": "64d7edf9-d824-460d-9068-6d5d1d624b08",
+    "name": "Mozzarella",
+    "storeSection": "Dairy",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz block/ball"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz shredded bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "adf43d02-24e4-4814-9109-f371f48bc8fa",
+    "name": "Mustard",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz bottle"
+      },
+      {
+        "quantity": 14,
+        "unit": "oz",
+        "label": "14 oz bottle"
+      },
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz bottle"
+      }
+    ]
+  },
+  {
+    "id": "4caadc85-50c0-450a-80c0-477996f27c15",
+    "name": "Nutritional Yeast",
+    "storeSection": "Health & Supplements",
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "oz",
+        "label": "5 oz shaker"
+      },
+      {
+        "quantity": 10,
+        "unit": "oz",
+        "label": "10 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1.4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 0.25,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "3f62c6aa-e55b-4e81-a149-b5bccee08c6e",
+    "name": "Oatly Barista",
+    "storeSection": "Beverages",
+    "containerSizes": [
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "1 qt carton"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "half-gallon carton"
+      }
+    ]
+  },
+  {
+    "id": "8659b376-babb-4bb1-b66b-60ee632d9920",
+    "name": "Old Bay",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 2.62,
+        "unit": "oz",
+        "label": "2.62 oz tin"
+      },
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz tin"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz tin"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.18,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "eb0c6f5c-d6ad-4d05-8667-8d8898a289b9",
+    "name": "Olive Oil",
+    "storeSection": "Pantry",
+    "aliases": [
+      "olive oil (or spray)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 16.9,
+        "unit": "fl oz",
+        "label": "500 ml bottle"
+      },
+      {
+        "quantity": 25.4,
+        "unit": "fl oz",
+        "label": "750 ml bottle"
+      },
+      {
+        "quantity": 33.8,
+        "unit": "fl oz",
+        "label": "1 L bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 7.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "9bf57fbc-9a50-43b5-9a48-85074194d8fc",
+    "name": "Onion",
+    "storeSection": "Produce",
+    "aliases": [
+      "medium onion, chopped",
+      "medium onion, sliced",
+      "onion, sliced",
+      "small onion, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium onion, chopped"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "dc42228b-7292-4b02-9303-3c790fea0a23",
+    "name": "Onion Powder",
+    "storeSection": "Spices",
+    "aliases": [
+      "onion powder, to taste",
+      "onion powder, to tatse"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2.5,
+        "unit": "oz",
+        "label": "2.5 oz jar"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "fc8ed343-5e56-4d29-8b62-44cb604c68dd",
+    "name": "Orange",
+    "storeSection": "Produce",
+    "aliases": [
+      "orange, juice only"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 4,
+        "unit": "lb",
+        "label": "4 lb bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium orange, juiced"
+        },
+        "volume": {
+          "quantity": 0.33,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "78305d21-6b9e-4a49-9946-6df4431545dd",
+    "name": "Orange Juice",
+    "storeSection": "Beverages",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "1 qt carton"
+      },
+      {
+        "quantity": 52,
+        "unit": "fl oz",
+        "label": "52 fl oz carton"
+      },
+      {
+        "quantity": 59,
+        "unit": "fl oz",
+        "label": "59 fl oz carton"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "cd6dda70-acab-468b-b383-51b678e21432",
+    "name": "Orange Zest",
+    "storeSection": "Produce",
+    "containerSizes": []
+  },
+  {
+    "id": "a43a06ff-f610-48d1-9d03-afe7aef31de8",
+    "name": "Oregano",
+    "storeSection": "Spices",
+    "aliases": [
+      "oregano, to taste"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 0.75,
+        "unit": "oz",
+        "label": "0.75 oz jar"
+      },
+      {
+        "quantity": 1,
+        "unit": "oz",
+        "label": "1 oz jar"
+      },
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "bc42f003-71c2-42df-8c18-60834fd494d1",
+    "name": "Orzo",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz box"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "e65dedfb-d88f-4c8d-9d53-75bf95d6a5df",
+    "name": "Oyster Sauce",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 9,
+        "unit": "oz",
+        "label": "9 oz bottle"
+      },
+      {
+        "quantity": 18,
+        "unit": "oz",
+        "label": "18 oz bottle"
+      }
+    ]
+  },
+  {
+    "id": "18647352-63ba-4b63-8918-14850375a3de",
+    "name": "Paprika",
+    "storeSection": "Spices",
+    "aliases": [
+      "paprika, to taste",
+      "paprika, to tatse"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "oz",
+        "label": "1 oz jar"
+      },
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz jar"
+      },
+      {
+        "quantity": 3.5,
+        "unit": "oz",
+        "label": "3.5 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "994dce5c-cbfc-4a57-b64f-6dc06aa157e4",
+    "name": "Parmigiano Reggiano",
+    "storeSection": "Dairy",
+    "aliases": [
+      "Parmesan",
+      "Parmesan Cheese",
+      "Light Grated Parmesan"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "oz",
+        "label": "5 oz wedge"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz wedge"
+      },
+      {
+        "quantity": 5,
+        "unit": "oz",
+        "label": "5 oz grated"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz grated"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "5e53a938-a93c-4ae5-bcef-e1df0b89c0ce",
+    "name": "Parsley",
+    "storeSection": "Produce",
+    "aliases": [
+      "Fresh Parsley",
+      "dried parsley, to taste"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "bunch",
+        "label": "fresh bunch"
+      },
+      {
+        "quantity": 0.5,
+        "unit": "oz",
+        "label": "0.5 oz dried"
+      },
+      {
+        "quantity": 1,
+        "unit": "oz",
+        "label": "1 oz dried"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "3b455282-0f5a-45fb-81b3-4c40ac2ead03",
+    "name": "Passata",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz jar"
+      },
+      {
+        "quantity": 26,
+        "unit": "oz",
+        "label": "26 oz carton"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "5bada7b3-c2d1-4ddf-97c0-113351ec7362",
+    "name": "Pasta",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz box"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "56ba628e-3c28-4323-ba24-9b1afa8b1577",
+    "name": "Pasta Water",
+    "storeSection": "Unassigned",
+    "containerSizes": []
+  },
+  {
+    "id": "8fec306f-7a7e-4b4b-9a1a-a7bf217394ae",
+    "name": "Peanut Butter",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz jar"
+      },
+      {
+        "quantity": 28,
+        "unit": "oz",
+        "label": "28 oz jar"
+      },
+      {
+        "quantity": 40,
+        "unit": "oz",
+        "label": "40 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.8,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "7b459b4e-e033-4945-9aaf-04f85b8076bb",
+    "name": "Pecans",
+    "storeSection": "Baking",
+    "aliases": [
+      "pecans, roasted"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz bag"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.75,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "d63d8b22-99c1-497d-874f-3e2c3710d3a6",
+    "name": "Pineapple",
+    "storeSection": "Produce",
+    "aliases": [
+      "Pineapple Chunks",
+      "frozen pineapple chunks",
+      "pineapple, canned chunks",
+      "pineapple, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "1 whole pineapple"
+      },
+      {
+        "quantity": 14,
+        "unit": "oz",
+        "label": "14 oz can chunks"
+      },
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz can chunks"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz frozen bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium pineapple"
+        },
+        "volume": {
+          "quantity": 4,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "cd580eab-c8cc-41bc-941b-1fd95d562b7d",
+    "name": "Pineapple Juice",
+    "storeSection": "Beverages",
+    "aliases": [
+      "pineapple juice, from can"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "fl oz",
+        "label": "6 fl oz can"
+      },
+      {
+        "quantity": 46,
+        "unit": "fl oz",
+        "label": "46 fl oz can"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "64 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "54efb302-1ae1-4da9-af62-2051c9180baf",
+    "name": "Plenny Active Powder",
+    "storeSection": "Health & Supplements",
+    "aliases": [
+      "Plenny Active Powder (Chocolate)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 49.4,
+        "unit": "oz",
+        "label": "1.4 kg bag"
+      }
+    ]
+  },
+  {
+    "id": "bfeb7c01-00db-4ba5-a5e0-b53951ccf31e",
+    "name": "Pomegranate Fruit",
+    "storeSection": "Produce",
+    "aliases": [
+      "pomegranate fruit, seeds"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 9,
+        "unit": "oz",
+        "label": "1 whole pomegranate"
+      },
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz arils cup"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium pomegranate"
+        },
+        "volume": {
+          "quantity": 0.75,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "aea965a6-2e1c-425b-8a25-e0fe9165e6e1",
+    "name": "Pork Tenderloin",
+    "storeSection": "Meat & Seafood",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb package"
+      },
+      {
+        "quantity": 1.5,
+        "unit": "lb",
+        "label": "1.5 lb package"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb package"
+      }
+    ]
+  },
+  {
+    "id": "36c8da32-009c-4f61-bb30-ee96c5cedbed",
+    "name": "Potato Starch",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb bag"
+      },
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "1.5 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "aea89ba4-3c5d-4350-81b0-673625b45782",
+    "name": "Potatoes",
+    "storeSection": "Produce",
+    "aliases": [
+      "large potatoes",
+      "medium potatoes"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      },
+      {
+        "quantity": 10,
+        "unit": "lb",
+        "label": "10 lb bag"
+      },
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium potato, diced"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Powdered Peanut Butter",
+    "storeSection": "Pantry",
+    "id": "f78e32a9-3840-48ec-ae18-980cf71117fa",
+    "containerSizes": [
+      {
+        "quantity": 6.5,
+        "unit": "oz",
+        "label": "6.5 oz jar"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.28,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "ba9644b3-cb8e-400f-b77d-7f86126fb5c7",
+    "name": "Prosciutto Slices",
+    "storeSection": "Deli",
+    "containerSizes": [
+      {
+        "quantity": 3,
+        "unit": "oz",
+        "label": "3 oz pack"
+      },
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz pack"
+      }
+    ]
+  },
+  {
+    "id": "66128e52-8ec0-4ed9-8443-27446dec97db",
+    "name": "Protein Powder",
+    "storeSection": "Health & Supplements",
+    "aliases": [
+      "protein powder, vanilla",
+      "Vanilla Protein Powder",
+      "Vanilla Whey",
+      "Vanilla Whey Powder",
+      "Scoop Vanilla Whey Protein"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb tub"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb tub"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb tub"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1.1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "scoop"
+        }
+      }
+    }
+  },
+  {
+    "id": "bfd4d6e5-1026-4f06-b3d4-fe43ff96d44e",
+    "name": "Pumpkin Puree",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 15,
+        "unit": "oz",
+        "label": "15 oz can"
+      },
+      {
+        "quantity": 29,
+        "unit": "oz",
+        "label": "29 oz can"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "d5319843-e3e7-40b2-bbc9-ed108e0f2ed8",
+    "name": "Raspberries",
+    "storeSection": "Produce",
+    "aliases": [
+      "frozen raspberries"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz clamshell"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz frozen bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz frozen bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4.3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "74b562cb-c645-45ab-888e-92b9ba03dc3c",
+    "name": "Red Bell Pepper",
+    "storeSection": "Produce",
+    "aliases": [
+      "red bell pepper, chopped",
+      "red bell pepper, sliced",
+      "small red bell pepper"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 3,
+        "unit": "each",
+        "label": "3-pack"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium red bell pepper, chopped"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "ca951ecf-5561-47c0-ab6f-65ef4a1e02ec",
+    "name": "Red Onion",
+    "storeSection": "Produce",
+    "aliases": [
+      "red onion, chopped",
+      "small red onion",
+      "small red onion, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium red onion, chopped"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "afc11f31-9861-4051-917e-37e023f57a7f",
+    "name": "Red Pepper Flakes",
+    "storeSection": "Spices",
+    "aliases": [
+      "Chili Flakes",
+      "Crushed Chili Flakes",
+      "Red Chili Flakes"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "oz",
+        "label": "1 oz jar"
+      },
+      {
+        "quantity": 2.5,
+        "unit": "oz",
+        "label": "2.5 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.09,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "9838aa9c-0b71-43a2-a6c8-b88a3afab689",
+    "name": "Red Pesto",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 6.5,
+        "unit": "oz",
+        "label": "6.5 oz jar"
+      },
+      {
+        "quantity": 10,
+        "unit": "oz",
+        "label": "10 oz jar"
+      }
+    ]
+  },
+  {
+    "id": "9f4fdad8-37b7-47f4-802a-3af8582b29ff",
+    "name": "Red Wine Vinegar",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      },
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "129c88ac-f99d-4c99-b213-138eb590340c",
+    "name": "Rice",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      },
+      {
+        "quantity": 10,
+        "unit": "lb",
+        "label": "10 lb bag"
+      },
+      {
+        "quantity": 20,
+        "unit": "lb",
+        "label": "20 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "9665901e-4a28-4533-8267-3659595a4a1d",
+    "name": "Rice Vinegar",
+    "storeSection": "Condiments",
+    "aliases": [
+      "of rice vinegar"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "fl oz",
+        "label": "10 fl oz bottle"
+      },
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "1e6c49ab-33fa-457c-ad6e-a37b71d48219",
+    "name": "Rolled Oats",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 18,
+        "unit": "oz",
+        "label": "18 oz canister"
+      },
+      {
+        "quantity": 42,
+        "unit": "oz",
+        "label": "42 oz canister"
+      },
+      {
+        "quantity": 4,
+        "unit": "lb",
+        "label": "4 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 2.85,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "3fea0656-1df2-4cf8-8c1b-ee44e0b950a3",
+    "name": "Romaine Lettuce",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single head"
+      },
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "romaine hearts 3-pack"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium romaine head, chopped"
+        },
+        "volume": {
+          "quantity": 8,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "aeb71695-5b58-4363-9519-073d90c38a59",
+    "name": "Rosdee Seasoning",
+    "storeSection": "International",
+    "containerSizes": [
+      {
+        "quantity": 2.12,
+        "unit": "oz",
+        "label": "60g packet"
+      }
+    ]
+  },
+  {
+    "id": "e9ccdc7d-3a08-4389-9006-672c46c415df",
+    "name": "Salmon",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "Salmon Fillets",
+      "salmon, 4 fillets"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz fillet"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb fillet"
+      },
+      {
+        "quantity": 1.5,
+        "unit": "lb",
+        "label": "1.5 lb side"
+      }
+    ]
+  },
+  {
+    "id": "fc4af54e-daf4-4c63-9544-7ee9978b070f",
+    "name": "Salt",
+    "storeSection": "Spices",
+    "aliases": [
+      "of salt",
+      "salt, to taste",
+      "salt, to tatse"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 26,
+        "unit": "oz",
+        "label": "26 oz canister"
+      },
+      {
+        "quantity": 4,
+        "unit": "lb",
+        "label": "4 lb box"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb kosher box"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb kosher box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.2,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "7ec1ff17-4326-4ac2-916b-353d6062a8a5",
+    "name": "Self-rising Flour",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 4.4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "5a83677f-f6dd-44ac-9de6-2443df873e3b",
+    "name": "Sesame Oil",
+    "storeSection": "International",
+    "containerSizes": [
+      {
+        "quantity": 8.45,
+        "unit": "fl oz",
+        "label": "8.45 fl oz bottle"
+      },
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 7.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "85cd2c25-6257-44ba-be55-cab2d2b60659",
+    "name": "Sesame Seeds",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Shallot",
+    "storeSection": "Produce",
+    "id": "9359edec-e86e-4f44-ac31-b8d56d9640e2"
+  },
+  {
+    "id": "8256ca29-2346-4287-b738-dcdc59e5d318",
+    "name": "Shawarma Seasoning",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "oz",
+        "label": "2 oz jar"
+      },
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 2.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "3141f59f-3619-4880-8e5e-c821d1961af7",
+    "name": "Shredded Carrots",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "oz",
+        "label": "10 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.8,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Sirloin Steak",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "Sirloin Steak Or Ground Beef"
+    ],
+    "id": "61aff4cc-bed8-4085-b8a3-39f3d1ed8b57",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz steak"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz steak"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb steak"
+      }
+    ]
+  },
+  {
+    "id": "7aea6d44-3564-4273-a7b8-15147c8b09cf",
+    "name": "Skirt Steak",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "Stir-fry Beef"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb"
+      },
+      {
+        "quantity": 1.5,
+        "unit": "lb",
+        "label": "1.5 lb"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb"
+      }
+    ]
+  },
+  {
+    "id": "cf48abf0-beb2-42b8-ad60-2e1c3f286bab",
+    "name": "Snap Peas",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "2be9fe2d-1df5-440f-9bf4-eb0705add5f9",
+    "name": "Sour Cream",
+    "storeSection": "Dairy",
+    "aliases": [
+      "fat free sour cream"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz container"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz container"
+      },
+      {
+        "quantity": 24,
+        "unit": "oz",
+        "label": "24 oz container"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "760cdc47-a8e9-4e20-a1b6-72fc0b0869ac",
+    "name": "Soy Sauce",
+    "storeSection": "Condiments",
+    "aliases": [
+      "of soy sauce"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 10,
+        "unit": "fl oz",
+        "label": "10 fl oz bottle"
+      },
+      {
+        "quantity": 15,
+        "unit": "fl oz",
+        "label": "15 fl oz bottle"
+      },
+      {
+        "quantity": 64,
+        "unit": "fl oz",
+        "label": "64 fl oz jug"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "Spinach",
+    "storeSection": "Produce",
+    "aliases": [
+      "spinach, chopped"
+    ],
+    "id": "8d014b61-37eb-42a0-8618-4e2efe9e6183",
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "oz",
+        "label": "5 oz bag"
+      },
+      {
+        "quantity": 9,
+        "unit": "oz",
+        "label": "9 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "1 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "11216c73-a1c5-4ea2-b5db-9a14f8a7c785",
+    "name": "Spring Mix",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "oz",
+        "label": "5 oz container"
+      },
+      {
+        "quantity": 11,
+        "unit": "oz",
+        "label": "11 oz container"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "2760b706-b381-4c56-a8ad-bb87c629eb73",
+    "name": "Spring Onions",
+    "storeSection": "Produce",
+    "aliases": [
+      "spring onions, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "bunch",
+        "label": "1 bunch (~6 stalks)"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 1.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "ab290a36-d0af-4f39-9a19-9e24c783f003",
+    "name": "Sriracha",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 9,
+        "unit": "fl oz",
+        "label": "9 fl oz bottle"
+      },
+      {
+        "quantity": 17,
+        "unit": "fl oz",
+        "label": "17 fl oz bottle"
+      },
+      {
+        "quantity": 28,
+        "unit": "fl oz",
+        "label": "28 fl oz bottle"
+      }
+    ]
+  },
+  {
+    "name": "Strawberries",
+    "storeSection": "Produce",
+    "id": "f102aa05-b6b6-4a24-b985-bafba36b90d3",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb clamshell"
+      },
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb clamshell"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5.3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "72e1277e-8217-4fa0-997b-dd6e165271a2",
+    "name": "Strips Turkey Bacon",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "strips turkey bacon, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 11,
+        "unit": "oz",
+        "label": "11 oz pkg"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz pkg"
+      }
+    ]
+  },
+  {
+    "id": "3d0b2aba-0c25-47ab-a76d-d74aec147afd",
+    "name": "Sugar",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 4,
+        "unit": "lb",
+        "label": "4 lb bag"
+      },
+      {
+        "quantity": 10,
+        "unit": "lb",
+        "label": "10 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "56e9704e-9a47-4e14-ab65-5188299d4288",
+    "name": "Sun-Dried Tomatoes",
+    "storeSection": "Pantry",
+    "aliases": [
+      "sun-dried tomatoes, drained",
+      "sun-dried tomatoes, oil of"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 3,
+        "unit": "oz",
+        "label": "3 oz bag"
+      },
+      {
+        "quantity": 8.5,
+        "unit": "oz",
+        "label": "8.5 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5.3,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "05202738-7982-4060-8c8f-8d8f48979211",
+    "name": "Sweet Potato",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 3,
+        "unit": "lb",
+        "label": "3 lb bag"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium sweet potato, cubed"
+        },
+        "volume": {
+          "quantity": 1.5,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "1f83b8eb-e0e6-4be2-a00d-6dcccbe5bb09",
+    "name": "Sweet Potato Tots",
+    "storeSection": "Frozen",
+    "containerSizes": [
+      {
+        "quantity": 20,
+        "unit": "oz",
+        "label": "20 oz bag"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz bag"
+      }
+    ]
+  },
+  {
+    "id": "1a268bc3-ff0b-499e-9593-4f56d92a33b5",
+    "name": "Sweetcorn",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 15.25,
+        "unit": "oz",
+        "label": "15.25 oz can"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz frozen bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "623e5b76-9c28-4e05-81ac-8c623b3486fb",
+    "name": "Thai Chiles",
+    "storeSection": "Produce",
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz bag"
+      }
+    ]
+  },
+  {
+    "id": "77859385-6551-4c70-b695-4d3af21586d8",
+    "name": "Thyme",
+    "storeSection": "Produce",
+    "aliases": [
+      "thyme, to taste"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 0.75,
+        "unit": "oz",
+        "label": "0.75 oz fresh bunch"
+      },
+      {
+        "quantity": 0.75,
+        "unit": "oz",
+        "label": "0.75 oz dried jar"
+      }
+    ]
+  },
+  {
+    "id": "ad436577-31a9-4cbb-b983-c4621897b956",
+    "name": "Toasted Sesame Seeds",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 3.5,
+        "unit": "oz",
+        "label": "3.5 oz jar"
+      },
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "d2bc2e81-b4f6-4b04-b314-8bcfbefea31f",
+    "name": "Tomato",
+    "storeSection": "Produce",
+    "aliases": [
+      "small tomato, chopped",
+      "Tomatoes",
+      "chopped tomatoes"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 1,
+        "unit": "each",
+        "label": "single"
+      },
+      {
+        "quantity": 1,
+        "unit": "lb",
+        "label": "1 lb loose"
+      }
+    ],
+    "conversions": {
+      "portionToVolume": {
+        "portion": {
+          "quantity": 1,
+          "description": "medium tomato, chopped"
+        },
+        "volume": {
+          "quantity": 0.75,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "0da487ee-be9b-402a-9270-aa660ca6756b",
+    "name": "Tomato Paste",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "oz",
+        "label": "6 oz can"
+      },
+      {
+        "quantity": 4.5,
+        "unit": "oz",
+        "label": "4.5 oz tube"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 9.4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "53b9285d-7c4a-428e-a043-af583596e0a2",
+    "name": "Tomato Sauce",
+    "storeSection": "Canned Goods",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz can"
+      },
+      {
+        "quantity": 15,
+        "unit": "oz",
+        "label": "15 oz can"
+      },
+      {
+        "quantity": 29,
+        "unit": "oz",
+        "label": "29 oz can"
+      }
+    ]
+  },
+  {
+    "id": "88b944dc-0e63-498d-a016-4bc007b4ee16",
+    "name": "Tortellini",
+    "storeSection": "Deli",
+    "containerSizes": [
+      {
+        "quantity": 9,
+        "unit": "oz",
+        "label": "9 oz pkg (refrigerated)"
+      },
+      {
+        "quantity": 19,
+        "unit": "oz",
+        "label": "19 oz pkg (refrigerated)"
+      },
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz pkg (dry)"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "4dc798e6-4739-4523-ac3b-c69eee2fe3df",
+    "name": "Turkey Sausage",
+    "storeSection": "Meat & Seafood",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz pkg"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz pkg"
+      }
+    ]
+  },
+  {
+    "id": "f99c8870-0942-4187-9e25-df344e8eed99",
+    "name": "Turmeric",
+    "storeSection": "Spices",
+    "containerSizes": [
+      {
+        "quantity": 1.7,
+        "unit": "oz",
+        "label": "1.7 oz jar"
+      },
+      {
+        "quantity": 3.12,
+        "unit": "oz",
+        "label": "3.12 oz jar"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.1,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "84f19fd2-a3bd-4981-8dcc-58148a1630f2",
+    "name": "Unsweetened Apple Sauce",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 23,
+        "unit": "oz",
+        "label": "23 oz jar"
+      },
+      {
+        "quantity": 46,
+        "unit": "oz",
+        "label": "46 oz jar"
+      },
+      {
+        "quantity": 4,
+        "unit": "oz",
+        "label": "4 oz cup (single-serve)"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "138c02c3-cbd1-4e2f-8345-bb9b12f00c26",
+    "name": "Unsweetened Cocoa Powder",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz can"
+      },
+      {
+        "quantity": 23,
+        "unit": "oz",
+        "label": "23 oz can"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.21,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "7d4e1599-3de1-4832-bd10-8d9e7cf33087",
+    "name": "Vanilla Extract",
+    "storeSection": "Baking",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "fl oz",
+        "label": "2 fl oz bottle"
+      },
+      {
+        "quantity": 4,
+        "unit": "fl oz",
+        "label": "4 fl oz bottle"
+      },
+      {
+        "quantity": 8,
+        "unit": "fl oz",
+        "label": "8 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 0.15,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      }
+    }
+  },
+  {
+    "id": "cfc4a92a-93a1-4ed4-b6f6-b93909f26987",
+    "name": "Vegetable Oil",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz bottle"
+      },
+      {
+        "quantity": 48,
+        "unit": "fl oz",
+        "label": "48 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 7.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "f6e2ab21-fc18-42e1-8f6c-87341dc78407",
+    "name": "Walnuts",
+    "storeSection": "Pantry",
+    "aliases": [
+      "walnuts, chopped"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 8,
+        "unit": "oz",
+        "label": "8 oz bag"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz bag"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "19674a6a-63b2-4f97-8b88-b389c226fa39",
+    "name": "Water",
+    "storeSection": "Beverages",
+    "aliases": [
+      "of water"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 16.9,
+        "unit": "fl oz",
+        "label": "16.9 fl oz bottle"
+      },
+      {
+        "quantity": 33.8,
+        "unit": "fl oz",
+        "label": "1 L bottle"
+      },
+      {
+        "quantity": 128,
+        "unit": "fl oz",
+        "label": "1 gal jug"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.35,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "2e1ea635-79e5-43e2-8de7-3fe9e4f47539",
+    "name": "White Rice",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb bag"
+      },
+      {
+        "quantity": 5,
+        "unit": "lb",
+        "label": "5 lb bag"
+      },
+      {
+        "quantity": 10,
+        "unit": "lb",
+        "label": "10 lb bag"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 6.4,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "5fc0a8cc-70b8-4257-ac6f-326491748bd0",
+    "name": "White Wine",
+    "storeSection": "Beverages",
+    "containerSizes": [
+      {
+        "quantity": 750,
+        "unit": "ml",
+        "label": "750 ml bottle"
+      },
+      {
+        "quantity": 1500,
+        "unit": "ml",
+        "label": "1.5 L bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "name": "White Wine Vinegar",
+    "storeSection": "Condiments",
+    "aliases": [
+      "Splash of White Wine Vinegar"
+    ],
+    "id": "c5373e37-2c63-472c-8557-824c5908714b",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "fl oz",
+        "label": "12 fl oz bottle"
+      },
+      {
+        "quantity": 16,
+        "unit": "fl oz",
+        "label": "16 fl oz bottle"
+      },
+      {
+        "quantity": 32,
+        "unit": "fl oz",
+        "label": "32 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "89200769-5f1c-49f0-83e9-069928af6e0f",
+    "name": "Whole Grain Spaghetti",
+    "storeSection": "Pantry",
+    "containerSizes": [
+      {
+        "quantity": 12,
+        "unit": "oz",
+        "label": "12 oz box"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz box"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 3.5,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "07165816-87d8-4c3c-8f26-8b5e35c860df",
+    "name": "Whole Wheat English Muffins",
+    "storeSection": "Bakery",
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "each",
+        "label": "pack of 6"
+      },
+      {
+        "quantity": 12,
+        "unit": "each",
+        "label": "pack of 12"
+      }
+    ]
+  },
+  {
+    "id": "65998614-ebbc-49db-85ac-d61cc053c312",
+    "name": "Whole-wheat Tortillas",
+    "storeSection": "Bakery",
+    "aliases": [
+      "small whole-wheat tortillas"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 6,
+        "unit": "each",
+        "label": "pack of 6"
+      },
+      {
+        "quantity": 8,
+        "unit": "each",
+        "label": "pack of 8"
+      },
+      {
+        "quantity": 10,
+        "unit": "each",
+        "label": "pack of 10"
+      }
+    ]
+  },
+  {
+    "id": "1dad98b3-5490-45d1-a2e2-289eb7a49e9b",
+    "name": "Wings",
+    "storeSection": "Meat & Seafood",
+    "aliases": [
+      "wings (cut into 12 drums and flats)"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 2,
+        "unit": "lb",
+        "label": "2 lb pack"
+      },
+      {
+        "quantity": 4,
+        "unit": "lb",
+        "label": "4 lb pack"
+      }
+    ]
+  },
+  {
+    "id": "30b2dddd-fa34-4cc9-a670-eece15b41b5d",
+    "name": "Worcestershire Sauce",
+    "storeSection": "Condiments",
+    "containerSizes": [
+      {
+        "quantity": 5,
+        "unit": "fl oz",
+        "label": "5 fl oz bottle"
+      },
+      {
+        "quantity": 10,
+        "unit": "fl oz",
+        "label": "10 fl oz bottle"
+      },
+      {
+        "quantity": 15,
+        "unit": "fl oz",
+        "label": "15 fl oz bottle"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.7,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  },
+  {
+    "id": "e5256313-18d0-4e7d-a576-a83c44437e81",
+    "name": "Yogurt",
+    "storeSection": "Dairy",
+    "aliases": [
+      "fat free yogurt"
+    ],
+    "containerSizes": [
+      {
+        "quantity": 5.3,
+        "unit": "oz",
+        "label": "5.3 oz single-serve"
+      },
+      {
+        "quantity": 16,
+        "unit": "oz",
+        "label": "16 oz container"
+      },
+      {
+        "quantity": 32,
+        "unit": "oz",
+        "label": "32 oz container"
+      }
+    ],
+    "conversions": {
+      "weightToVolume": {
+        "weight": {
+          "quantity": 8.6,
+          "unit": "oz"
+        },
+        "volume": {
+          "quantity": 1,
+          "unit": "cup"
+        }
+      }
+    }
+  }
+]

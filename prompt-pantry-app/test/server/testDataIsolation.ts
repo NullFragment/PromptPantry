@@ -20,6 +20,7 @@ export interface TestEnvironment {
         mealPlanFile: string;
         multiWeekFile: string;
         ingredientsFile: string;
+        storeSectionsFile: string;
     };
     cleanup: () => void;
 }
@@ -59,6 +60,7 @@ export function createTestEnvironment(testName: string): TestEnvironment {
             mealPlanFile: path.join(tempDir, 'mealPlan.json'),
             multiWeekFile: path.join(tempDir, 'multiWeeklyCookPlan.json'),
             ingredientsFile: path.join(tempDir, 'ingredients.json'),
+            storeSectionsFile: path.join(tempDir, 'storeSections.json'),
         },
         cleanup: () => {
             if (fs.existsSync(tempDir)) {

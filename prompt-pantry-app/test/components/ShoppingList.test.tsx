@@ -511,7 +511,7 @@ describe('ShoppingList', () => {
             );
 
             expect(screen.getByText('milk')).toBeInTheDocument();
-            expect(screen.getByText(/Buy:/)).toBeInTheDocument();
+            expect(screen.getByText('gallon + half gallon')).toBeInTheDocument();
         });
 
         it('hides container recommendation when ingredient has no containerSizes', () => {

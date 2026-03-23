@@ -1,7 +1,7 @@
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import {renderWithAppContext} from '../testHelpers';
 import {Ingredients} from '../../src/components/Ingredients';
-import {IngredientDefinition} from '../../src/types';
+import {IngredientDefinition, StoreSectionDefinition} from '../../src/types';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 const mockIngredients: IngredientDefinition[] = [
@@ -24,7 +24,12 @@ const mockIngredients: IngredientDefinition[] = [
     }
 ];
 
-const mockStoreSections = ['Dairy', 'Meat', 'Produce', 'Unassigned'];
+const mockStoreSections: StoreSectionDefinition[] = [
+    { name: 'Dairy' },
+    { name: 'Meat' },
+    { name: 'Produce' },
+    { name: 'Unassigned' }
+];
 
 describe('Ingredients', () => {
     beforeEach(() => {

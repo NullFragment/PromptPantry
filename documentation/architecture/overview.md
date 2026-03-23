@@ -31,13 +31,13 @@ file-based JSON persistence.
 
 See the per-area architecture docs for more detail:
 
-- [System Architecture](SYSTEM_ARCHITECTURE.md) -- Diagrams and component hierarchy
-- [Authentication & Authorization](AUTH.md) -- JWT auth, tiers, middleware
-- [Server Architecture](SERVER.md) -- Factory, data access, routes
-- [API Reference](API.md) -- All endpoints
-- [Hooks](HOOKS.md) -- Custom hooks
-- [Data Flow](DATA_FLOW.md) -- Sequence diagrams
-- [Persistence](PERSISTENCE.md) -- Storage details
-- [File Structure](FILE_STRUCTURE.md) -- Project layout
-- [Performance & Security](PERF_SECURITY.md) -- Optimizations and security
-- [Testing](TESTING.md) -- Test strategy and coverage
+- [System Architecture](system.md) -- Diagrams and component hierarchy
+- [Authentication & Authorization](auth.md) -- JWT auth, tiers, middleware
+- [Server Architecture](server.md) -- Factory, data access, routes
+- [API Reference](api.md) -- All endpoints
+- [Hooks](hooks.md) -- Custom hooks
+- [Data Flow](data-flow.md) -- Sequence diagrams
+- [Persistence](persistence.md) -- Storage details
+- [File Structure](file-structure.md) -- Project layout
+- [Performance & Security](perf-security.md) -- Optimizations and security
+- [Testing](testing.md) -- Test strategy and coverage

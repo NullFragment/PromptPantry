@@ -5,40 +5,75 @@ Custom hooks used by the application, their responsibilities, persistence model,
 ## Hook Dependency Diagram
 
 ```mermaid
-graph LR
-    subgraph dataHooks["Data Hooks"]
-        useRecipes["useRecipes<br/>Recipe CRUD"]
-        useParticipants["useParticipants<br/>Participant data"]
-        useMealPlan["useMealPlan<br/>Meal scheduling"]
-        useIngredients["useIngredients<br/>Ingredient CRUD + aliases"]
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
+flowchart LR
+    subgraph HookDependencies["Hook Dependencies"]
+        subgraph dataHooks["Data Hooks"]
+            useRecipes["useRecipes<br/>Recipe CRUD"]:::blue
+            useParticipants["useParticipants<br/>Participant data"]:::blue
+            useMealPlan["useMealPlan<br/>Meal scheduling"]:::blue
+            useIngredients["useIngredients<br/>Ingredient CRUD + aliases"]:::blue
+        end
+
+        subgraph uiHooks["UI Hooks"]
+            useUIState["useUIState<br/>View, theme, settings"]:::purple
+            useRecipeFilters["useRecipeFilters<br/>Search/sort/filter"]:::purple
+            useConfirmation["useConfirmation<br/>Confirmation dialogs"]:::purple
+        end
+
+        subgraph contextHooks["Context Hooks"]
+            useAppContext["useAppContext<br/>Shared app state"]:::teal
+        end
+
+        subgraph componentHooks["Component-Level Hooks"]
+            useAliasManagement["useAliasManagement<br/>Alias editing dialogs"]:::teal
+        end
+
+        subgraph storage["Storage"]
+            API[Backend API]:::green
+            LSt[Local Storage]:::slate
+        end
+
+        useRecipes --> API
+        useParticipants --> API
+        useMealPlan --> API
+        useMealPlan --> LSt
+        useIngredients --> API
+        useUIState --> API
+        useUIState --> LSt
     end
 
-    subgraph uiHooks["UI Hooks"]
-        useUIState["useUIState<br/>View, theme, settings"]
-        useRecipeFilters["useRecipeFilters<br/>Search/sort/filter"]
-        useConfirmation["useConfirmation<br/>Confirmation dialogs"]
-    end
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef purple fill:#7B68EE,stroke:#5B48CE
+    classDef teal fill:#48A8A0,stroke:#288888
+    classDef green fill:#4EA882,stroke:#308862
+    classDef slate fill:#808898,stroke:#606878
 
-    subgraph contextHooks["Context Hooks"]
-        useAppContext["useAppContext<br/>Shared app state"]
-    end
+    style HookDependencies fill:#88888814,stroke:#888888
+    style dataHooks fill:#4A90D914,stroke:#4A90D9
+    style uiHooks fill:#7B68EE14,stroke:#7B68EE
+    style contextHooks fill:#48A8A014,stroke:#48A8A0
+    style componentHooks fill:#48A8A014,stroke:#48A8A0
+    style storage fill:#4EA88214,stroke:#4EA882
 
-    subgraph componentHooks["Component-Level Hooks"]
-        useAliasManagement["useAliasManagement<br/>Alias editing dialogs"]
-    end
-
-    subgraph storage["Storage"]
-        API[Backend API]
-        LSt[Local Storage]
-    end
-
-    useRecipes --> API
-    useParticipants --> API
-    useMealPlan --> API
-    useMealPlan --> LSt
-    useIngredients --> API
-    useUIState --> API
-    useUIState --> LSt
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#4A90D9
+    linkStyle 2 stroke:#4A90D9
+    linkStyle 3 stroke:#4A90D9
+    linkStyle 4 stroke:#4A90D9
+    linkStyle 5 stroke:#7B68EE
+    linkStyle 6 stroke:#7B68EE
 ```
 
 ## App-Level Hooks
@@ -84,7 +119,23 @@ These hooks decompose the WeeklyPlanner logic into focused concerns:
 ## useMealPlan Sync Model
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant Component
     participant useMealPlan
     participant localStorage

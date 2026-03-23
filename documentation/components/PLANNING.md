@@ -84,16 +84,54 @@ Weekly meal planning with batch cooking, leftover tracking, and drag-and-drop.
 ### Layout
 
 ```mermaid
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 flowchart LR
-    subgraph plannerLayout["WeeklyPlanner"]
-        Header[PlannerHeader]
-        subgraph body["Two-column layout"]
-            Sidebar["WeeklyRecipesSidebar<br/>(sticky, scrollable)"]
-            Grid["7-day grid"]
+    subgraph PlannerLayout["WeeklyPlanner Layout"]
+        subgraph plannerLayout["WeeklyPlanner"]
+            Header[PlannerHeader]:::blue
+            subgraph body["Two-column layout"]
+                Sidebar["WeeklyRecipesSidebar<br/>(sticky, scrollable)"]:::purple
+                Grid["7-day grid"]:::teal
+            end
         end
+        Sidebar -->|"drag recipe"| Grid
+        Grid --> Sun[DayColumn]:::slate
+        Grid --> Mon[DayColumn]:::slate
+        Grid --> Tue[DayColumn]:::slate
+        Grid --> Wed[DayColumn]:::slate
+        Grid --> Thu[DayColumn]:::slate
+        Grid --> Fri[DayColumn]:::slate
+        Grid --> Sat[DayColumn]:::slate
     end
-    Sidebar -->|"drag recipe"| Grid
-    Grid --> Sun[DayColumn] & Mon[DayColumn] & Tue[DayColumn] & Wed[DayColumn] & Thu[DayColumn] & Fri[DayColumn] & Sat[DayColumn]
+
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef purple fill:#7B68EE,stroke:#5B48CE
+    classDef teal fill:#48A8A0,stroke:#288888
+    classDef slate fill:#808898,stroke:#606878
+
+    style PlannerLayout fill:#88888814,stroke:#888888
+    style plannerLayout fill:#4A90D914,stroke:#4A90D9
+    style body fill:#7B68EE14,stroke:#7B68EE
+
+    linkStyle 0 stroke:#7B68EE
+    linkStyle 1 stroke:#48A8A0
+    linkStyle 2 stroke:#48A8A0
+    linkStyle 3 stroke:#48A8A0
+    linkStyle 4 stroke:#48A8A0
+    linkStyle 5 stroke:#48A8A0
+    linkStyle 6 stroke:#48A8A0
+    linkStyle 7 stroke:#48A8A0
 ```
 
 ### Features
@@ -122,7 +160,23 @@ Lightweight recipe selector for adding to a specific meal slot:
 ### Leftover Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+    signalColor: "#777777"
+    signalTextColor: "#777777"
+    actorBkg: "#808080"
+    actorBorder: "#777777"
+    sequenceNumberColor: "#4a2040"
+---
 sequenceDiagram
+    autonumber
     participant User
     participant Planner
     participant Prompt as LeftoverPromptModal
@@ -177,14 +231,46 @@ Aggregates ingredients from the weekly cook plan into a shopping list.
 ### Aggregation Flow
 
 ```mermaid
+---
+config:
+  theme: base
+  flowchart:
+    curve: linear
+  themeVariables:
+    lineColor: "#c8a0b0"
+    primaryBorderColor: "#c8a0b0"
+    edgeLabelBackground: "#808080"
+    textColor: "#777777"
+    titleColor: "#777777"
+---
 flowchart TD
-    CookPlan[Multi-Week Cook Plan] --> Recipes["Look up recipe<br/>ingredients"]
-    Recipes --> Scale["Scale quantities<br/>by multiplier"]
-    Scale --> Normalize["Normalize ingredient<br/>names"]
-    Normalize --> Aggregate["Aggregate same<br/>ingredients"]
-    Aggregate --> Resolve["Resolve store<br/>sections"]
-    Resolve --> Convert["Convert units<br/>per user preference"]
-    Convert --> Group["Group by<br/>store section"]
-    Group --> Containers["Calculate container<br/>recommendations"]
-    Containers --> Render[Render sections]
+    subgraph AggregationFlow["Shopping List Aggregation"]
+        CookPlan[Multi-Week Cook Plan]:::blue --> Recipes["Look up recipe<br/>ingredients"]:::purple
+        Recipes --> Scale["Scale quantities<br/>by multiplier"]:::purple
+        Scale --> Normalize["Normalize ingredient<br/>names"]:::teal
+        Normalize --> Aggregate["Aggregate same<br/>ingredients"]:::teal
+        Aggregate --> Resolve["Resolve store<br/>sections"]:::teal
+        Resolve --> Convert["Convert units<br/>per user preference"]:::amber
+        Convert --> Group["Group by<br/>store section"]:::amber
+        Group --> Containers["Calculate container<br/>recommendations"]:::amber
+        Containers --> Render[Render sections]:::green
+    end
+
+    classDef blue fill:#4A90D9,stroke:#3570B0
+    classDef purple fill:#7B68EE,stroke:#5B48CE
+    classDef teal fill:#48A8A0,stroke:#288888
+    classDef amber fill:#C8A040,stroke:#A88020
+    classDef green fill:#4EA882,stroke:#308862
+
+    style AggregationFlow fill:#88888814,stroke:#888888
+
+    linkStyle 0 stroke:#4A90D9
+    linkStyle 1 stroke:#7B68EE
+    linkStyle 2 stroke:#7B68EE
+    linkStyle 3 stroke:#48A8A0
+    linkStyle 4 stroke:#48A8A0
+    linkStyle 5 stroke:#48A8A0
+    linkStyle 6 stroke:#C8A040
+    linkStyle 7 stroke:#C8A040
+    linkStyle 8 stroke:#C8A040
 ```
