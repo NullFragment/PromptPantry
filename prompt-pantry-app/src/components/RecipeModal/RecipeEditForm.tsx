@@ -1,6 +1,7 @@
 import React from 'react';
 import {Heart, Minus, Plus, ThumbsDown, ThumbsUp, Trash, X} from 'lucide-react';
 import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe} from '../../types';
+import {ValidationError} from '../../utils/recipeValidation';
 import {flattenIngredients, flattenInstructions} from '../../utils/recipeUtils';
 import {IngredientAutocomplete} from '../IngredientAutocomplete';
 
@@ -98,10 +99,12 @@ interface RecipeEditFormProps {
     firstInputRef: React.Ref<HTMLInputElement>;
     handleToggleFavorite: () => void;
     handleSetRating: (rating: 'up' | 'down' | 'neutral') => void;
-    /** All recipes (for "Create as variant of" dropdown); only non-variant recipes are offered as base. */
+    /** All recipes (used to resolve base recipe for variant display). */
     availableRecipes?: Recipe[];
-    /** When user selects a base recipe for a variant, call so modal can sync macro/servings state. */
-    onVariantBaseSelected?: (base: Recipe) => void;
+    /** Client-side validation errors from the save attempt. */
+    saveErrors?: ValidationError[];
+    /** When true, shows an amber review banner (recipe was auto-imported). */
+    isImported?: boolean;
 }
 
 export function RecipeEditForm({
@@ -122,13 +125,13 @@ export function RecipeEditForm({
     handleToggleFavorite,
     handleSetRating,
     availableRecipes = [],
-    onVariantBaseSelected
+    saveErrors = [],
+    isImported = false
 }: RecipeEditFormProps) {
     const isVariant = !!editedRecipe.baseRecipeName;
     const baseRecipe = availableRecipes.find(r => r.name === editedRecipe.baseRecipeName);
     const baseIngredients = baseRecipe ? flattenIngredients(baseRecipe.ingredients ?? []) : [];
     const baseInstructions = baseRecipe ? flattenInstructions(baseRecipe.instructions ?? []) : [];
-    const baseRecipesForDropdown = availableRecipes.filter(r => !r.baseRecipeName && r.name);
     const isIngredientsGrouped = !isVariant && editedRecipe.ingredients.length > 0 && 'ingredients' in editedRecipe.ingredients[0];
     const isInstructionsGrouped = !isVariant && editedRecipe.instructions.length > 0 && typeof editedRecipe.instructions[0] === 'object' && 'steps' in editedRecipe.instructions[0];
     const variantIngredientAdditions = editedRecipe.ingredientAdditions ?? [];
@@ -238,39 +241,28 @@ export function RecipeEditForm({
 
     return (
         <>
+            {isImported && (
+                <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                    <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mb-1">
+                        Review required before saving
+                    </p>
+                    <p className="text-sm text-amber-600 dark:text-amber-300">
+                        This recipe was imported automatically. Check that the category is correct (defaults to &quot;Misc&quot;), ingredients are linked to your library, instructions are complete, times and servings are accurate, and macros are filled in (default 0 if not found).
+                    </p>
+                </div>
+            )}
+            {saveErrors.length > 0 && (
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-sm font-bold text-red-700 dark:text-red-400 mb-1">
+                        Please fix the following before saving:
+                    </p>
+                    <ul className="text-sm text-red-600 dark:text-red-300 list-disc list-inside space-y-0.5">
+                        {saveErrors.map(e => <li key={e.field}>{e.message}</li>)}
+                    </ul>
+                </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                    {!isVariant && editedRecipe.name === '' && baseRecipesForDropdown.length > 0 && (
-                        <div>
-                            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Create as variant of</label>
-                            <select
-                                className="w-full p-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-                                value=""
-                                onChange={e => {
-                                    const baseName = e.target.value;
-                                    if (!baseName) return;
-                                    const base = baseRecipesForDropdown.find(r => r.name === baseName);
-                                    if (base) {
-                                        setEditedRecipe({
-                                            ...base,
-                                            name: base.name + ': ',
-                                            baseRecipeName: base.name,
-                                            ingredientAdditions: [],
-                                            instructionAdditions: [],
-                                            ingredients: [],
-                                            instructions: []
-                                        });
-                                        onVariantBaseSelected?.(base);
-                                    }
-                                }}
-                            >
-                                <option value="">— New recipe (not a variant) —</option>
-                                {baseRecipesForDropdown.map(r => (
-                                    <option key={r.name} value={r.name}>{r.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
                     <div>
                         <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
                             {isVariant ? 'Variant name' : 'Recipe Name'}
@@ -300,7 +292,7 @@ export function RecipeEditForm({
                             <input
                                 ref={firstInputRef}
                                 type="text"
-                                className="w-full p-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                className={`w-full p-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${saveErrors.some(e => e.field === 'name') ? 'border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
                                 value={editedRecipe.name}
                                 onChange={e => setEditedRecipe({...editedRecipe, name: e.target.value})}
                                 placeholder="e.g. Chicken Shawarma"
@@ -309,7 +301,7 @@ export function RecipeEditForm({
                     </div>
                     <div>
                         <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Categories</label>
-                        <div className="flex flex-wrap gap-2">
+                        <div className={`flex flex-wrap gap-2 ${saveErrors.some(e => e.field === 'categories') ? 'p-2 rounded-lg border border-red-500 dark:border-red-500' : ''}`}>
                             {(['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Side', 'Drink', 'Misc'] as const).map(cat => (
                                 <button
                                     key={cat}

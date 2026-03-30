@@ -4,6 +4,7 @@ import {
     Code2,
     Edit,
     FileEdit,
+    Globe,
     Heart,
     Minus,
     Plus,
@@ -22,10 +23,12 @@ import {
 } from '../../types';
 import {getRecipeCookCount} from '../../utils/mealPlanUtils';
 import {resolveVariantRecipe} from '../../utils/recipeUtils';
+import {validateRecipe, ValidationError as RecipeValidationError} from '../../utils/recipeValidation';
 import {useAppContext} from '../../hooks/useAppContext';
 import {RecipeViewMode} from './RecipeViewMode';
 import {RecipeEditForm} from './RecipeEditForm';
 import {RecipeJsonEditor} from './RecipeJsonEditor';
+import {ImportRecipeModal} from '../ImportRecipeModal';
 
 interface RecipeModalProps {
     recipe: Recipe | Record<string, unknown>;
@@ -136,7 +139,7 @@ export function RecipeModal({
     const [isEditing, setIsEditing] = useState(false);
     const [editedRecipe, setEditedRecipe] = useState<Recipe>(recipe as Recipe);
     const [originalName, setOriginalName] = useState<string | null>(null);
-    const [editMode, setEditMode] = useState<'form' | 'json'>('form');
+    const [editMode, setEditMode] = useState<'form' | 'json' | 'import'>('form');
     const [jsonText, setJsonText] = useState<string>('');
     const [jsonError, setJsonError] = useState<string | null>(null);
     const [currentValidationErrors, setCurrentValidationErrors] = useState<ValidationError[] | undefined>(validationErrors);
@@ -148,6 +151,8 @@ export function RecipeModal({
     }));
     const [servingsInput, setServingsInput] = useState<string>(String((recipe as Recipe)?.servings ?? ''));
     const [tagInput, setTagInput] = useState('');
+    const [saveErrors, setSaveErrors] = useState<RecipeValidationError[]>([]);
+    const [isImported, setIsImported] = useState(false);
     const firstInputRef = useRef<HTMLInputElement | null>(null);
 
     const recipeName = (recipe as Recipe).name || '';
@@ -158,8 +163,9 @@ export function RecipeModal({
         const readOnly = !canEdit;
         const shouldEdit = ((recipe as Recipe).name === '' && !readOnly) || isInvalidRecipe;
         setIsEditing(!!shouldEdit);
-        setOriginalName((recipe as Recipe).name === '' ? null : (recipe as Recipe).name);
-        setEditMode(isInvalidRecipe ? 'json' : 'form');
+        const isNewRecipe = (recipe as Recipe).name === '';
+        setOriginalName(isNewRecipe ? null : (recipe as Recipe).name);
+        setEditMode(isInvalidRecipe ? 'json' : isNewRecipe ? 'import' : 'form');
         setJsonText(JSON.stringify(recipe, null, 2));
         setJsonError(null);
         setCurrentValidationErrors(validationErrors);
@@ -224,6 +230,12 @@ export function RecipeModal({
                 macros: parsedMacros,
                 servings: parsedServings
             };
+            const validationErrors = validateRecipe(recipeToSave);
+            if (validationErrors.length > 0) {
+                setSaveErrors(validationErrors);
+                return;
+            }
+            setSaveErrors([]);
             setEditedRecipe(recipeToSave);
             await onSave(recipeToSave, originalName);
             setIsEditing(false);
@@ -314,7 +326,7 @@ export function RecipeModal({
                                         <Trash className="h-5 w-5"/>
                                     </button>
                                 )}
-                                {advancedMode && !isInvalidRecipe && (
+                                {canEdit && !isInvalidRecipe && (
                                     <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700">
                                         <button
                                             onClick={() => {
@@ -335,15 +347,23 @@ export function RecipeModal({
                                             <FileEdit className="h-4 w-4"/> Form
                                         </button>
                                         <button
-                                            onClick={() => {
-                                                setJsonText(JSON.stringify(editedRecipe, null, 2));
-                                                setJsonError(null);
-                                                setEditMode('json');
-                                            }}
-                                            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${editMode === 'json' ? 'bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+                                            onClick={() => setEditMode('import')}
+                                            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${editMode === 'import' ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
                                         >
-                                            <Code2 className="h-4 w-4"/> JSON
+                                            <Globe className="h-4 w-4"/> Import
                                         </button>
+                                        {advancedMode && (
+                                            <button
+                                                onClick={() => {
+                                                    setJsonText(JSON.stringify(editedRecipe, null, 2));
+                                                    setJsonError(null);
+                                                    setEditMode('json');
+                                                }}
+                                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${editMode === 'json' ? 'bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+                                            >
+                                                <Code2 className="h-4 w-4"/> JSON
+                                            </button>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -366,7 +386,26 @@ export function RecipeModal({
                                 </div>
                             )}
 
-                            {editMode === 'json' ? (
+                            {editMode === 'import' ? (
+                                <ImportRecipeModal
+                                    inline
+                                    onClose={() => setEditMode('form')}
+                                    ingredientLibrary={ingredientDefinitions}
+                                    onImport={(parsed, _sourceUrl) => {
+                                        setEditedRecipe(parsed as unknown as Recipe);
+                                        setMacroInputs({
+                                            calories: String(parsed.macros?.calories ?? 0),
+                                            protein: String(parsed.macros?.protein ?? 0),
+                                            carbs: String(parsed.macros?.carbs ?? 0),
+                                            fat: String(parsed.macros?.fat ?? 0),
+                                        });
+                                        setServingsInput(String(parsed.servings ?? 1));
+                                        setIsImported(true);
+                                        setIsEditing(true);
+                                        setEditMode('form');
+                                    }}
+                                />
+                            ) : editMode === 'json' ? (
                                 <RecipeJsonEditor
                                     jsonText={jsonText}
                                     setJsonText={setJsonText}
@@ -376,7 +415,7 @@ export function RecipeModal({
                             ) : (
                                 <RecipeEditForm
                                     editedRecipe={editedRecipe}
-                                    setEditedRecipe={setEditedRecipe}
+                                    setEditedRecipe={(r) => { setSaveErrors([]); setEditedRecipe(r); }}
                                     macroInputs={macroInputs}
                                     setMacroInputs={setMacroInputs}
                                     servingsInput={servingsInput}
@@ -391,27 +430,22 @@ export function RecipeModal({
                                     firstInputRef={firstInputRef}
                                     handleToggleFavorite={handleToggleFavorite}
                                     handleSetRating={handleSetRating}
+                                    saveErrors={saveErrors}
                                     availableRecipes={recipes}
-                                    onVariantBaseSelected={(base) => {
-                                        setMacroInputs({
-                                            calories: String(base.macros?.calories ?? ''),
-                                            protein: String(base.macros?.protein ?? ''),
-                                            carbs: String(base.macros?.carbs ?? ''),
-                                            fat: String(base.macros?.fat ?? '')
-                                        });
-                                        setServingsInput(String(base.servings ?? ''));
-                                    }}
+                                    isImported={isImported}
                                 />
                             )}
 
-                            <div className="flex justify-end space-x-4 pt-6 border-t dark:border-gray-800">
-                                <button onClick={handleCancel} className="px-6 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
-                                    Cancel
-                                </button>
-                                <button onClick={handleSave} className={`px-8 py-2 rounded-xl text-sm font-bold shadow-md transition-all flex items-center ${editMode === 'json' ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
-                                    <Save className="h-4 w-4 mr-2"/> Save Recipe
-                                </button>
-                            </div>
+                            {editMode !== 'import' && (
+                                <div className="flex justify-end space-x-4 pt-6 border-t dark:border-gray-800">
+                                    <button onClick={handleCancel} className="px-6 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                                        Cancel
+                                    </button>
+                                    <button onClick={handleSave} className={`px-8 py-2 rounded-xl text-sm font-bold shadow-md transition-all flex items-center ${editMode === 'json' ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
+                                        <Save className="h-4 w-4 mr-2"/> Save Recipe
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <RecipeViewMode
@@ -423,6 +457,7 @@ export function RecipeModal({
                     )}
                 </div>
             </div>
+
         </div>
     );
 }

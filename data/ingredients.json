@@ -426,6 +426,11 @@
     ]
   },
   {
+    "name": "Beef Tenderloin",
+    "storeSection": "Meat & Seafood",
+    "id": "913c921d-d70e-4498-adc0-1f588de7b752"
+  },
+  {
     "id": "588a76bb-e823-4e43-ad64-f8f467998fa3",
     "name": "Beetroot",
     "storeSection": "Produce",
@@ -491,7 +496,8 @@
     "aliases": [
       "Pepper",
       "pepper, to taste",
-      "pepper, to tatse"
+      "pepper, to tatse",
+      "finely ground black pepper"
     ],
     "containerSizes": [
       {
@@ -2173,7 +2179,8 @@
     "name": "Green Onions",
     "storeSection": "Produce",
     "aliases": [
-      "green onions, chopped"
+      "green onions, chopped",
+      "Scallion"
     ],
     "id": "f5b68257-8b1e-46c2-a540-5f0de64ea3e0",
     "containerSizes": [
@@ -2594,6 +2601,11 @@
     ]
   },
   {
+    "name": "Kosher Salt",
+    "storeSection": "Pantry",
+    "id": "b14158fe-b3f4-4933-a59c-bb02d40ecc70"
+  },
+  {
     "id": "1290b783-f160-45ff-bdc6-3d342180c075",
     "name": "Lemon Juice",
     "storeSection": "Produce",
@@ -2682,6 +2694,11 @@
         }
       }
     }
+  },
+  {
+    "name": "Light Brown Sugar",
+    "storeSection": "Pantry",
+    "id": "a037e2b7-2a8f-4287-8e03-03c17ec3ebc3"
   },
   {
     "id": "1f6de6ee-67ab-4db3-ae09-a8b563802f3c",
@@ -3712,6 +3729,11 @@
     }
   },
   {
+    "name": "Peanut Oil",
+    "storeSection": "Pantry",
+    "id": "ff3f90a7-7810-4524-a154-2a38fb214b08"
+  },
+  {
     "id": "7b459b4e-e033-4945-9aaf-04f85b8076bb",
     "name": "Pecans",
     "storeSection": "Baking",
@@ -4487,6 +4509,11 @@
         }
       }
     }
+  },
+  {
+    "name": "Salted Peanuts",
+    "storeSection": "Snacks",
+    "id": "2cb79600-2ef5-4c90-b26a-0f6b1bf09690"
   },
   {
     "id": "7ec1ff17-4326-4ac2-916b-353d6062a8a5",
@@ -5747,6 +5774,11 @@
         }
       }
     }
+  },
+  {
+    "name": "Yellow Onion",
+    "storeSection": "Produce",
+    "id": "b7c0f97b-9966-4e05-9496-4b4b9b9633f2"
   },
   {
     "id": "e5256313-18d0-4e7d-a576-a83c44437e81",

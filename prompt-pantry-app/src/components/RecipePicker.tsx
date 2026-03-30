@@ -1,8 +1,9 @@
 import {useEffect, useMemo, useState} from 'react';
 import {Check, Filter, Heart, History, Minus, Plus, Search, Sparkles, ThumbsDown, ThumbsUp, X} from 'lucide-react';
 import {MealPlan, MultiWeeklyCookPlan, Participant, Recipe} from '../types';
-import {flattenIngredients, normalizeIngredientName} from '../utils/recipeUtils';
+import {flattenIngredients} from '../utils/recipeUtils';
 import {calculateParticipantTargets, getRecipeCookCount, isRecipeFitForParticipant} from '../utils/mealPlanUtils';
+import {buildWeekIngredientSet, scoreIngredientSuggestion, scoreMacroSuggestion} from '../utils/suggestionScoring';
 import {format} from 'date-fns';
 
 interface RecipePickerProps {
@@ -50,6 +51,8 @@ export function RecipePicker({
     const [pickerShowOnlyNeverCooked, setPickerShowOnlyNeverCooked] = useState(false);
     const [selectedRecipes, setSelectedRecipes] = useState<Record<string, number>>({});
     const [qtyDisplay, setQtyDisplay] = useState<Record<string, string>>({});
+    const [minSharedIngredients, setMinSharedIngredients] = useState(1);
+    const [useRatingBonus, setUseRatingBonus] = useState(true);
 
     const categories = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Side', 'Drink', 'Misc'];
 
@@ -63,15 +66,7 @@ export function RecipePicker({
     const suggestions = useMemo(() => {
         if (!Array.isArray(recipes)) return [];
 
-        const weekIngredients = new Set<string>();
-        selectedWeekRecipes.forEach(r => {
-            flattenIngredients(r.ingredients).forEach(ing => {
-                const name = normalizeIngredientName(ing.ingredient);
-                if (name.length >= 3 && name.split(' ').length <= 6) {
-                    weekIngredients.add(name);
-                }
-            });
-        });
+        const weekIngredientIds = buildWeekIngredientSet(selectedWeekRecipes);
 
         const filteredRecipes = recipes.filter(r => {
             if (selectedWeekRecipes.some(wr => wr.name === r.name)) return false;
@@ -95,21 +90,8 @@ export function RecipePicker({
         if (suggestionMode === 'ingredients') {
             if (selectedWeekRecipes.length === 0) return [];
             return filteredRecipes
-                .map(r => {
-                    const recipeIngredients = flattenIngredients(r.ingredients).map(ing => normalizeIngredientName(ing.ingredient));
-                    const shared = recipeIngredients.filter(normalized =>
-                        normalized.length >= 3 && weekIngredients.has(normalized)
-                    );
-                    const uniqueShared = Array.from(new Set(shared));
-                    const ratingBonus = r.rating === 'up' ? 100 : r.rating === 'down' ? -50 : 0;
-                    return {
-                        recipe: r,
-                        sharedCount: uniqueShared.length,
-                        sharedIngredients: uniqueShared,
-                        score: uniqueShared.length + ratingBonus
-                    };
-                })
-                .filter(item => item.sharedCount >= 1)
+                .map(r => scoreIngredientSuggestion(r, weekIngredientIds, {useRatingBonus}))
+                .filter(item => item.sharedCount >= minSharedIngredients)
                 .sort((a, b) => b.score - a.score);
         } else {
             const weeklyTargets = participants.reduce((acc, p) => {
@@ -141,56 +123,15 @@ export function RecipePicker({
                 });
             });
 
-            const remaining = {
-                calories: Math.max(0.1, weeklyTargets.calories - weeklyPlanned.calories),
-                protein: Math.max(0.1, weeklyTargets.protein - weeklyPlanned.protein),
-                carbs: Math.max(0.1, weeklyTargets.carbs - weeklyPlanned.carbs),
-                fat: Math.max(0.1, weeklyTargets.fat - weeklyPlanned.fat),
-            };
-
-            const gaps = [
-                {
-                    key: 'protein' as const,
-                    gap: (weeklyTargets.protein - weeklyPlanned.protein) / Math.max(1, weeklyTargets.protein)
-                },
-                {
-                    key: 'carbs' as const,
-                    gap: (weeklyTargets.carbs - weeklyPlanned.carbs) / Math.max(1, weeklyTargets.carbs)
-                },
-                {key: 'fat' as const, gap: (weeklyTargets.fat - weeklyPlanned.fat) / Math.max(1, weeklyTargets.fat)}
-            ].sort((a, b) => b.gap - a.gap);
-
-            const furthestMacro = gaps[0].key;
-
             return filteredRecipes
                 .map(r => {
-                    const recipeIngredients = flattenIngredients(r.ingredients).map(ing => normalizeIngredientName(ing.ingredient));
-                    const shared = recipeIngredients.filter(normalized =>
-                        normalized.length >= 3 && weekIngredients.has(normalized)
-                    );
-                    const uniqueShared = Array.from(new Set(shared));
-
-                    const p1 = (Math.min(r.macros.protein, remaining.protein) / remaining.protein) +
-                        (Math.min(r.macros.carbs, remaining.carbs) / remaining.carbs) +
-                        (Math.min(r.macros.fat, remaining.fat) / remaining.fat);
-                    const p2 = Math.min(r.macros[furthestMacro], remaining[furthestMacro]) / remaining[furthestMacro];
-                    const p3 = Math.min(r.macros.calories, remaining.calories) / remaining.calories;
-                    const p4 = uniqueShared.length;
-
-                    // Macro suggestions are purely mathematical - no rating bonus applied
-                    // Users can still filter by rating using the rating filter buttons
-                    const score = (p1 * 100) + (p2 * 50) + (p3 * 10) + (p4 * 1);
-
-                    return {
-                        recipe: r,
-                        sharedCount: uniqueShared.length,
-                        sharedIngredients: uniqueShared,
-                        score
-                    };
+                    const multiplier = selectedRecipes[r.name] ?? 1;
+                    const cookCount = getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.name);
+                    return scoreMacroSuggestion(r, weeklyTargets, weeklyPlanned, weekIngredientIds, multiplier, cookCount);
                 })
                 .sort((a, b) => b.score - a.score);
         }
-    }, [selectedWeekRecipes, recipes, participants, suggestionMode, mealPlan, multiWeeklyCookPlan, weekDays, pickerSelectedRatings, pickerShowOnlyFavorites, pickerShowOnlyNeverCooked, pickerSelectedCategories, pickerSelectedTags]);
+    }, [selectedWeekRecipes, recipes, participants, suggestionMode, mealPlan, multiWeeklyCookPlan, weekDays, pickerSelectedRatings, pickerShowOnlyFavorites, pickerShowOnlyNeverCooked, pickerSelectedCategories, pickerSelectedTags, minSharedIngredients, useRatingBonus, selectedRecipes]);
 
     const pickerRecipes = useMemo(() => {
         if (!Array.isArray(recipes)) return [];
@@ -454,6 +395,41 @@ export function RecipePicker({
                                     Macros
                                 </button>
                             </div>
+                            {/* Min shared ingredients — ingredients mode only */}
+                            {suggestionMode === 'ingredients' && (
+                                <div className="flex items-center gap-2 ml-3">
+                                    <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+                                        Min shared:
+                                    </span>
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            onClick={() => setMinSharedIngredients(Math.max(1, minSharedIngredients - 1))}
+                                            className="w-5 h-5 flex items-center justify-center rounded bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-indigo-100 dark:hover:bg-indigo-900 font-bold text-xs"
+                                        >-</button>
+                                        <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 w-4 text-center">
+                                            {minSharedIngredients}
+                                        </span>
+                                        <button
+                                            onClick={() => setMinSharedIngredients(Math.min(5, minSharedIngredients + 1))}
+                                            className="w-5 h-5 flex items-center justify-center rounded bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-indigo-100 dark:hover:bg-indigo-900 font-bold text-xs"
+                                        >+</button>
+                                    </div>
+                                </div>
+                            )}
+                            {/* Rating bonus toggle — ingredients mode only */}
+                            {suggestionMode === 'ingredients' && (
+                                <button
+                                    onClick={() => setUseRatingBonus(!useRatingBonus)}
+                                    className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors ${
+                                        useRatingBonus
+                                            ? 'bg-green-500 text-white'
+                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700'
+                                    }`}
+                                    title="Use thumbs up/down weighting"
+                                >
+                                    Rating bonus
+                                </button>
+                            )}
                         </div>
                         <div
                             className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">

@@ -33,6 +33,9 @@ Reference document capturing project state, architectural decisions, and continu
 | Unit System            | Metric / imperial / both toggle, persisted per user                       | Complete    |
 | Docker Deployment      | Docker Compose with Traefik labels, bind mount for data                   | Complete    |
 | Documentation          | Architecture, component, and development docs                             | Complete    |
+| Recipe Importer        | URL fetch + HTML paste fallback, WPRM/Tasty Recipes/JSON-LD parsers       | Complete    |
+| Save Validation        | Client-side validation with unlinked-ingredient blocking                  | Complete    |
+| Suggestion Algorithm   | Improved scoring with library-based matching, recency penalty, UI controls | Complete    |
 | Recipe Audit Fixes     | 7 ⚠️ ingredient entries from enrichment need manual recipe fixes          | In Progress |
 
 ---
@@ -75,6 +78,30 @@ Reference document capturing project state, architectural decisions, and continu
   them via `ingredientAdditions` / `instructionAdditions`.
 - `recipeUtils.ts` resolves variants to their full form via `resolveVariantRecipe()`.
 
+### Recipe Import & Parsing
+
+- **Client-side parsing** via `DOMParser` — WPRM, Tasty Recipes, and JSON-LD formats detected in a chain. Avoids
+  external parser dependencies and keeps import logic testable.
+- **Server proxy for URL fetch** — avoids CORS errors. Client sends URL, server fetches the page with standard headers
+  and returns raw HTML.
+- **Fallback HTML paste** — when URL is unavailable or fails, users can paste HTML snippets directly for manual
+  extraction.
+
+### Save Validation
+
+- **Client-side validation** runs before the API call in `RecipeEditForm`. Detects unlinked ingredients via
+  `ingredientId` check and blocks saves with a user-facing modal.
+- **Server-side schema validation** still runs as an integrity check but is not the primary validation gate.
+- Validation is extracted to pure utilities (`recipeValidation.ts`) to enable unit testing independent of React.
+
+### Suggestion Scoring
+
+- **Pure utility function** (`suggestionScoring.ts`) implements scoring logic: name match (via string-distance library),
+  recency penalty for older recipes, and category/tag weighting.
+- **UI controls** in `RecipePicker` allow toggling recency penalty and limiting result count, enabling quick
+  experimentation without code changes.
+- Scoring is testable independently via unit tests on the pure function.
+
 ---
 
 ## Deferred Items
@@ -83,7 +110,6 @@ Reference document capturing project state, architectural decisions, and continu
 |-----------------------------------|-----------------------------------------------------|-----------------------------------|
 | Recipe audit ⚠️ fixes (7 entries) | Requires manual review of affected recipes          | Next development session          |
 | Multi-tenant account groups       | Significant architectural change, low priority      | Post-launch user feedback         |
-| Recipe auto-import from URL       | Web scraping complexity, low priority               | Post-launch user feedback         |
 | Grocery shopping integration      | Requires external API agreements or scraping        | Post-launch user feedback         |
 
 ---

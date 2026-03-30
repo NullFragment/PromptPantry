@@ -12,7 +12,7 @@ const mockRecipe: Recipe = {
     servings: 4,
     tags: ['test'],
     ingredients: [
-        {ingredient: 'Ingredient 1', quantity: '1', measure: 'cup'}
+        {ingredient: 'Ingredient 1', quantity: '1', measure: 'cup', ingredientId: 'ing-1'}
     ],
     instructions: ['Step 1', 'Step 2'],
     macros: {calories: 500, protein: 20, carbs: 60, fat: 10}
@@ -380,7 +380,7 @@ describe('RecipeModal', () => {
         expect(video).toBeTruthy();
     });
 
-    it('opens in edit mode for new recipe', () => {
+    it('opens in import mode for new recipe', () => {
         const onClose = vi.fn();
         renderWithAppContext(
             <RecipeModal
@@ -394,12 +394,13 @@ describe('RecipeModal', () => {
                 readOnly={false}
             />
         );
-        // Should immediately be in edit mode since name is empty
+        // New recipes open in import mode — shows the URL input, not the save button
         expect(screen.getByText('Add New Recipe')).toBeInTheDocument();
-        expect(screen.getByText('Save Recipe')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('https://example.com/recipe')).toBeInTheDocument();
+        expect(screen.queryByText('Save Recipe')).not.toBeInTheDocument();
     });
 
-    it('closes on cancel for new recipe', () => {
+    it('closes on cancel after switching to form mode for new recipe', () => {
         const onClose = vi.fn();
         renderWithAppContext(
             <RecipeModal
@@ -414,6 +415,8 @@ describe('RecipeModal', () => {
             />
         );
 
+        // Switch to form mode to reveal the Cancel button
+        fireEvent.click(screen.getByText('Form'));
         fireEvent.click(screen.getByText('Cancel'));
         expect(onClose).toHaveBeenCalled();
     });

@@ -296,5 +296,8 @@ fabric.properties
 data/*
 !data/ingredients.json
 !data/storeSections.json
+
+# Recipe scraping source data (large, not for version control)
 .superpowers/
+.worktrees/
 documentation/agentic-context/implementation-plans.worktrees/

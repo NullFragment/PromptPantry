@@ -162,13 +162,18 @@ describe('RecipePicker', () => {
     });
 
     it('shows ingredient-based suggestions when selectedWeekRecipes is not empty', () => {
-        const selectedWeekRecipes = [mockRecipes[0]]; // Pasta (noodles)
+        const pastaWithId = {
+            ...mockRecipes[0],
+            ingredients: [{ingredient: 'noodles', quantity: '1', measure: 'box', ingredientId: 'ing-noodles'}]
+        };
+        const selectedWeekRecipes = [pastaWithId];
         const recipesWithShared = [
-            ...mockRecipes,
+            pastaWithId,
+            mockRecipes[1],
             {
                 ...mockRecipes[1],
                 name: 'Noodle Bowl',
-                ingredients: [{ingredient: 'noodles', quantity: '1', measure: 'box'}]
+                ingredients: [{ingredient: 'noodles', quantity: '1', measure: 'box', ingredientId: 'ing-noodles'}]
             }
         ];
         render(<RecipePicker {...defaultProps} recipes={recipesWithShared} selectedWeekRecipes={selectedWeekRecipes}/>);

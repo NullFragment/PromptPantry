@@ -21,6 +21,7 @@ import { registerIngredientRoutes } from './server/ingredientRoutes.js';
 import { registerStoreSectionRoutes } from './server/storeSectionRoutes.js';
 import { registerMealPlanRoutes } from './server/mealPlanRoutes.js';
 import { registerUserRoutes } from './server/userRoutes.js';
+import { registerScrapeRoutes } from './server/scrapeRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -140,6 +141,7 @@ export function createApp(dataDir = DEFAULT_DATA_DIR) {
     registerRecipeRoutes(app, ctx);
     registerMealPlanRoutes(app, ctx);
     registerUserRoutes(app, ctx);
+    registerScrapeRoutes(app, ctx);
 
     // eslint-disable-next-line no-unused-vars
     app.use((err, req, res, next) => {
