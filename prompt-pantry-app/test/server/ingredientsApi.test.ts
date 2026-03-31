@@ -2,16 +2,22 @@ import request from 'supertest';
 import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 import {createTestEnvironment, writeTestFile, readTestFile, type TestEnvironment} from './testDataIsolation.js';
 
+// Test UUID constants for store sections
+const PRODUCE_SECTION_ID = 'b0000000-0000-0000-0000-000000000001';
+const PROTEIN_SECTION_ID = 'b0000000-0000-0000-0000-000000000002';
+const DAIRY_SECTION_ID   = 'b0000000-0000-0000-0000-000000000003';
+const SPICES_SECTION_ID  = 'b0000000-0000-0000-0000-000000000004';
+
 const sampleIngredient = {
     id: '550e8400-e29b-41d4-a716-446655440000',
     name: 'garlic',
-    storeSection: 'Produce'
+    storeSectionId: PRODUCE_SECTION_ID
 };
 
 const sampleIngredientWithAliases = {
     id: '550e8400-e29b-41d4-a716-446655440001',
     name: 'chicken breast',
-    storeSection: 'Protein',
+    storeSectionId: PROTEIN_SECTION_ID,
     aliases: ['boneless chicken breast', 'chicken breast, skinless']
 };
 
@@ -25,6 +31,13 @@ describe('Ingredients API', () => {
     beforeEach(() => {
         // Reset ingredients file
         writeTestFile(env.files.ingredientsFile, []);
+        // Set up known store sections
+        writeTestFile(env.files.storeSectionsFile, [
+            { id: PRODUCE_SECTION_ID, name: 'Produce' },
+            { id: PROTEIN_SECTION_ID, name: 'Protein' },
+            { id: DAIRY_SECTION_ID,   name: 'Dairy' },
+            { id: SPICES_SECTION_ID,  name: 'Spices' },
+        ]);
         // Ensure testuser has Editor tier for write operations
         writeTestFile(env.files.usersFile, [
             {username: 'testuser', password: '$2a$10$hashedpassword', tier: 'Editor'}
@@ -46,9 +59,9 @@ describe('Ingredients API', () => {
         it('returns all ingredients sorted alphabetically', async () => {
             const {app} = env;
             writeTestFile(env.files.ingredientsFile, [
-                {id: '1', name: 'zucchini', storeSection: 'Produce'},
-                {id: '2', name: 'apple', storeSection: 'Produce'},
-                {id: '3', name: 'milk', storeSection: 'Dairy'}
+                {id: '1', name: 'zucchini', storeSectionId: PRODUCE_SECTION_ID},
+                {id: '2', name: 'apple',    storeSectionId: PRODUCE_SECTION_ID},
+                {id: '3', name: 'milk',     storeSectionId: DAIRY_SECTION_ID}
             ]);
 
             const res = await request(app).get('/api/ingredients');
@@ -134,7 +147,6 @@ describe('Ingredients API', () => {
             const names = res.body.map((s: { name: string }) => s.name);
             expect(names).toContain('Dairy');
             expect(names).toContain('Produce');
-            expect(names).toContain('Unassigned');
         });
     });
 
@@ -143,7 +155,7 @@ describe('Ingredients API', () => {
             const {app} = env;
             const newIngredient = {
                 name: 'onion',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
 
             const res = await request(app)
@@ -152,7 +164,7 @@ describe('Ingredients API', () => {
 
             expect(res.status).toBe(201);
             expect(res.body.name).toBe('onion');
-            expect(res.body.storeSection).toBe('Produce');
+            expect(res.body.storeSectionId).toBe(PRODUCE_SECTION_ID);
             expect(res.body.id).toBeDefined();
         });
 
@@ -160,30 +172,10 @@ describe('Ingredients API', () => {
             const {app} = env;
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'carrot', storeSection: 'Produce'});
+                .send({name: 'carrot', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(201);
             expect(res.body.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
-        });
-
-        it('normalizes store section to Title Case', async () => {
-            const {app} = env;
-            const res = await request(app)
-                .post('/api/ingredients')
-                .send({name: 'pepper', storeSection: 'PRODUCE'});
-
-            expect(res.status).toBe(201);
-            expect(res.body.storeSection).toBe('Produce');
-        });
-
-        it('does not normalize Unassigned store section', async () => {
-            const {app} = env;
-            const res = await request(app)
-                .post('/api/ingredients')
-                .send({name: 'unknown', storeSection: 'Unassigned'});
-
-            expect(res.status).toBe(201);
-            expect(res.body.storeSection).toBe('Unassigned');
         });
 
         it('rejects duplicate ingredient name', async () => {
@@ -192,7 +184,7 @@ describe('Ingredients API', () => {
 
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'garlic', storeSection: 'Produce'});
+                .send({name: 'garlic', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('already exists');
@@ -204,7 +196,7 @@ describe('Ingredients API', () => {
 
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'GARLIC', storeSection: 'Produce'});
+                .send({name: 'GARLIC', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(400);
         });
@@ -217,7 +209,7 @@ describe('Ingredients API', () => {
                 .post('/api/ingredients')
                 .send({
                     name: 'onion',
-                    storeSection: 'Produce',
+                    storeSectionId: PRODUCE_SECTION_ID,
                     aliases: ['garlic'] // conflicts with existing ingredient name
                 });
 
@@ -233,7 +225,7 @@ describe('Ingredients API', () => {
                 .post('/api/ingredients')
                 .send({
                     name: 'turkey breast',
-                    storeSection: 'Protein',
+                    storeSectionId: PROTEIN_SECTION_ID,
                     aliases: ['boneless chicken breast'] // conflicts with existing alias
                 });
 
@@ -245,7 +237,7 @@ describe('Ingredients API', () => {
             const {app} = env;
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'onion'}); // missing storeSection
+                .send({name: 'onion'}); // missing storeSectionId
 
             expect(res.status).toBe(400);
         });
@@ -260,11 +252,11 @@ describe('Ingredients API', () => {
                 .put(`/api/ingredients/${sampleIngredient.id}`)
                 .send({
                     ...sampleIngredient,
-                    storeSection: 'Spices'
+                    storeSectionId: SPICES_SECTION_ID
                 });
 
             expect(res.status).toBe(200);
-            expect(res.body.storeSection).toBe('Spices');
+            expect(res.body.storeSectionId).toBe(SPICES_SECTION_ID);
         });
 
         it('returns 404 for non-existent ingredient', async () => {
@@ -272,7 +264,7 @@ describe('Ingredients API', () => {
             // Use a valid UUID format that doesn't exist
             const res = await request(app)
                 .put('/api/ingredients/550e8400-e29b-41d4-a716-000000000000')
-                .send({name: 'onion', storeSection: 'Produce'});
+                .send({name: 'onion', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(404);
         });
@@ -341,9 +333,9 @@ describe('Ingredients API', () => {
     describe('POST /api/ingredients/merge', () => {
         it('merges multiple ingredients into target', async () => {
             const {app} = env;
-            const source1 = {id: '550e8400-e29b-41d4-a716-446655440002', name: 'rocket', storeSection: 'Produce'};
-            const source2 = {id: '550e8400-e29b-41d4-a716-446655440003', name: 'arugula salad', storeSection: 'Produce'};
-            const target = {id: '550e8400-e29b-41d4-a716-446655440004', name: 'arugula', storeSection: 'Produce'};
+            const source1 = {id: '550e8400-e29b-41d4-a716-446655440002', name: 'rocket',        storeSectionId: PRODUCE_SECTION_ID};
+            const source2 = {id: '550e8400-e29b-41d4-a716-446655440003', name: 'arugula salad', storeSectionId: PRODUCE_SECTION_ID};
+            const target  = {id: '550e8400-e29b-41d4-a716-446655440004', name: 'arugula',       storeSectionId: PRODUCE_SECTION_ID};
 
             writeTestFile(env.files.ingredientsFile, [source1, source2, target]);
 
@@ -369,8 +361,8 @@ describe('Ingredients API', () => {
 
         it('updates recipe references when merging', async () => {
             const {app} = env;
-            const source = {id: '550e8400-e29b-41d4-a716-446655440005', name: 'rocket', storeSection: 'Produce'};
-            const target = {id: '550e8400-e29b-41d4-a716-446655440006', name: 'arugula', storeSection: 'Produce'};
+            const source = {id: '550e8400-e29b-41d4-a716-446655440005', name: 'rocket',  storeSectionId: PRODUCE_SECTION_ID};
+            const target = {id: '550e8400-e29b-41d4-a716-446655440006', name: 'arugula', storeSectionId: PRODUCE_SECTION_ID};
 
             writeTestFile(env.files.ingredientsFile, [source, target]);
             writeTestFile(env.files.recipesFile, [
@@ -402,8 +394,8 @@ describe('Ingredients API', () => {
 
         it('adds source names as aliases to target', async () => {
             const {app} = env;
-            const source = {id: '550e8400-e29b-41d4-a716-446655440007', name: 'rocket', storeSection: 'Produce', aliases: ['rucola']};
-            const target = {id: '550e8400-e29b-41d4-a716-446655440008', name: 'arugula', storeSection: 'Produce'};
+            const source = {id: '550e8400-e29b-41d4-a716-446655440007', name: 'rocket',  storeSectionId: PRODUCE_SECTION_ID, aliases: ['rucola']};
+            const target = {id: '550e8400-e29b-41d4-a716-446655440008', name: 'arugula', storeSectionId: PRODUCE_SECTION_ID};
 
             writeTestFile(env.files.ingredientsFile, [source, target]);
 
@@ -425,7 +417,7 @@ describe('Ingredients API', () => {
             const source = {
                 id: '550e8400-e29b-41d4-a716-446655440010',
                 name: 'baby bella mushrooms',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 containerSizes: [
                     {quantity: 8, unit: 'oz', label: '8 oz pack'},
                     {quantity: 16, unit: 'oz'}
@@ -434,7 +426,7 @@ describe('Ingredients API', () => {
             const target = {
                 id: '550e8400-e29b-41d4-a716-446655440011',
                 name: 'baby portabella mushrooms',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 containerSizes: [
                     {quantity: 16, unit: 'oz', label: '1 lb pack'},
                     {quantity: 32, unit: 'oz'}
@@ -494,7 +486,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440100',
                 name: 'onion',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['onion, chopped', 'yellow onion']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -547,7 +539,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440101',
                 name: 'garlic',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['garlic clove', 'garlic, minced']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -567,7 +559,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440102',
                 name: 'onion',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['onion, choped']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -599,7 +591,7 @@ describe('Ingredients API', () => {
             const garlicWithAlias = { ...sampleIngredient, aliases: ['garlic clove'] };
             writeTestFile(env.files.ingredientsFile, [
                 garlicWithAlias,
-                {id: '550e8400-e29b-41d4-a716-446655440103', name: 'onion', storeSection: 'Produce', aliases: ['red onion']}
+                {id: '550e8400-e29b-41d4-a716-446655440103', name: 'onion', storeSectionId: PRODUCE_SECTION_ID, aliases: ['red onion']}
             ]);
 
             const res = await request(app)
@@ -615,7 +607,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440106',
                 name: 'parsley',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['fresh parsley']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -650,7 +642,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440104',
                 name: 'milk',
-                storeSection: 'Dairy',
+                storeSectionId: DAIRY_SECTION_ID,
                 aliases: ['whole milk']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -684,7 +676,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440105',
                 name: 'onion',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['onion, choped', 'onion, chopped', 'yellow onion']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -718,7 +710,7 @@ describe('Ingredients API', () => {
             const ing = {
                 id: '550e8400-e29b-41d4-a716-446655440106',
                 name: 'tomato',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['tomatoes, diced']
             };
             writeTestFile(env.files.ingredientsFile, [ing]);
@@ -765,7 +757,7 @@ describe('Ingredients API', () => {
 
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'onion', storeSection: 'Produce'});
+                .send({name: 'onion', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(403);
         });
@@ -778,7 +770,7 @@ describe('Ingredients API', () => {
 
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'onion', storeSection: 'Produce'});
+                .send({name: 'onion', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(201);
         });
@@ -791,10 +783,9 @@ describe('Ingredients API', () => {
 
             const res = await request(app)
                 .post('/api/ingredients')
-                .send({name: 'onion', storeSection: 'Produce'});
+                .send({name: 'onion', storeSectionId: PRODUCE_SECTION_ID});
 
             expect(res.status).toBe(201);
         });
     });
 });
-

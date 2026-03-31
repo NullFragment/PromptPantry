@@ -35,7 +35,7 @@ export function useIngredients() {
     const [error, setError] = useState<string | null>(null);
 
     const storeSections = useMemo(() => {
-        const sections = [...new Set(ingredients.map(i => i.storeSection))];
+        const sections = [...new Set(ingredients.map(i => i.storeSectionId))];
         return sortSectionsWithUnassignedLast(sections);
     }, [ingredients]);
 
@@ -55,7 +55,7 @@ export function useIngredients() {
     }, []);
 
     const saveIngredient = useCallback(async (
-        ingredient: Partial<IngredientDefinition> & { name: string; storeSection: string },
+        ingredient: Partial<IngredientDefinition> & { name: string; storeSectionId: string },
         isNew: boolean
     ): Promise<SaveResult> => {
         const id = ingredient.id || '';

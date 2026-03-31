@@ -4,27 +4,33 @@ import {useIngredients} from '../../src/hooks/useIngredients';
 import {IngredientDefinition} from '../../src/types';
 import {mockFetchResponse, mockFetchError} from '../testHelpers';
 
+// UUID constants for store sections
+const PRODUCE_SECTION_ID  = 'i0000000-0000-0000-0000-000000000001';
+const PROTEIN_SECTION_ID  = 'i0000000-0000-0000-0000-000000000002';
+const DAIRY_SECTION_ID    = 'i0000000-0000-0000-0000-000000000003';
+const UNASSIGNED_ID       = 'i0000000-0000-0000-0000-000000000000';
+
 const mockIngredients: IngredientDefinition[] = [
     {
         id: '550e8400-e29b-41d4-a716-446655440001',
         name: 'garlic',
-        storeSection: 'Produce',
+        storeSectionId: PRODUCE_SECTION_ID,
         aliases: ['garlic clove', 'garlic, minced']
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440002',
         name: 'chicken breast',
-        storeSection: 'Protein'
+        storeSectionId: PROTEIN_SECTION_ID
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440003',
         name: 'milk',
-        storeSection: 'Dairy'
+        storeSectionId: DAIRY_SECTION_ID
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440004',
         name: 'mystery item',
-        storeSection: 'Unassigned'
+        storeSectionId: UNASSIGNED_ID
     }
 ];
 
@@ -105,7 +111,7 @@ describe('useIngredients', () => {
     });
 
     describe('storeSections', () => {
-        it('derives unique store sections sorted with Unassigned last', async () => {
+        it('derives unique store section IDs from ingredients', async () => {
             vi.stubGlobal('fetch', vi.fn(() =>
                 Promise.resolve(mockFetchResponse(mockIngredients))
             ));
@@ -116,13 +122,19 @@ describe('useIngredients', () => {
                 await result.current.fetchIngredients();
             });
 
-            expect(result.current.storeSections).toEqual(['Dairy', 'Produce', 'Protein', 'Unassigned']);
+            // storeSections returns unique UUIDs from ingredient storeSectionIds
+            const sections = result.current.storeSections;
+            expect(sections).toHaveLength(4);
+            expect(sections).toContain(DAIRY_SECTION_ID);
+            expect(sections).toContain(PRODUCE_SECTION_ID);
+            expect(sections).toContain(PROTEIN_SECTION_ID);
+            expect(sections).toContain(UNASSIGNED_ID);
         });
     });
 
     describe('saveIngredient', () => {
         it('creates new ingredient successfully', async () => {
-            const newIngredient = {name: 'onion', storeSection: 'Produce'};
+            const newIngredient = {name: 'onion', storeSectionId: PRODUCE_SECTION_ID};
             const savedIngredient = {...newIngredient, id: 'new-uuid'};
 
             vi.stubGlobal('fetch', vi.fn()
@@ -142,7 +154,7 @@ describe('useIngredients', () => {
 
         it('updates existing ingredient successfully', async () => {
             const existingIngredient = mockIngredients[0];
-            const updatedIngredient = {...existingIngredient, storeSection: 'Spices'};
+            const updatedIngredient = {...existingIngredient, storeSectionId: PROTEIN_SECTION_ID};
 
             vi.stubGlobal('fetch', vi.fn()
                 .mockResolvedValueOnce(mockFetchResponse(updatedIngredient))
@@ -168,7 +180,7 @@ describe('useIngredients', () => {
 
             let saveResult;
             await act(async () => {
-                saveResult = await result.current.saveIngredient({name: 'garlic', storeSection: 'Produce'}, true);
+                saveResult = await result.current.saveIngredient({name: 'garlic', storeSectionId: PRODUCE_SECTION_ID}, true);
             });
 
             expect(saveResult).toEqual({success: false, error: 'Name already exists'});

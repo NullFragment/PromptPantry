@@ -13,6 +13,7 @@ import {
 import {MealPlan, Participant, Recipe} from '../src/types';
 
 const baseRecipe: Recipe = {
+    id: 'uuid-base-recipe',
     name: 'Base Recipe',
     categories: ['Dinner'],
     prepTime: '10',
@@ -260,7 +261,7 @@ describe('mealPlanUtils', () => {
                 }
             };
 
-            const used = getUsedServingsForWeek(mealPlan, baseRecipe.name, weekStart);
+            const used = getUsedServingsForWeek(mealPlan, baseRecipe.id ?? 'uuid-base-recipe', weekStart);
             expect(used).toBe(3);
         });
 
@@ -277,18 +278,17 @@ describe('mealPlanUtils', () => {
 
         it('counts multipliers from multiWeeklyCookPlan', () => {
             const cookPlan = {
-                [week1Str]: {'uuid-1': {recipeName: 'Pasta', multiplier: 2, servings: 8}},
-                [week2Str]: {'uuid-2': {recipeName: 'Pasta', multiplier: 1, servings: 4}}
+                [week1Str]: {'uuid-1': {recipeId: 'uuid-pasta', recipeName: 'Pasta', multiplier: 2, servings: 8}},
+                [week2Str]: {'uuid-2': {recipeId: 'uuid-pasta', recipeName: 'Pasta', multiplier: 1, servings: 4}}
             };
-            expect(getRecipeCookCount(cookPlan, {}, 'Pasta')).toBe(3);
+            expect(getRecipeCookCount(cookPlan, {}, 'uuid-pasta')).toBe(3);
         });
 
         it('counts 1 for scheduled meals when multiplier is missing or 0', () => {
             const mealPlan: MealPlan = {
                 [week1Str]: {dinner: [{recipe: baseRecipe, servings: 1}]}
             };
-            // baseRecipe.name is 'Base Recipe'
-            expect(getRecipeCookCount({}, mealPlan, 'Base Recipe')).toBe(1);
+            expect(getRecipeCookCount({}, mealPlan, 'uuid-base-recipe')).toBe(1);
         });
 
         it('counts 1 per week even if multiple slots are scheduled in that week', () => {
@@ -298,44 +298,44 @@ describe('mealPlanUtils', () => {
                     lunch: [{recipe: baseRecipe, servings: 1}]
                 }
             };
-            expect(getRecipeCookCount({}, mealPlan, 'Base Recipe')).toBe(1);
+            expect(getRecipeCookCount({}, mealPlan, 'uuid-base-recipe')).toBe(1);
         });
 
         it('prefers multiplier over scheduled fallback in the same week', () => {
             const cookPlan = {
-                [week1Str]: {'uuid-1': {recipeName: 'Base Recipe', multiplier: 2, servings: 8}}
+                [week1Str]: {'uuid-1': {recipeId: 'uuid-base-recipe', recipeName: 'Base Recipe', multiplier: 2, servings: 8}}
             };
             const mealPlan: MealPlan = {
                 [week1Str]: {dinner: [{recipe: baseRecipe, servings: 1}]}
             };
-            expect(getRecipeCookCount(cookPlan, mealPlan, 'Base Recipe')).toBe(2);
+            expect(getRecipeCookCount(cookPlan, mealPlan, 'uuid-base-recipe')).toBe(2);
         });
 
         it('does not count transferred servings as a new cook event', () => {
             const cookPlan = {
-                [week1Str]: {'uuid-1': {recipeName: 'Base Recipe', multiplier: 0, servings: 4, transferredFromDate: '2025-12-28'}}
+                [week1Str]: {'uuid-1': {recipeId: 'uuid-base-recipe', recipeName: 'Base Recipe', multiplier: 0, servings: 4, transferredFromDate: '2025-12-28'}}
             };
             const mealPlan: MealPlan = {
                 [week1Str]: {dinner: [{recipe: baseRecipe, servings: 1}]}
             };
-            expect(getRecipeCookCount(cookPlan, mealPlan, 'Base Recipe')).toBe(0);
+            expect(getRecipeCookCount(cookPlan, mealPlan, 'uuid-base-recipe')).toBe(0);
         });
 
         it('handles multiple weeks with a mix of multipliers and scheduled fallback', () => {
             const cookPlan = {
-                [week1Str]: {'uuid-1': {recipeName: 'Base Recipe', multiplier: 2, servings: 8}},
-                [week2Str]: {'uuid-2': {recipeName: 'Base Recipe', multiplier: 0, servings: 4}}
+                [week1Str]: {'uuid-1': {recipeId: 'uuid-base-recipe', recipeName: 'Base Recipe', multiplier: 2, servings: 8}},
+                [week2Str]: {'uuid-2': {recipeId: 'uuid-base-recipe', recipeName: 'Base Recipe', multiplier: 0, servings: 4}}
             };
             const mealPlan: MealPlan = {
                 [week2Str]: {dinner: [{recipe: baseRecipe, servings: 1}]}
             };
             // Week 1: Multiplier 2
             // Week 2: Scheduled fallback 1
-            expect(getRecipeCookCount(cookPlan, mealPlan, 'Base Recipe')).toBe(3);
+            expect(getRecipeCookCount(cookPlan, mealPlan, 'uuid-base-recipe')).toBe(3);
         });
 
         it('returns 0 for never cooked/scheduled recipe', () => {
-            expect(getRecipeCookCount({}, {}, 'Unknown')).toBe(0);
+            expect(getRecipeCookCount({}, {}, 'uuid-unknown')).toBe(0);
         });
 
         it('handles null/undefined plans safely', () => {

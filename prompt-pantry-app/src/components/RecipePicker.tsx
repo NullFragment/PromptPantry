@@ -56,11 +56,11 @@ export function RecipePicker({
 
     const categories = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Side', 'Drink', 'Misc'];
 
-    const commitQty = (recipeName: string, raw: string) => {
+    const commitQty = (recipeId: string, raw: string) => {
         const n = parseInt(raw, 10);
         const num = (Number.isNaN(n) || n < 1) ? 1 : n;
-        updateMultiplier(recipeName, num);
-        setQtyDisplay(prev => ({ ...prev, [recipeName]: String(num) }));
+        updateMultiplier(recipeId, num);
+        setQtyDisplay(prev => ({ ...prev, [recipeId]: String(num) }));
     };
 
     const suggestions = useMemo(() => {
@@ -69,7 +69,7 @@ export function RecipePicker({
         const weekIngredientIds = buildWeekIngredientSet(selectedWeekRecipes);
 
         const filteredRecipes = recipes.filter(r => {
-            if (selectedWeekRecipes.some(wr => wr.name === r.name)) return false;
+            if (selectedWeekRecipes.some(wr => wr.id === r.id)) return false;
             if (!participants.every(p => isRecipeFitForParticipant(r, p))) return false;
 
             // Apply category filter (same as search tab)
@@ -82,7 +82,7 @@ export function RecipePicker({
 
             const ratingMatch = pickerSelectedRatings.length === 0 || pickerSelectedRatings.includes(r.rating || 'neutral');
             const favoriteMatch = !pickerShowOnlyFavorites || r.isFavorite;
-            const neverCookedMatch = !pickerShowOnlyNeverCooked || getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.name) === 0;
+            const neverCookedMatch = !pickerShowOnlyNeverCooked || getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.id) === 0;
 
             return ratingMatch && favoriteMatch && neverCookedMatch;
         });
@@ -125,8 +125,8 @@ export function RecipePicker({
 
             return filteredRecipes
                 .map(r => {
-                    const multiplier = selectedRecipes[r.name] ?? 1;
-                    const cookCount = getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.name);
+                    const multiplier = selectedRecipes[r.id] ?? 1;
+                    const cookCount = getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.id);
                     return scoreMacroSuggestion(r, weeklyTargets, weeklyPlanned, weekIngredientIds, multiplier, cookCount);
                 })
                 .sort((a, b) => b.score - a.score);
@@ -143,7 +143,7 @@ export function RecipePicker({
             (pickerSelectedCategories.length === 0 || r.categories?.some(c => pickerSelectedCategories.includes(c))) &&
             (pickerSelectedRatings.length === 0 || pickerSelectedRatings.includes(r.rating || 'neutral')) &&
             (!pickerShowOnlyFavorites || r.isFavorite) &&
-            (!pickerShowOnlyNeverCooked || getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.name) === 0)
+            (!pickerShowOnlyNeverCooked || getRecipeCookCount(multiWeeklyCookPlan, mealPlan, r.id) === 0)
         );
     }, [pickerSearchQuery, pickerSelectedTags, pickerSelectedCategories, pickerSelectedRatings, pickerShowOnlyFavorites, pickerShowOnlyNeverCooked, recipes, mealPlan, multiWeeklyCookPlan]);
 
@@ -159,37 +159,37 @@ export function RecipePicker({
         );
     };
 
-    const toggleRecipeSelection = (recipeName: string) => {
+    const toggleRecipeSelection = (recipeId: string) => {
         setSelectedRecipes(prev => {
             const next = {...prev};
-            if (next[recipeName]) {
-                delete next[recipeName];
+            if (next[recipeId]) {
+                delete next[recipeId];
             } else {
-                next[recipeName] = 1;
+                next[recipeId] = 1;
             }
             return next;
         });
         setQtyDisplay(prev => {
             const next = {...prev};
-            if (selectedRecipes[recipeName]) {
-                delete next[recipeName];
+            if (selectedRecipes[recipeId]) {
+                delete next[recipeId];
             }
             return next;
         });
     };
 
-    const updateMultiplier = (recipeName: string, multiplier: number) => {
+    const updateMultiplier = (recipeId: string, multiplier: number) => {
         setSelectedRecipes(prev => ({
             ...prev,
-            [recipeName]: Math.max(1, multiplier)
+            [recipeId]: Math.max(1, multiplier)
         }));
     };
 
     const handleAddSelected = () => {
-        const selections = Object.entries(selectedRecipes).map(([name, multiplier]) => {
-            const recipe = recipes.find(r => r.name === name);
+        const selections = Object.entries(selectedRecipes).map(([id, multiplier]) => {
+            const recipe = recipes.find(r => r.id === id);
             if (!recipe) return null;
-            const raw = qtyDisplay[name];
+            const raw = qtyDisplay[id];
             const parsed = raw != null && raw !== '' ? parseInt(raw, 10) : null;
             const effectiveMultiplier = (parsed != null && !Number.isNaN(parsed) && parsed >= 1) ? parsed : multiplier;
             return {recipe, multiplier: effectiveMultiplier};
@@ -197,21 +197,21 @@ export function RecipePicker({
         setSelectedRecipes(prev => {
             const next = { ...prev };
             selections.forEach(({ recipe, multiplier }) => {
-                next[recipe.name] = multiplier;
+                next[recipe.id] = multiplier;
             });
             return next;
         });
         setQtyDisplay(prev => {
             const next = { ...prev };
             selections.forEach(({ recipe, multiplier }) => {
-                next[recipe.name] = String(multiplier);
+                next[recipe.id] = String(multiplier);
             });
             return next;
         });
         onSelect(selections);
     };
 
-    const hasSelections = Object.keys(selectedRecipes).length > 0 && Object.keys(selectedRecipes).every(name => recipes.some(r => r.name === name));
+    const hasSelections = Object.keys(selectedRecipes).length > 0 && Object.keys(selectedRecipes).every(id => recipes.some(r => r.id === id));
 
     return (
         <div role="dialog" aria-modal="true"
@@ -442,12 +442,12 @@ export function RecipePicker({
                 <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {(activeTab === 'search' ? pickerRecipes : suggestions.map(s => s.recipe)).length > 0 ? (
                         (activeTab === 'search' ? pickerRecipes : suggestions.map(s => s.recipe)).map(r => {
-                            const isSelected = !!selectedRecipes[r.name];
-                            const sInfo = activeTab === 'suggestions' ? suggestions.find(s => s.recipe.name === r.name) : null;
+                            const isSelected = !!selectedRecipes[r.id];
+                            const sInfo = activeTab === 'suggestions' ? suggestions.find(s => s.recipe.id === r.id) : null;
 
                             return (
                                 <div
-                                    key={r.name}
+                                    key={r.id}
                                     className={`w-full text-left p-4 rounded-xl border transition-all shadow-sm hover:shadow-md group flex items-start gap-4 ${
                                         isSelected
                                             ? 'border-indigo-500 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/30'
@@ -456,7 +456,7 @@ export function RecipePicker({
                                 >
                                     <div className="flex items-center self-stretch">
                                         <button
-                                            onClick={() => toggleRecipeSelection(r.name)}
+                                            onClick={() => toggleRecipeSelection(r.id)}
                                             aria-label={`Select ${r.name}`}
                                             className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
                                                 isSelected
@@ -536,9 +536,9 @@ export function RecipePicker({
                                             <input
                                                 type="number"
                                                 min={1}
-                                                value={qtyDisplay[r.name] ?? String(selectedRecipes[r.name] ?? 1)}
-                                                onChange={(e) => setQtyDisplay(prev => ({ ...prev, [r.name]: e.target.value }))}
-                                                onBlur={(e) => commitQty(r.name, e.target.value)}
+                                                value={qtyDisplay[r.id] ?? String(selectedRecipes[r.id] ?? 1)}
+                                                onChange={(e) => setQtyDisplay(prev => ({ ...prev, [r.id]: e.target.value }))}
+                                                onBlur={(e) => commitQty(r.id, e.target.value)}
                                                 className="w-12 px-1 py-1 bg-white dark:bg-gray-800 border-2 border-indigo-200 dark:border-indigo-900 rounded-lg text-xs font-black text-center text-indigo-600 dark:text-indigo-400 outline-none focus:ring-2 focus:ring-indigo-500"
                                             />
                                         </div>

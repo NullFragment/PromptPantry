@@ -21,8 +21,7 @@ export function useWeeklyRecipeCards({
 }: UseWeeklyRecipeCardsParams): WeeklyRecipeCardData[] {
     return useMemo(() => {
         return Object.entries(currentWeeklyCookPlan).flatMap(([instanceId, item]) => {
-            const recipeName = item.recipeName;
-            const recipe = recipes.find((r) => r.name === recipeName);
+            const recipe = recipes.find((r) => r.id === item.recipeId);
             if (!recipe) return [];
 
             const totalServings = item.servings || 0;
@@ -35,7 +34,7 @@ export function useWeeklyRecipeCards({
                 return (
                     sum +
                     getAllMealsForDay(dayPlan)
-                        .filter((m) => m.recipe.name === recipeName && m.recipeInstanceId === instanceId)
+                        .filter((m) => m.recipe.id === recipe.id && m.recipeInstanceId === instanceId)
                         .reduce((s, m) => s + m.servings, 0)
                 );
             }, 0);
@@ -44,7 +43,7 @@ export function useWeeklyRecipeCards({
             const card: WeeklyRecipeCardData = {
                 key: instanceId,
                 instanceId,
-                name: recipeName,
+                name: recipe.name,
                 recipe,
                 servings: totalServings,
                 used: Math.min(usedTotal, totalServings),

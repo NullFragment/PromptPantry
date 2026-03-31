@@ -3,6 +3,7 @@ import type { Recipe, WeeklyCookPlanItem } from '../../types';
 /** One leftover recipe from a previous week (for leftover prompt modal) */
 export interface LeftoverItem {
     name: string;
+    recipeId?: string;
     count: number;
     fromWeek: string;
     instanceId: string;

@@ -19,6 +19,7 @@ import {
     MealPlan,
     MultiWeeklyCookPlan,
     Recipe,
+    StoreSectionDefinition,
     ValidationError
 } from '../../types';
 import {getRecipeCookCount} from '../../utils/mealPlanUtils';
@@ -41,7 +42,7 @@ interface RecipeModalProps {
         isValid?: boolean;
         errors?: ValidationError[]
     }>;
-    onDelete: (name: string) => Promise<void>;
+    onDelete: (id: string) => Promise<void>;
     mealPlan: MealPlan;
     multiWeeklyCookPlan: MultiWeeklyCookPlan;
     highlightedIngredients?: string[];
@@ -49,7 +50,7 @@ interface RecipeModalProps {
     validationErrors?: ValidationError[];
     allTags?: string[];
     ingredientDefinitions?: IngredientDefinition[];
-    storeSections?: string[];
+    storeSections?: StoreSectionDefinition[];
     onCreateIngredient?: (ingredient: Omit<IngredientDefinition, 'id'>) => Promise<IngredientDefinition | null>;
     onAddIngredientAlias?: (alias: string, ingredientId: string) => Promise<boolean>;
 }
@@ -67,7 +68,7 @@ function RecipeModalHeader({ isEditing, canEdit, recipe, onDelete, onEdit, onCre
     onToggleFavorite: () => void;
     onSetRating: (rating: 'up' | 'down' | 'neutral') => void;
 }) {
-    const isBaseRecipe = !!(recipe.name && !recipe.baseRecipeName);
+    const isBaseRecipe = !!(recipe.name && !recipe.baseRecipeId);
     return (
         <div className="absolute right-4 top-4 z-10 flex flex-col items-end space-y-2">
             <div className="flex items-center justify-between w-full">
@@ -155,8 +156,8 @@ export function RecipeModal({
     const [isImported, setIsImported] = useState(false);
     const firstInputRef = useRef<HTMLInputElement | null>(null);
 
-    const recipeName = (recipe as Recipe).name || '';
-    const cookCount = useMemo(() => getRecipeCookCount(multiWeeklyCookPlan, mealPlan, recipeName), [multiWeeklyCookPlan, mealPlan, recipeName]);
+    const recipeId = (recipe as Recipe).id || '';
+    const cookCount = useMemo(() => getRecipeCookCount(multiWeeklyCookPlan, mealPlan, recipeId), [multiWeeklyCookPlan, mealPlan, recipeId]);
 
     useEffect(() => {
         setEditedRecipe(recipe as Recipe);
@@ -284,14 +285,14 @@ export function RecipeModal({
                     isEditing={isEditing}
                     canEdit={canEdit}
                     recipe={editedRecipe}
-                    onDelete={() => onDelete(editedRecipe.name)}
+                    onDelete={() => onDelete(editedRecipe.id)}
                     onEdit={() => { setOriginalName(editedRecipe.name); setIsEditing(true); }}
                     onCreateVariant={() => {
                         const base = editedRecipe as Recipe;
                         const variantDraft: Recipe = {
                             ...base,
                             name: base.name + ': ',
-                            baseRecipeName: base.name,
+                            baseRecipeId: base.id,
                             ingredientAdditions: [],
                             instructionAdditions: [],
                             ingredients: [],
@@ -322,7 +323,7 @@ export function RecipeModal({
                                     {isInvalidRecipe ? 'Fix Invalid Recipe' : (originalName ? 'Edit Recipe' : 'Add New Recipe')}
                                 </h3>
                                 {canEdit && editedRecipe.name && !isInvalidRecipe && (
-                                    <button onClick={() => onDelete(editedRecipe.name)} className="p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full text-red-500 dark:text-red-400 transition-all" title="Delete Recipe">
+                                    <button onClick={() => onDelete(editedRecipe.id)} className="p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full text-red-500 dark:text-red-400 transition-all" title="Delete Recipe">
                                         <Trash className="h-5 w-5"/>
                                     </button>
                                 )}

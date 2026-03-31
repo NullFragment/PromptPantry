@@ -8,7 +8,7 @@ export interface QuickAddRecipeModalProps {
     onSearchChange: (value: string) => void;
     participants: Participant[];
     recipes: Recipe[];
-    recipesInPlanNames: Set<string>;
+    recipesInPlanIds: Set<string>;
     onSelectRecipe: (recipe: Recipe, participantName: string) => void;
     onClose: () => void;
 }
@@ -19,7 +19,7 @@ export function QuickAddRecipeModal({
     onSearchChange,
     participants,
     recipes,
-    recipesInPlanNames,
+    recipesInPlanIds,
     onSelectRecipe,
     onClose
 }: QuickAddRecipeModalProps) {
@@ -73,17 +73,17 @@ export function QuickAddRecipeModal({
                                         );
                                     }
                                     return (
-                                        recipe.isFavorite || recipesInPlanNames.has(recipe.name)
+                                        recipe.isFavorite || recipesInPlanIds.has(recipe.id)
                                     );
                                 });
 
                                 const favorites = matchingRecipes.filter((r) => r.isFavorite);
                                 const inPlan = matchingRecipes.filter(
-                                    (r) => !r.isFavorite && recipesInPlanNames.has(r.name)
+                                    (r) => !r.isFavorite && recipesInPlanIds.has(r.id)
                                 );
                                 const searchResults = matchingRecipes.filter(
                                     (r) =>
-                                        !r.isFavorite && !recipesInPlanNames.has(r.name)
+                                        !r.isFavorite && !recipesInPlanIds.has(r.id)
                                 );
 
                                 favorites.sort((a, b) => a.name.localeCompare(b.name));

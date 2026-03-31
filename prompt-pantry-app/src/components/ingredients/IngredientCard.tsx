@@ -1,9 +1,11 @@
 import { Check, Edit, Trash2 } from 'lucide-react';
 import type * as React from 'react';
-import type { IngredientDefinition } from '../../types';
+import { useAppContext } from '../../hooks/useAppContext';
+import type { IngredientDefinition, StoreSectionDefinition } from '../../types';
 
 export interface IngredientCardProps {
     ingredient: IngredientDefinition;
+    storeSections: StoreSectionDefinition[];
     isEditing: boolean;
     isSelected: boolean;
     canEdit: boolean;
@@ -16,6 +18,7 @@ export interface IngredientCardProps {
 
 export function IngredientCard({
     ingredient,
+    storeSections,
     isEditing,
     isSelected,
     canEdit,
@@ -25,6 +28,8 @@ export function IngredientCard({
     onClick,
     children
 }: IngredientCardProps) {
+    const { advancedMode } = useAppContext();
+    const sectionName = storeSections.find(s => s.id === ingredient.storeSectionId)?.name ?? 'Unassigned';
     return (
         <div
             onClick={() => onClick(ingredient)}
@@ -60,7 +65,10 @@ export function IngredientCard({
                                 {ingredient.name}
                             </h3>
                             <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                                {ingredient.storeSection}
+                                {sectionName}
+                                {advancedMode && (
+                                    <span className="ml-1 opacity-50 font-mono">[{ingredient.storeSectionId}]</span>
+                                )}
                             </span>
                             {ingredient.aliases && ingredient.aliases.length > 0 && (
                                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">

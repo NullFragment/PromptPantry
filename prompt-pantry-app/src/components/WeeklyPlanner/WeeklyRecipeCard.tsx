@@ -8,7 +8,7 @@ import type { WeeklyRecipeCardData } from './weeklyPlannerTypes';
 interface WeeklyRecipeCardProps {
     card: WeeklyRecipeCardData;
     canEdit: boolean;
-    onDragStart: (e: React.DragEvent, recipeName: string, instanceId: string) => void;
+    onDragStart: (e: React.DragEvent, recipeId: string, instanceId: string) => void;
     onRemove: (instanceId: string) => void;
     onUpdateMultiplier: (instanceId: string, value: number) => void;
     onViewRecipe: (recipe: Recipe) => void;
@@ -51,7 +51,7 @@ export function WeeklyRecipeCard({
             draggable={canEdit}
             onDragStart={(e) => {
                 if (!canEdit) return;
-                onDragStart(e, name, instanceId);
+                onDragStart(e, recipe.id, instanceId);
             }}
             className={`p-4 soft-card ${canEdit ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'} transition-all group ${
                 isTransferredCard

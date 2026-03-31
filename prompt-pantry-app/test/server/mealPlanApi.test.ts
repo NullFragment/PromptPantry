@@ -2,16 +2,18 @@ import request from 'supertest';
 import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 import {createTestEnvironment, deleteTestFile, writeTestFile, type TestEnvironment} from './testDataIsolation.js';
 
-// Compact format: recipeName only, not full recipe object
+const SAMPLE_RECIPE_ID = 'a1b2c3d4-0000-0000-0000-000000000001';
+
+// Compact format: recipeId + servings (schema requires recipeId as UUID)
 const samplePlan = {
     '2026-01-02': {
         dinner: [{
-            recipeName: 'Test',
+            recipeId: SAMPLE_RECIPE_ID,
             servings: 2
         }]
     }
 };
-const sampleMulti = {'2026-01-02': {'uuid-test-1': {recipeName: 'Test', servings: 2}}};
+const sampleMulti = {'2026-01-02': {'uuid-test-1': {recipeId: SAMPLE_RECIPE_ID, servings: 2}}};
 
 describe('Meal plan API', () => {
     let env: TestEnvironment;
@@ -54,7 +56,7 @@ describe('Meal plan API', () => {
         expect(putRes.status).toBe(200);
 
         const getRes = await request(app).get('/api/multi-weekly-cook-plan');
-        expect(getRes.body['2026-01-02']['uuid-test-1'].recipeName).toBe('Test');
+        expect(getRes.body['2026-01-02']['uuid-test-1'].recipeId).toBe(SAMPLE_RECIPE_ID);
         expect(getRes.body['2026-01-02']['uuid-test-1'].servings).toBe(2);
     });
 });

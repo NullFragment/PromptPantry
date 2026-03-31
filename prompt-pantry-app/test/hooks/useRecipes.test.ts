@@ -6,6 +6,7 @@ import {mockFetchResponse, mockFetchError} from '../testHelpers';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'recipe-test-uuid',
         name: 'Test Recipe',
         categories: ['Dinner'],
         tags: ['quick'],
@@ -17,6 +18,7 @@ const mockRecipes: Recipe[] = [
         macros: {calories: 500, protein: 25, carbs: 60, fat: 15}
     },
     {
+        id: 'recipe-another-uuid',
         name: 'Another Recipe',
         categories: ['Lunch'],
         tags: ['healthy'],
@@ -146,11 +148,11 @@ describe('useRecipes', () => {
 
             let response: any;
             await act(async () => {
-                response = await result.current.saveRecipe(newRecipe, null);
+                response = await result.current.saveRecipe(newRecipe, true);
             });
 
             expect(response.success).toBe(true);
-            expect(response.name).toBe(newRecipe.name);
+            expect(response.id).toBe('recipe-test-uuid');
             expect(fetch).toHaveBeenCalledWith('/api/recipes', expect.objectContaining({
                 method: 'POST'
             }));
@@ -168,11 +170,11 @@ describe('useRecipes', () => {
 
             let response: any;
             await act(async () => {
-                response = await result.current.saveRecipe(updatedRecipe, 'Original Name');
+                response = await result.current.saveRecipe(updatedRecipe, false);
             });
 
             expect(response.success).toBe(true);
-            expect(fetch).toHaveBeenCalledWith('/api/recipes/Original%20Name', expect.objectContaining({
+            expect(fetch).toHaveBeenCalledWith('/api/recipes/recipe-test-uuid', expect.objectContaining({
                 method: 'PUT'
             }));
         });
@@ -186,7 +188,7 @@ describe('useRecipes', () => {
 
             let response: any;
             await act(async () => {
-                response = await result.current.saveRecipe(mockRecipes[0], null);
+                response = await result.current.saveRecipe(mockRecipes[0], true);
             });
 
             expect(response.success).toBe(false);
@@ -202,15 +204,15 @@ describe('useRecipes', () => {
 
             let response: any;
             await act(async () => {
-                response = await result.current.saveRecipe(mockRecipes[0], null);
+                response = await result.current.saveRecipe(mockRecipes[0], true);
             });
 
             expect(response.success).toBe(false);
             expect(response.error).toBe('Failed to save recipe');
         });
 
-        it('encodes recipe name in URL for update', async () => {
-            const recipeWithSpecialChars = mockRecipes[0];
+        it('uses recipe id in PUT URL', async () => {
+            const recipeToUpdate = mockRecipes[0];
 
             vi.stubGlobal('fetch', vi.fn()
                 .mockResolvedValueOnce(mockFetchResponse({}))
@@ -220,11 +222,11 @@ describe('useRecipes', () => {
             const {result} = renderHook(() => useRecipes());
 
             await act(async () => {
-                await result.current.saveRecipe(recipeWithSpecialChars, 'Recipe & Special/Name');
+                await result.current.saveRecipe(recipeToUpdate, false);
             });
 
             expect(fetch).toHaveBeenCalledWith(
-                expect.stringContaining('Recipe%20%26%20Special%2FName'),
+                '/api/recipes/recipe-test-uuid',
                 expect.any(Object)
             );
         });
@@ -247,7 +249,7 @@ describe('useRecipes', () => {
 
             let success: boolean = false;
             await act(async () => {
-                success = await result.current.deleteRecipe('Test Recipe');
+                success = await result.current.deleteRecipe('recipe-test-uuid');
             });
 
             expect(success).toBe(true);
@@ -264,7 +266,7 @@ describe('useRecipes', () => {
 
             let success: boolean = true;
             await act(async () => {
-                success = await result.current.deleteRecipe('Test Recipe');
+                success = await result.current.deleteRecipe('recipe-test-uuid');
             });
 
             expect(success).toBe(false);
@@ -280,14 +282,14 @@ describe('useRecipes', () => {
 
             let success: boolean = true;
             await act(async () => {
-                success = await result.current.deleteRecipe('Test Recipe');
+                success = await result.current.deleteRecipe('recipe-test-uuid');
             });
 
             expect(success).toBe(false);
             expect(result.current.error).toBe('Failed to delete recipe');
         });
 
-        it('encodes recipe name in delete URL', async () => {
+        it('uses recipe id in DELETE URL', async () => {
             vi.stubGlobal('fetch', vi.fn(() =>
                 Promise.resolve(mockFetchResponse({}))
             ));
@@ -295,11 +297,11 @@ describe('useRecipes', () => {
             const {result} = renderHook(() => useRecipes());
 
             await act(async () => {
-                await result.current.deleteRecipe('Recipe & Special/Name');
+                await result.current.deleteRecipe('recipe-test-uuid');
             });
 
             expect(fetch).toHaveBeenCalledWith(
-                '/api/recipes/Recipe%20%26%20Special%2FName',
+                '/api/recipes/recipe-test-uuid',
                 expect.objectContaining({method: 'DELETE'})
             );
         });

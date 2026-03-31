@@ -1,3 +1,5 @@
+import type { StoreSectionDefinition } from '../types';
+
 /**
  * Title-case a string (e.g. "dairy & frozen" -> "Dairy & Frozen").
  */
@@ -18,6 +20,18 @@ export function sortSectionsWithUnassignedLast(sections: string[]): string[] {
         if (b === 'Unassigned') return -1;
         return a.localeCompare(b);
     });
+}
+
+/**
+ * Sort StoreSectionDefinition objects alphabetically by name with "Unassigned" last.
+ */
+export function sortSectionDefs(defs: StoreSectionDefinition[]): StoreSectionDefinition[] {
+    const sorted = [...defs];
+    sorted.sort((a, b) => {
+        const names = sortSectionsWithUnassignedLast([a.name, b.name]);
+        return names[0] === a.name ? -1 : 1;
+    });
+    return sorted;
 }
 
 /**

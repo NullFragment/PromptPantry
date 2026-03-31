@@ -113,7 +113,8 @@ export function WeeklyPlanner({
         promptedRecipes,
         setPromptedRecipes,
         mealPlan,
-        canEdit
+        canEdit,
+        recipes
     });
 
     React.useEffect(() => {
@@ -160,18 +161,18 @@ export function WeeklyPlanner({
     }, [recipes]);
 
     const selectedWeekRecipes = useMemo(() => {
-        const recipeNames = new Set<string>();
+        const recipeIds = new Set<string>();
         Object.values(currentWeeklyCookPlan).forEach(item => {
-            if (item.recipeName) recipeNames.add(item.recipeName);
+            if (item.recipeId) recipeIds.add(item.recipeId);
         });
-        return Array.from(recipeNames)
-            .map(name => recipes.find(r => r.name === name))
+        return Array.from(recipeIds)
+            .map(recipeId => recipes.find(r => r.id === recipeId))
             .filter((r): r is Recipe => !!r);
     }, [currentWeeklyCookPlan, recipes]);
 
-    const getUsedServings = React.useCallback((recipeName: string, date?: Date, instanceId?: string) => {
+    const getUsedServings = React.useCallback((recipeId: string, date?: Date, instanceId?: string) => {
         const effectiveDate = date || parseISO(weekStartStr);
-        return getUsedServingsForWeek(mealPlan, recipeName, effectiveDate, instanceId);
+        return getUsedServingsForWeek(mealPlan, recipeId, effectiveDate, instanceId);
     }, [mealPlan, weekStartStr]);
 
     const {
@@ -346,7 +347,7 @@ export function WeeklyPlanner({
                 onSearchChange={setQuickAddSearch}
                 participants={participants.filter((p) => selectedParticipants.includes(p.name))}
                 recipes={recipes}
-                recipesInPlanNames={new Set(Object.values(currentWeeklyCookPlan).map((item) => item.recipeName))}
+                recipesInPlanIds={new Set(Object.values(currentWeeklyCookPlan).map((item) => item.recipeId))}
                 onSelectRecipe={(recipe, participantName) => {
                     if (!quickAddSlot) return;
                     handleQuickAddRecipe(

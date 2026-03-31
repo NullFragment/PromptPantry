@@ -5,6 +5,7 @@ import {describe, expect, it, vi} from 'vitest';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'recipe-pasta',
         name: 'Pasta',
         categories: ['Dinner'],
         prepTime: '10',
@@ -16,6 +17,7 @@ const mockRecipes: Recipe[] = [
         macros: {calories: 500, protein: 20, carbs: 60, fat: 10}
     },
     {
+        id: 'recipe-oatmeal',
         name: 'Oatmeal',
         categories: ['Breakfast'],
         prepTime: '5',
@@ -142,6 +144,7 @@ describe('RecipePicker', () => {
             ...mockRecipes,
             {
                 ...mockRecipes[0],
+                id: 'recipe-favorite-pasta',
                 name: 'Favorite Pasta',
                 isFavorite: true,
                 rating: 'up' as const
@@ -172,6 +175,7 @@ describe('RecipePicker', () => {
             mockRecipes[1],
             {
                 ...mockRecipes[1],
+                id: 'recipe-noodle-bowl',
                 name: 'Noodle Bowl',
                 ingredients: [{ingredient: 'noodles', quantity: '1', measure: 'box', ingredientId: 'ing-noodles'}]
             }

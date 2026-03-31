@@ -79,7 +79,7 @@ interface DaySidebarMealsProps {
     participantFilter?: string;
     participants: Participant[];
     canEdit: boolean;
-    onDragStart: (e: React.DragEvent, recipeName: string, dateStr: string, type: string, instanceId?: string, participant?: string) => void;
+    onDragStart: (e: React.DragEvent, recipeId: string, dateStr: string, type: string, instanceId?: string, participant?: string) => void;
     onMealClick: (meal: MealItem) => void;
     expandMealsByServings: (meals: NonNullable<MealPlan[string][MealTypeKey]>) => MealItem[];
 }
@@ -112,7 +112,7 @@ function DaySidebarMeals({
                                     type={type}
                                     dateStr={dateStr}
                                     typeStyle={typeStyle}
-                                    onDragStart={(e, m, date, t) => onDragStart(e, m.recipe.name, date, t, m.recipeInstanceId, m.participant)}
+                                    onDragStart={(e, m, date, t) => onDragStart(e, m.recipe.id, date, t, m.recipeInstanceId, m.participant)}
                                     onClick={onMealClick}
                                     canEdit={canEdit}
                                     icon={meal.participant ? participants.find(p => p.name === meal.participant)?.icon : undefined}
@@ -171,8 +171,8 @@ export function Calendar({
         ? participants
         : participants.filter(p => p.name === participantFilter);
 
-    const onMealDragStart = (e: React.DragEvent, recipeName: string, sourceDate: string, sourceSlot: string, recipeInstanceId?: string, participant?: string) => {
-        e.dataTransfer.setData('recipeName', recipeName);
+    const onMealDragStart = (e: React.DragEvent, recipeId: string, sourceDate: string, sourceSlot: string, recipeInstanceId?: string, participant?: string) => {
+        e.dataTransfer.setData('recipeId', recipeId);
         e.dataTransfer.setData('sourceDate', sourceDate);
         e.dataTransfer.setData('sourceSlot', sourceSlot);
         e.dataTransfer.setData('isMove', 'true');
@@ -183,7 +183,7 @@ export function Calendar({
     const onDrop = (e: React.DragEvent, date: Date, targetSlot?: keyof MealPlan[string]) => {
         e.preventDefault();
         if (!canEdit) return;
-        const recipeName = e.dataTransfer.getData('recipeName');
+        const recipeId = e.dataTransfer.getData('recipeId');
         const sourceDateStr = e.dataTransfer.getData('sourceDate');
         const sourceSlot = e.dataTransfer.getData('sourceSlot') as keyof MealPlan[string];
         const isMove = e.dataTransfer.getData('isMove') === 'true';
@@ -195,13 +195,13 @@ export function Calendar({
 
         if (isMove && sourceDateStr === targetDateStr && sourceSlot === finalTargetSlot) return;
 
-        const recipe = recipes.find(r => r.name === recipeName);
+        const recipe = recipes.find(r => r.id === recipeId);
         if (!recipe) return;
 
         // Find the specific meal being moved using recipeInstanceId and participant
         const sourceMeal = isMove
             ? mealPlan[sourceDateStr]?.[sourceSlot]?.find(m =>
-                m.recipe.name === recipeName &&
+                m.recipe.id === recipeId &&
                 (!recipeInstanceId || m.recipeInstanceId === recipeInstanceId) &&
                 (!participant || m.participant === participant)
             )
@@ -216,7 +216,7 @@ export function Calendar({
                 const sourceMeals = Array.isArray(sourceDayPlan[sourceSlot]) ? sourceDayPlan[sourceSlot] : [];
                 // Filter using recipeInstanceId and participant for precise matching
                 sourceDayPlan[sourceSlot] = sourceMeals.filter(m =>
-                    !(m.recipe.name === recipeName &&
+                    !(m.recipe.id === recipeId &&
                       (!recipeInstanceId || m.recipeInstanceId === recipeInstanceId) &&
                       (!participant || m.participant === participant))
                 );
@@ -229,9 +229,9 @@ export function Calendar({
                 slotMeals = [];
             }
 
-            // Find existing meal matching by recipeName, recipeInstanceId, and participant
+            // Find existing meal matching by recipeId, recipeInstanceId, and participant
             const existingMealIndex = slotMeals.findIndex(m =>
-                m.recipe.name === recipeName &&
+                m.recipe.id === recipeId &&
                 (!recipeInstanceId || m.recipeInstanceId === recipeInstanceId) &&
                 (!participant || m.participant === participant)
             );
@@ -373,7 +373,7 @@ export function Calendar({
                                                             onDragStart={(e) => {
                                                                 if (!canEdit) return;
                                                                 e.stopPropagation();
-                                                                onMealDragStart(e, meal.recipe.name, dStr, type, meal.recipeInstanceId, meal.participant);
+                                                                onMealDragStart(e, meal.recipe.id, dStr, type, meal.recipeInstanceId, meal.participant);
                                                             }}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();

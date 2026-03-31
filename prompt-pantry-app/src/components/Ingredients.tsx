@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import type { AliasUpdateResult } from '../hooks/useIngredients';
 import { buildIngredientPayload, validateAliases } from '../utils/ingredientFormUtils';
-import { normalizeStoreSection } from '../utils/storeSectionUtils';
 import { AliasDeleteDialog } from './ingredients/AliasDeleteDialog';
 import { AliasMergeDialog as AliasMergeDialogComponent } from './ingredients/AliasMergeDialog';
 import { ConfirmationDialog } from './ConfirmationDialog';
@@ -34,7 +33,7 @@ interface IngredientsToolbarProps {
     setSearchQuery: (query: string) => void;
     sectionFilter: string | null;
     setSectionFilter: (section: string | null) => void;
-    storeSections: string[];
+    storeSections: StoreSectionDefinition[];
     canEdit: boolean;
     filteredCount: number;
     isAllSelected: boolean;
@@ -74,7 +73,9 @@ function IngredientsToolbar({
                 >
                     <option value="">All Sections</option>
                     {storeSections.map(section => (
-                        <option key={section} value={section}>{section}</option>
+                        <option key={section.id} value={section.id}>
+                            {section.emoji ? `${section.emoji} ` : ''}{section.name}
+                        </option>
                     ))}
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -104,9 +105,9 @@ function IngredientsToolbar({
 interface IngredientsProps {
     ingredients: IngredientDefinition[];
     storeSections: StoreSectionDefinition[];
-    onSaveSection?: (section: Partial<StoreSectionDefinition> & { name: string }, isNew: boolean) => Promise<{ success: boolean; error?: string; section?: StoreSectionDefinition }>;
-    onDeleteSection?: (name: string, action: 'uncategorize' | 'merge', targetSection?: string) => Promise<{ success: boolean; error?: string }>;
-    onSave: (ingredient: Partial<IngredientDefinition> & { name: string; storeSection: string }, isNew: boolean) => Promise<{ success: boolean; error?: string }>;
+    onSaveSection?: (section: Partial<StoreSectionDefinition> & { id?: string; name: string }, isNew: boolean) => Promise<{ success: boolean; error?: string; section?: StoreSectionDefinition }>;
+    onDeleteSection?: (id: string, action: 'uncategorize' | 'merge', targetSection?: string) => Promise<{ success: boolean; error?: string }>;
+    onSave: (ingredient: Partial<IngredientDefinition> & { name: string; storeSectionId: string }, isNew: boolean) => Promise<{ success: boolean; error?: string }>;
     onDelete: (id: string) => Promise<{ success: boolean; error?: string }>;
     onCheckUsage: (id: string) => Promise<{ recipeCount: number; recipeNames: string[] } | null>;
     onMerge: (sourceIds: string[], targetId: string) => Promise<{ success: boolean; message?: string; updatedRecipeCount?: number; mergedIngredientCount?: number }>;
@@ -133,7 +134,10 @@ export function Ingredients({
     onMergeAlias
 }: IngredientsProps) {
     const { canEdit } = useAppContext();
-    const storeSections = useMemo(() => storeSectionDefs.map(s => s.name), [storeSectionDefs]);
+    const storeSections = useMemo(
+        () => storeSectionDefs,
+        [storeSectionDefs]
+    );
     const [searchQuery, setSearchQuery] = useState('');
     const [sectionFilter, setSectionFilter] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -206,7 +210,7 @@ export function Ingredients({
                     if (!matchesName && !matchesAlias) return false;
                 }
                 // Section filter
-                if (sectionFilter && ing.storeSection !== sectionFilter) return false;
+                if (sectionFilter && ing.storeSectionId !== sectionFilter) return false;
                 return true;
             })
             .sort((a, b) => a.name.localeCompare(b.name));
@@ -309,9 +313,8 @@ export function Ingredients({
     };
 
     const BULK_SET_SECTION_LIMIT = 50;
-    const handleBulkSetStoreSection = async (section: string) => {
-        const normalized = normalizeStoreSection(section);
-        if (!normalized || selectedIds.size === 0) return;
+    const handleBulkSetStoreSection = async (sectionId: string) => {
+        if (!sectionId || selectedIds.size === 0) return;
         if (selectedIds.size > BULK_SET_SECTION_LIMIT) return; // guard: avoid accidental bulk update of huge sets
         setIsBulkSettingSection(true);
         let allOk = true;
@@ -319,7 +322,7 @@ export function Ingredients({
             const ing = ingredients.find(i => i.id === id);
             if (!ing) continue;
             const result = await onSave(
-                { ...ing, name: ing.name, storeSection: normalized },
+                { ...ing, name: ing.name, storeSectionId: sectionId },
                 false
             );
             if (!result.success) allOk = false;
@@ -328,13 +331,16 @@ export function Ingredients({
         if (allOk) clearSelection();
     };
 
-    const handleBulkApplyNewSection = () => {
-        const normalized = normalizeStoreSection(bulkSectionNewName);
-        if (normalized) {
-            handleBulkSetStoreSection(normalized);
-            setBulkSectionSelectValue('');
-            setBulkSectionNewName('');
+    const handleBulkApplyNewSection = async () => {
+        if (!bulkSectionNewName.trim()) return;
+        const result = await onSaveSection!({ name: bulkSectionNewName.trim() }, true);
+        if (!result.success || !result.section) {
+            console.error('Failed to create section:', result.error ?? 'Unknown error');
+            return;
         }
+        handleBulkSetStoreSection(result.section.id);
+        setBulkSectionSelectValue('');
+        setBulkSectionNewName('');
     };
 
     const startEditing = (ingredient: IngredientDefinition) => {
@@ -343,12 +349,10 @@ export function Ingredients({
         setIsAddingNew(false);
         setFormData({
             name: ingredient.name,
-            storeSection: ingredient.storeSection,
+            storeSectionId: ingredient.storeSectionId,
             aliases: ingredient.aliases || [],
             containerSizes: ingredient.containerSizes ? [...ingredient.containerSizes] : [],
-            conversions: ingredient.conversions ? { ...ingredient.conversions } : {},
-            isNewSection: false,
-            newSectionName: ''
+            conversions: ingredient.conversions ? { ...ingredient.conversions } : {}
         });
         setFormError(null);
     };
@@ -378,10 +382,9 @@ export function Ingredients({
             return;
         }
 
-        const storeSectionInput = formData.isNewSection ? formData.newSectionName : formData.storeSection;
-        const storeSection = normalizeStoreSection(storeSectionInput);
+        const storeSectionId = formData.storeSectionId;
 
-        if (!storeSection) {
+        if (!storeSectionId) {
             setFormError('Store section is required');
             return;
         }
@@ -399,7 +402,7 @@ export function Ingredients({
         setIsSaving(true);
         const ingredientData = buildIngredientPayload(
             name,
-            storeSection,
+            storeSectionId,
             aliases,
             { containerSizes: formData.containerSizes, conversions: formData.conversions },
             editingId
@@ -483,12 +486,8 @@ export function Ingredients({
     };
 
 
-    const selectSection = (section: string) => {
-        if (section === '__new__') {
-            setFormData(prev => ({...prev, isNewSection: true, newSectionName: ''}));
-        } else {
-            setFormData(prev => ({...prev, storeSection: section, isNewSection: false}));
-        }
+    const selectSection = (sectionId: string) => {
+        setFormData(prev => ({ ...prev, storeSectionId: sectionId }));
     };
 
     const ingredientEditFormProps = {
@@ -518,7 +517,8 @@ export function Ingredients({
         addContainerSize,
         removeContainerSize,
         aliasActionError,
-        selectSection
+        selectSection,
+        saveSection: onSaveSection!
     };
 
     const handleIngredientClick = (ingredient: IngredientDefinition) => {
@@ -590,6 +590,7 @@ export function Ingredients({
                         <IngredientCard
                             key={ingredient.id}
                             ingredient={ingredient}
+                            storeSections={storeSectionDefs}
                             isEditing={editingId === ingredient.id}
                             isSelected={selectedIds.has(ingredient.id)}
                             canEdit={canEdit}
@@ -640,7 +641,7 @@ export function Ingredients({
                             <button
                                 type="button"
                                 onClick={handleBulkApplyNewSection}
-                                disabled={!normalizeStoreSection(bulkSectionNewName) || isBulkSettingSection}
+                                disabled={!bulkSectionNewName.trim() || isBulkSettingSection}
                                 className="px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors disabled:opacity-50"
                             >
                                 Apply
@@ -677,7 +678,7 @@ export function Ingredients({
                             >
                                 <option value="">Choose...</option>
                                 {storeSections.map(sec => (
-                                    <option key={sec} value={sec}>{sec}</option>
+                                    <option key={sec.id} value={sec.id}>{sec.emoji ? `${sec.emoji} ` : ''}{sec.name}</option>
                                 ))}
                                 <option value="__new__">New section...</option>
                             </select>
@@ -781,8 +782,9 @@ export function Ingredients({
                     onUpdateAlias={canEdit ? onUpdateAlias : undefined}
                     onDeleteAlias={canEdit ? onDeleteAlias : undefined}
                     onMergeAlias={canEdit ? onMergeAlias : undefined}
-                    onSave={canEdit ? (ing) => onSave(ing, false) : undefined}
+                    onSave={canEdit ? (ing) => onSave(ing as Partial<IngredientDefinition> & { name: string; storeSectionId: string }, false) : undefined}
                     onIngredientUpdated={canEdit ? (updated) => setSelectedIngredient(prev => prev && prev.id === updated.id ? updated : prev) : undefined}
+                    storeSections={storeSections}
                 />
             )}
         </div>

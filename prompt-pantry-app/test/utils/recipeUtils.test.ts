@@ -58,6 +58,7 @@ describe('recipeUtils', () => {
 
     describe('resolveVariantRecipe', () => {
         const baseRecipe: Recipe = {
+            id: 'base-recipe-uuid',
             name: 'Overnight Oats',
             categories: ['Breakfast'],
             prepTime: '5 min',
@@ -69,21 +70,22 @@ describe('recipeUtils', () => {
             macros: {calories: 200, protein: 8, carbs: 30, fat: 5}
         };
 
-        it('should return recipe as-is when baseRecipeName is absent', () => {
-            const recipe: Recipe = {...baseRecipe, name: 'Standalone'};
+        it('should return recipe as-is when baseRecipeId is absent', () => {
+            const recipe: Recipe = {...baseRecipe, id: 'standalone-uuid', name: 'Standalone'};
             expect(resolveVariantRecipe(recipe, [baseRecipe])).toBe(recipe);
         });
 
-        it('should return recipe as-is when baseRecipeName is empty string', () => {
-            const recipe: Recipe = {...baseRecipe, name: 'X: Y', baseRecipeName: ''};
+        it('should return recipe as-is when baseRecipeId is undefined', () => {
+            const recipe: Recipe = {...baseRecipe, id: 'variant-uuid', name: 'X: Y', baseRecipeId: undefined};
             expect(resolveVariantRecipe(recipe, [baseRecipe])).toBe(recipe);
         });
 
         it('should merge base with variant additions in grouped structure', () => {
             const variant: Recipe = {
                 ...baseRecipe,
+                id: 'variant-uuid',
                 name: 'Overnight Oats: Chocolate',
-                baseRecipeName: 'Overnight Oats',
+                baseRecipeId: 'base-recipe-uuid',
                 ingredients: [],
                 instructions: [],
                 ingredientAdditions: [{ingredient: 'Cocoa powder', quantity: '1', measure: 'tbsp'}],
@@ -110,8 +112,9 @@ describe('recipeUtils', () => {
         it('should return variant as-is when base is not found (orphaned variant)', () => {
             const variant: Recipe = {
                 ...baseRecipe,
+                id: 'orphan-uuid',
                 name: 'Overnight Oats: Missing',
-                baseRecipeName: 'Nonexistent Base',
+                baseRecipeId: 'nonexistent-uuid',
                 ingredients: [],
                 instructions: []
             };

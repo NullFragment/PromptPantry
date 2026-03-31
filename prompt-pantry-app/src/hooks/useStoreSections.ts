@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { StoreSectionDefinition } from '../types';
 import { apiRequest, apiJson } from '../utils/apiRequest';
+import { sortSectionDefs } from '../utils/storeSectionUtils';
 
 interface SaveSectionResult {
     success: boolean;
@@ -19,7 +20,7 @@ export function useStoreSections() {
     const fetchStoreSections = useCallback(async () => {
         const result = await apiRequest<StoreSectionDefinition[]>('/api/store-sections');
         if (result.success && Array.isArray(result.data)) {
-            setStoreSections(result.data);
+            setStoreSections(sortSectionDefs(result.data));
         }
     }, []);
 
@@ -29,7 +30,7 @@ export function useStoreSections() {
     ): Promise<SaveSectionResult> => {
         const url = isNew
             ? '/api/store-sections'
-            : `/api/store-sections/${encodeURIComponent(section.name)}`;
+            : `/api/store-sections/${section.id}`;
         const method = isNew ? 'POST' : 'PUT';
 
         const result = await apiJson<StoreSectionDefinition>(url, method, { name: section.name, emoji: section.emoji });
@@ -41,12 +42,12 @@ export function useStoreSections() {
     }, [fetchStoreSections]);
 
     const deleteSection = useCallback(async (
-        name: string,
+        id: string,
         action: 'uncategorize' | 'merge',
         targetSection?: string
     ): Promise<DeleteSectionResult> => {
         const result = await apiJson(
-            `/api/store-sections/${encodeURIComponent(name)}`,
+            `/api/store-sections/${id}`,
             'DELETE',
             { action, targetSection }
         );

@@ -41,11 +41,11 @@ export function validateAliases(
  */
 export function buildIngredientPayload(
     name: string,
-    storeSection: string,
+    storeSectionId: string,
     aliases: string[],
     formData: IngredientFormData,
     editingId: string | null
-): Partial<IngredientDefinition> & { name: string; storeSection: string } {
+): Partial<IngredientDefinition> & { name: string; storeSectionId: string } {
     const containerSizesFiltered = formData.containerSizes
         .filter((c) => c.quantity > 0 && (c.unit?.trim() ?? '').length > 0)
         .map((c) => ({
@@ -81,9 +81,9 @@ export function buildIngredientPayload(
         }
     }
 
-    const payload: Partial<IngredientDefinition> & { name: string; storeSection: string } = {
+    const payload: Partial<IngredientDefinition> & { name: string; storeSectionId: string } = {
         name,
-        storeSection,
+        storeSectionId,
         aliases: aliases.length > 0 ? aliases : undefined,
         containerSizes:
             containerSizesFiltered.length > 0 ? containerSizesFiltered : undefined,

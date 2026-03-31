@@ -14,12 +14,10 @@
       "maxLength": 200,
       "description": "Canonical name of the ingredient"
     },
-    "storeSection": {
+    "storeSectionId": {
       "type": "string",
-      "minLength": 1,
-      "maxLength": 200,
-      "default": "Unassigned",
-      "description": "Store section where this ingredient is typically found"
+      "format": "uuid",
+      "description": "Reference to a StoreSectionDefinition id"
     },
     "aliases": {
       "type": "array",
@@ -142,6 +140,6 @@
       "description": "Unit conversion data for this ingredient"
     }
   },
-  "required": ["id", "name", "storeSection"],
+  "required": ["id", "name", "storeSectionId"],
   "additionalProperties": false
 }

@@ -46,7 +46,7 @@ interface RecipeViewProps {
     sortConfig: { key: string, direction: 'asc' | 'desc' } | null;
     handleSort: (key: string) => void;
     setSelectedRecipe: (data: { recipe: Recipe } | null) => void;
-    onDeleteRecipes: (names: string[]) => void;
+    onDeleteRecipes: (ids: string[]) => void;
     mealPlan: MealPlan;
     multiWeeklyCookPlan: MultiWeeklyCookPlan;
 }
@@ -80,10 +80,10 @@ export function RecipeView({
     const { advancedMode, canEdit } = useAppContext();
     const [selectedRecipes, setSelectedRecipes] = useState<string[]>([]);
 
-    const toggleRecipeSelection = (name: string, e?: React.MouseEvent) => {
+    const toggleRecipeSelection = (id: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
         setSelectedRecipes(prev =>
-            prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
+            prev.includes(id) ? prev.filter(n => n !== id) : [...prev, id]
         );
     };
 
@@ -201,6 +201,7 @@ export function RecipeView({
                             <button
                                 onClick={() => setSelectedRecipe({
                                     recipe: {
+                                        id: '',
                                         name: '',
                                         categories: [],
                                         prepTime: '',
@@ -279,7 +280,7 @@ export function RecipeView({
                         <div
                             key={recipe.name}
                             className={`bg-white dark:bg-gray-900 rounded-xl shadow-sm border overflow-hidden hover:shadow-md dark:hover:shadow-indigo-900/20 transition-all cursor-pointer flex flex-col relative group ${
-                                selectedRecipes.includes(recipe.name) ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-gray-100 dark:border-gray-800'
+                                selectedRecipes.includes(recipe.id) ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-gray-100 dark:border-gray-800'
                             }`}
                             onClick={() => setSelectedRecipe({recipe})}
                         >
@@ -306,15 +307,15 @@ export function RecipeView({
                                 </div>
                                 {canEdit && (
                                     <button
-                                        onClick={(e) => toggleRecipeSelection(recipe.name, e)}
+                                        onClick={(e) => toggleRecipeSelection(recipe.id, e)}
                                         className={`p-1.5 rounded-lg transition-all ${
-                                            selectedRecipes.includes(recipe.name)
+                                            selectedRecipes.includes(recipe.id)
                                                 ? 'bg-indigo-600 text-white shadow-md'
                                                 : 'bg-white/80 dark:bg-gray-800/80 text-gray-400 opacity-0 group-hover:opacity-100 hover:text-indigo-600 shadow-sm'
                                         }`}
-                                        title={selectedRecipes.includes(recipe.name) ? "Deselect Recipe" : "Select Recipe"}
+                                        title={selectedRecipes.includes(recipe.id) ? "Deselect Recipe" : "Select Recipe"}
                                     >
-                                        {selectedRecipes.includes(recipe.name) ? <CheckSquare className="h-4 w-4"/> :
+                                        {selectedRecipes.includes(recipe.id) ? <CheckSquare className="h-4 w-4"/> :
                                             <Square className="h-4 w-4"/>}
                                     </button>
                                 )}
@@ -329,6 +330,9 @@ export function RecipeView({
                                     ))}
                                 </div>
                                 <h3 className="font-bold text-base leading-tight mb-2 h-10 overflow-hidden line-clamp-2 dark:text-gray-100">{recipe.name}</h3>
+                                {advancedMode && (
+                                    <p className="text-[10px] font-mono text-gray-400 dark:text-gray-600 mb-1 truncate opacity-60">{recipe.id}</p>
+                                )}
                                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                                     <div className="flex items-center mb-1">
                                         <Info className="h-3 w-3 mr-1"/> {recipe.macros.calories} kcal
@@ -365,7 +369,7 @@ export function RecipeView({
                                                 if (selectedRecipes.length === sortedAndFilteredRecipes.length) {
                                                     setSelectedRecipes([]);
                                                 } else {
-                                                    setSelectedRecipes(sortedAndFilteredRecipes.map(r => r.name));
+                                                    setSelectedRecipes(sortedAndFilteredRecipes.map(r => r.id));
                                                 }
                                             }}
                                             className="text-gray-400 hover:text-indigo-600 transition-colors"
@@ -407,14 +411,14 @@ export function RecipeView({
                                 <tr
                                     key={recipe.name}
                                     className={`hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors ${
-                                        selectedRecipes.includes(recipe.name) ? 'bg-indigo-50/30 dark:bg-indigo-900/10' : ''
+                                        selectedRecipes.includes(recipe.id) ? 'bg-indigo-50/30 dark:bg-indigo-900/10' : ''
                                     }`}
                                     onClick={() => setSelectedRecipe({recipe})}
                                 >
                                     {canEdit && (
-                                        <td className="px-6 py-4" onClick={(e) => toggleRecipeSelection(recipe.name, e)}>
+                                        <td className="px-6 py-4" onClick={(e) => toggleRecipeSelection(recipe.id, e)}>
                                             <button className="text-gray-400 hover:text-indigo-600 transition-colors">
-                                                {selectedRecipes.includes(recipe.name) ?
+                                                {selectedRecipes.includes(recipe.id) ?
                                                     <CheckSquare className="h-4 w-4 text-indigo-600"/> :
                                                     <Square className="h-4 w-4"/>}
                                             </button>

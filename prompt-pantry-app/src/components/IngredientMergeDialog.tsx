@@ -158,7 +158,7 @@ export function IngredientMergeDialog({
                                             {ing.name}
                                         </span>
                                         <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                                            {ing.storeSection}
+                                            {ing.storeSectionId}
                                         </span>
                                         {isLoadingUsage ? (
                                             <Loader2 className="inline ml-2 h-3 w-3 animate-spin text-gray-400" />

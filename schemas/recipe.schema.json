@@ -3,6 +3,10 @@
   "$id": "recipe.schema.json",
   "type": "object",
   "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
     "name": {
       "type": "string",
       "maxLength": 500
@@ -175,10 +179,10 @@
     "isFavorite": {
       "type": "boolean"
     },
-    "baseRecipeName": {
+    "baseRecipeId": {
       "type": "string",
-      "maxLength": 500,
-      "description": "When set, this recipe is a variant of the named base recipe; ingredients and instructions are inherited from base."
+      "format": "uuid",
+      "description": "UUID of the base recipe when this is a variant."
     },
     "ingredientAdditions": {
       "type": "array",
@@ -199,14 +203,14 @@
     }
   },
   "if": {
-    "properties": { "baseRecipeName": { "type": "string", "minLength": 1 } },
-    "required": ["baseRecipeName"]
+    "properties": { "baseRecipeId": { "type": "string", "minLength": 1 } },
+    "required": ["baseRecipeId"]
   },
   "then": {
-    "required": ["name", "categories", "macros", "baseRecipeName"]
+    "required": ["id", "name", "categories", "macros", "baseRecipeId"]
   },
   "else": {
-    "required": ["name", "categories", "ingredients", "instructions", "macros"]
+    "required": ["id", "name", "categories", "ingredients", "instructions", "macros"]
   },
   "additionalProperties": false,
   "$defs": {

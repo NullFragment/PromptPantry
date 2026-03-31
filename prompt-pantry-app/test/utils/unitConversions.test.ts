@@ -53,7 +53,7 @@ describe('unitConversions', () => {
             const ingredient: IngredientDefinition = {
                 id: 'id',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: 'f0000000-0000-0000-0000-000000000001',
                 conversions: {
                     weightToVolume: {
                         weight: { quantity: 120, unit: 'g' },
@@ -69,7 +69,7 @@ describe('unitConversions', () => {
             const ingredient: IngredientDefinition = {
                 id: 'id',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: 'f0000000-0000-0000-0000-000000000001',
                 conversions: {
                     weightToVolume: {
                         weight: { quantity: 120, unit: 'g' },
@@ -82,7 +82,7 @@ describe('unitConversions', () => {
         });
 
         it('returns null when ingredient has no conversions', () => {
-            const ingredient: IngredientDefinition = { id: 'id', name: 'salt', storeSection: 'Baking' };
+            const ingredient: IngredientDefinition = { id: 'id', name: 'salt', storeSectionId: 'f0000000-0000-0000-0000-000000000001' };
             expect(convertUsingIngredient(1, 'cup', 'g', ingredient)).toBeNull();
         });
 
@@ -90,7 +90,7 @@ describe('unitConversions', () => {
             const ingredient: IngredientDefinition = {
                 id: 'id',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: 'f0000000-0000-0000-0000-000000000001',
                 conversions: { portionToVolume: { portion: { quantity: 1, description: 'clove' }, volume: { quantity: 1, unit: 'tsp' } } }
             };
             expect(convertUsingIngredient(100, 'g', 'cup', ingredient)).toBeNull();

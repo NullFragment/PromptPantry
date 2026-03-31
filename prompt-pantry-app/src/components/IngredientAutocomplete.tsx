@@ -1,14 +1,14 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import type * as React from 'react';
 import {createPortal} from 'react-dom';
-import {IngredientDefinition} from '../types';
+import {IngredientDefinition, StoreSectionDefinition} from '../types';
 import {Check, ChevronDown, Link, Loader2, Plus, Search} from 'lucide-react';
 
 interface IngredientAutocompleteProps {
     value: string;
     ingredientId?: string;
     ingredients: IngredientDefinition[];
-    storeSections: string[];
+    storeSections: StoreSectionDefinition[];
     onSelect: (ingredient: string, ingredientId: string) => void;
     onCreateIngredient?: (ingredient: Omit<IngredientDefinition, 'id'>) => Promise<IngredientDefinition | null>;
     onCreateAlias?: (alias: string, ingredientId: string) => Promise<boolean>;
@@ -49,7 +49,7 @@ export function IngredientAutocomplete({
     
     // Create ingredient form state
     const [newIngredientName, setNewIngredientName] = useState('');
-    const [newIngredientSection, setNewIngredientSection] = useState('Unassigned');
+    const [newIngredientSection, setNewIngredientSection] = useState('');
     const [newIngredientAlias, setNewIngredientAlias] = useState('');
     const [showSectionDropdown, setShowSectionDropdown] = useState(false);
     const [createError, setCreateError] = useState<string | null>(null);
@@ -243,7 +243,7 @@ export function IngredientAutocomplete({
             setNewIngredientName(trimmed);
             setNewIngredientAlias('');
         }
-        setNewIngredientSection('Unassigned');
+        setNewIngredientSection(storeSections.find(s => s.name === 'Unassigned')?.id ?? storeSections[0]?.id ?? '');
         setCreateError(null);
         setViewMode('create');
     };
@@ -279,7 +279,7 @@ export function IngredientAutocomplete({
         try {
             const created = await onCreateIngredient({
                 name,
-                storeSection: newIngredientSection,
+                storeSectionId: newIngredientSection,
                 aliases: aliases.length > 0 ? aliases : undefined
             });
             
@@ -477,7 +477,7 @@ export function IngredientAutocomplete({
                                                 )}
                                             </div>
                                             <span className="ml-2 px-1.5 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 flex-shrink-0">
-                                                {result.ingredient.storeSection}
+                                                {storeSections.find(s => s.id === result.ingredient.storeSectionId)?.name ?? ''}
                                             </span>
                                         </button>
                                     );
@@ -520,24 +520,24 @@ export function IngredientAutocomplete({
                                         onClick={() => setShowSectionDropdown(!showSectionDropdown)}
                                         className="w-full p-1.5 border dark:border-gray-700 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-left flex items-center justify-between"
                                     >
-                                        <span>{newIngredientSection}</span>
+                                        <span>{storeSections.find(s => s.id === newIngredientSection)?.name ?? newIngredientSection}</span>
                                         <ChevronDown className="h-4 w-4 text-gray-400" />
                                     </button>
                                     {showSectionDropdown && (
                                         <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg max-h-40 overflow-y-auto">
                                             {storeSections.map(section => (
                                                 <button
-                                                    key={section}
+                                                    key={section.id}
                                                     type="button"
                                                     onClick={() => {
-                                                        setNewIngredientSection(section);
+                                                        setNewIngredientSection(section.id);
                                                         setShowSectionDropdown(false);
                                                     }}
                                                     className={`w-full px-2 py-1.5 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                                                        newIngredientSection === section ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-gray-700 dark:text-gray-300'
+                                                        newIngredientSection === section.id ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-gray-700 dark:text-gray-300'
                                                     }`}
                                                 >
-                                                    {section}
+                                                    {section.name}
                                                 </button>
                                             ))}
                                         </div>
@@ -622,7 +622,7 @@ export function IngredientAutocomplete({
                                         className="w-full px-2 py-1.5 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between disabled:opacity-50"
                                     >
                                         <span className="text-gray-900 dark:text-gray-100">{ing.name}</span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">{ing.storeSection}</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{storeSections.find(s => s.id === ing.storeSectionId)?.name ?? ''}</span>
                                     </button>
                                 ))}
                                 {aliasTargetResults.length === 0 && (

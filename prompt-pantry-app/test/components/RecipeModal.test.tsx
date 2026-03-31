@@ -5,6 +5,7 @@ import {Recipe} from '../../src/types';
 import {describe, expect, it, vi} from 'vitest';
 
 const mockRecipe: Recipe = {
+    id: 'recipe-uuid-1',
     name: 'Test Recipe',
     categories: ['Dinner'],
     prepTime: '10 mins',
@@ -184,7 +185,7 @@ describe('RecipeModal', () => {
         );
 
         fireEvent.click(screen.getByTitle('Delete Recipe'));
-        expect(onDelete).toHaveBeenCalledWith('Test Recipe');
+        expect(onDelete).toHaveBeenCalledWith('recipe-uuid-1');
     });
 
     it('can cancel editing', () => {

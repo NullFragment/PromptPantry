@@ -8,6 +8,7 @@ import {addDays, addWeeks, format, startOfWeek, subWeeks} from 'date-fns';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'uuid-recipe-pasta',
         name: 'Pasta',
         categories: ['Dinner'],
         prepTime: '10',
@@ -19,6 +20,7 @@ const mockRecipes: Recipe[] = [
         macros: {calories: 500, protein: 20, carbs: 60, fat: 10}
     },
     {
+        id: 'uuid-recipe-granola',
         name: 'Cinnamon Granola',
         categories: ['Breakfast'],
         prepTime: '10',
@@ -28,6 +30,18 @@ const mockRecipes: Recipe[] = [
         ingredients: [],
         instructions: [],
         macros: {calories: 200, protein: 5, carbs: 30, fat: 10}
+    },
+    {
+        id: 'uuid-recipe-salad',
+        name: 'Salad',
+        categories: ['Lunch'],
+        prepTime: '5',
+        cookTime: '0',
+        servings: 2,
+        tags: [],
+        ingredients: [],
+        instructions: [],
+        macros: {calories: 150, protein: 5, carbs: 20, fat: 5}
     }
 ];
 
@@ -40,7 +54,7 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -78,7 +92,7 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const initialPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -87,7 +101,7 @@ describe('WeeklyPlanner', () => {
             // Check that a transferred instance was created in the current week
             const currentWeekPlan = result[weekStartStr];
             const pastaItems = Object.values(currentWeekPlan || {}).filter(
-                (item: any) => item.recipeName === 'Pasta'
+                (item: any) => item.recipeId === 'uuid-recipe-pasta'
             );
             expect(pastaItems.length).toBeGreaterThan(0);
             const transferredItem = pastaItems.find((item: any) => item.transferredFromDate);
@@ -137,7 +151,7 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const initialPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -181,7 +195,7 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -221,7 +235,7 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -256,7 +270,7 @@ describe('WeeklyPlanner', () => {
 
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevPastWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -291,7 +305,7 @@ describe('WeeklyPlanner', () => {
 
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [thisWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -327,18 +341,18 @@ describe('WeeklyPlanner', () => {
 
         const initialPlan: MultiWeeklyCookPlan = {
             [week1Str]: {
-                'uuid-original': { recipeName: 'Pasta', multiplier: 1, servings: 2 }
+                'uuid-original': { recipeId: 'uuid-recipe-pasta', multiplier: 1, servings: 2 }
             },
             [week2Str]: {
                 // Transferred from week 1
                 'uuid-transferred': {
-                    recipeName: 'Pasta',
+                    recipeId: 'uuid-recipe-pasta',
                     servings: 2,
                     transferredFromDate: week1Str,
                     transferredFromId: 'uuid-original'
                 },
                 // New batch in week 2
-                'uuid-new': { recipeName: 'Pasta', multiplier: 1, servings: 2 }
+                'uuid-new': { recipeId: 'uuid-recipe-pasta', multiplier: 1, servings: 2 }
             }
         };
 
@@ -395,7 +409,7 @@ describe('WeeklyPlanner', () => {
         const dayStr = format(selectedDate, 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
         const mealPlan: MealPlan = {
@@ -440,8 +454,8 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4},
-                'uuid-salad-1': {recipeName: 'Salad', servings: 2}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4},
+                'uuid-salad-1': {recipeId: 'uuid-recipe-salad', servings: 2}
             }
         };
 
@@ -515,7 +529,7 @@ describe('WeeklyPlanner', () => {
         const setMealPlan = vi.fn();
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 1}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 1}
             }
         };
         const mealPlan: MealPlan = {
@@ -551,7 +565,7 @@ describe('WeeklyPlanner', () => {
             preventDefault: vi.fn(),
             dataTransfer: {
                 getData: (key: string) => {
-                    if (key === 'recipeName') return 'Pasta';
+                    if (key === 'recipeId') return 'uuid-recipe-pasta';
                     if (key === 'instanceId') return 'uuid-pasta-1';
                     return '';
                 }
@@ -572,7 +586,7 @@ describe('WeeklyPlanner', () => {
         const setMealPlan = vi.fn();
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 1}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 1}
             }
         };
         const mealPlan: MealPlan = {
@@ -614,7 +628,7 @@ describe('WeeklyPlanner', () => {
     it('shows multiplier instead of servings for the input box', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4, multiplier: 1}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4, multiplier: 1}
             }
         };
 
@@ -652,7 +666,7 @@ describe('WeeklyPlanner', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
                 'uuid-granola-1': {
-                    recipeName: 'Cinnamon Granola',
+                    recipeId: 'uuid-recipe-granola',
                     multiplier: 1,
                     servings: 16
                 }
@@ -711,7 +725,7 @@ describe('WeeklyPlanner', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
                 'uuid-granola-1': {
-                    recipeName: 'Cinnamon Granola',
+                    recipeId: 'uuid-recipe-granola',
                     multiplier: 1,
                     servings: 16
                 }
@@ -761,7 +775,7 @@ describe('WeeklyPlanner', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevPrevWeekStartStr]: {
                 'uuid-granola-1': {
-                    recipeName: 'Cinnamon Granola',
+                    recipeId: 'uuid-recipe-granola',
                     multiplier: 0,
                     servings: 4,
                     manualUsed: 4
@@ -769,7 +783,7 @@ describe('WeeklyPlanner', () => {
             },
             [prevWeekStartStr]: {
                 'uuid-granola-2': {
-                    recipeName: 'Cinnamon Granola',
+                    recipeId: 'uuid-recipe-granola',
                     multiplier: 0,
                     servings: 12,
                     transferredFromDate: prevPrevWeekStartStr,
@@ -872,7 +886,7 @@ describe('WeeklyPlanner', () => {
         const setSelectedRecipe = vi.fn();
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4, multiplier: 1}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4, multiplier: 1}
             }
         };
         renderWithAppContext(
@@ -914,7 +928,7 @@ describe('WeeklyPlanner', () => {
 
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -956,7 +970,7 @@ describe('WeeklyPlanner', () => {
         const dropEvent = {
             dataTransfer: {
                 getData: (key: string) => {
-                    if (key === 'recipeName') return 'Pasta';
+                    if (key === 'recipeId') return 'uuid-recipe-pasta';
                     if (key === 'sourceDate') return day1Str;
                     if (key === 'sourceSlot') return 'breakfast';
                     if (key === 'isMove') return 'true';
@@ -982,10 +996,10 @@ describe('WeeklyPlanner', () => {
         const nextWeekStartStr = format(addWeeks(weekStart, 1), 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             },
             [nextWeekStartStr]: {
-                'uuid-pasta-2': {recipeName: 'Pasta', servings: 2, transferredFromDate: weekStartStr, transferredFromId: 'uuid-pasta-1'}
+                'uuid-pasta-2': {recipeId: 'uuid-recipe-pasta', servings: 2, transferredFromDate: weekStartStr, transferredFromId: 'uuid-pasta-1'}
             }
         };
 
@@ -1059,7 +1073,7 @@ describe('WeeklyPlanner', () => {
         const dropEvent = {
             preventDefault: vi.fn(),
             dataTransfer: {
-                getData: (key: string) => key === 'recipeName' ? 'Pasta' : ''
+                getData: (key: string) => key === 'recipeId' ? 'uuid-recipe-pasta' : ''
             }
         };
 
@@ -1097,7 +1111,7 @@ describe('WeeklyPlanner', () => {
             preventDefault: vi.fn(),
             dataTransfer: {
                 getData: (key: string) => {
-                    if (key === 'recipeName') return 'Pasta';
+                    if (key === 'recipeId') return 'uuid-recipe-pasta';
                     if (key === 'isMove') return 'true';
                     if (key === 'sourceDate') return weekStartStr;
                     if (key === 'sourceSlot') return 'dinner';
@@ -1114,7 +1128,7 @@ describe('WeeklyPlanner', () => {
         const prevWeekStartStr = format(subWeeks(weekStart, 1), 'yyyy-MM-dd');
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
         const setPromptedRecipes = vi.fn();
@@ -1180,7 +1194,7 @@ describe('WeeklyPlanner', () => {
         const setMultiWeeklyCookPlan = vi.fn();
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
 
@@ -1219,20 +1233,20 @@ describe('WeeklyPlanner', () => {
         const nextWeekStartStr = format(addWeeks(weekStart, 1), 'yyyy-MM-dd');
         const initialPlan: MultiWeeklyCookPlan = {
             [prevWeekStartStr]: {
-                'uuid-pasta-source': { recipeName: 'Pasta', servings: 0, multiplier: 1 }
+                'uuid-pasta-source': { recipeId: 'uuid-recipe-pasta', servings: 0, multiplier: 1 }
             },
             [weekStartStr]: {
                 'uuid-pasta-transferred': {
-                    recipeName: 'Pasta',
+                    recipeId: 'uuid-recipe-pasta',
                     servings: 2,
                     transferredFromDate: prevWeekStartStr,
                     transferredFromId: 'uuid-pasta-source'
                 },
-                'uuid-granola-base': { recipeName: 'Granola', servings: 4, multiplier: 1 }
+                'uuid-granola-base': { recipeId: 'uuid-recipe-granola2', servings: 4, multiplier: 1 }
             },
             [nextWeekStartStr]: {
                 'uuid-granola-future': {
-                    recipeName: 'Granola',
+                    recipeId: 'uuid-recipe-granola2',
                     servings: 2,
                     transferredFromDate: weekStartStr,
                     transferredFromId: 'uuid-granola-base'
@@ -1282,16 +1296,16 @@ describe('WeeklyPlanner', () => {
     it('sorts weekly recipes by remaining servings then alphabetically, and shows transferred separately', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-banana-1': {recipeName: 'Banana', servings: 0, multiplier: 1},
-                'uuid-apple-1': {recipeName: 'Apple', servings: 4},
-                'uuid-cucumber-1': {recipeName: 'Cucumber', servings: 2, transferredFromDate: '2026-01-05'},
-                'uuid-beet-1': {recipeName: 'Beet', servings: 1},
+                'uuid-banana-1': {recipeId: 'uuid-recipe-banana', servings: 0, multiplier: 1},
+                'uuid-apple-1': {recipeId: 'uuid-recipe-apple', servings: 4},
+                'uuid-cucumber-1': {recipeId: 'uuid-recipe-cucumber', servings: 2, transferredFromDate: '2026-01-05'},
+                'uuid-beet-1': {recipeId: 'uuid-recipe-beet', servings: 1},
             }
         };
 
         renderWithAppContext(
             <WeeklyPlanner
-                recipes={[...mockRecipes, {name: 'Apple', categories: [], prepTime: '1', cookTime: '1', servings: 2, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}, {name: 'Banana', categories: [], prepTime: '1', cookTime: '1', servings: 2, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}, {name: 'Beet', categories: [], prepTime: '1', cookTime: '1', servings: 1, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}, {name: 'Cucumber', categories: [], prepTime: '1', cookTime: '1', servings: 2, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}]}
+                recipes={[...mockRecipes, {id: 'uuid-recipe-apple', name: 'Apple', categories: [], prepTime: '1', cookTime: '1', servings: 2, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}, {id: 'uuid-recipe-banana', name: 'Banana', categories: [], prepTime: '1', cookTime: '1', servings: 2, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}, {id: 'uuid-recipe-beet', name: 'Beet', categories: [], prepTime: '1', cookTime: '1', servings: 1, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}, {id: 'uuid-recipe-cucumber', name: 'Cucumber', categories: [], prepTime: '1', cookTime: '1', servings: 2, tags: [], ingredients: [], instructions: [], macros: {calories: 0, protein: 0, carbs: 0, fat: 0}}]}
                 mealPlan={{}}
                 setMealPlan={() => {}}
                 multiWeeklyCookPlan={multiWeeklyCookPlan}
@@ -1406,12 +1420,12 @@ describe('App - Clear Week Functionality', () => {
 
         const initialMealPlan = {
             [weekStartStr]: {
-                dinner: [{recipeName: 'Pasta', servings: 1}]
+                dinner: [{recipeId: 'uuid-recipe-pasta', servings: 1}]
             }
         };
         const initialBatchPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4}
+                'uuid-pasta-1': {recipeId: 'uuid-recipe-pasta', servings: 4}
             }
         };
         const initialPromptedRecipes = {[weekStartStr]: ['Pasta']};

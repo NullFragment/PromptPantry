@@ -7,6 +7,7 @@ import {renderWithAppContext} from '../testHelpers';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'pasta-uuid',
         name: 'Pasta',
         categories: ['Dinner'],
         prepTime: '10',
@@ -408,7 +409,7 @@ describe('Calendar', () => {
         const dropEvent = {
             dataTransfer: {
                 getData: (key: string) => {
-                    if (key === 'recipeName') return 'Pasta';
+                    if (key === 'recipeId') return 'pasta-uuid';
                     if (key === 'sourceDate') return day1Str;
                     if (key === 'sourceSlot') return 'dinner';
                     if (key === 'isMove') return 'true';

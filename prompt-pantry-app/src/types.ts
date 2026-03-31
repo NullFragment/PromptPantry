@@ -35,6 +35,7 @@ export interface ContainerSize {
 }
 
 export interface StoreSectionDefinition {
+    id: string; // UUID
     name: string;
     emoji?: string;
 }
@@ -42,7 +43,7 @@ export interface StoreSectionDefinition {
 export interface IngredientDefinition {
     id: string; // UUID
     name: string; // Canonical name, unique
-    storeSection: string; // e.g., "Produce", "Dairy", "Unassigned"
+    storeSectionId: string; // UUID reference to StoreSectionDefinition
     aliases?: string[]; // Alternative names/preparations
     containerSizes?: ContainerSize[];
     conversions?: IngredientConversions;
@@ -85,6 +86,7 @@ export interface Macros {
 }
 
 export interface Recipe {
+    id: string; // UUID
     name: string;
     categories: ("Breakfast" | "Lunch" | "Dinner" | "Snack" | "Side" | "Drink" | "Misc")[];
     prepTime: string;
@@ -99,8 +101,8 @@ export interface Recipe {
     notes?: string;
     rating?: 'up' | 'down' | 'neutral';
     isFavorite?: boolean;
-    /** When set, this recipe is a variant of the named base recipe. */
-    baseRecipeName?: string;
+    /** UUID of base recipe (variant only) */
+    baseRecipeId?: string;
     /** Variant-only: additional ingredients to append to base. */
     ingredientAdditions?: Ingredient[];
     /** Variant-only: additional instruction steps to append to base. */
@@ -109,7 +111,7 @@ export interface Recipe {
 
 /** Compact storage format for meal slots - only stores references, not full recipe data */
 export interface CompactMealSlot {
-    recipeName: string;
+    recipeId: string; // UUID reference to Recipe
     servings: number;
     participant?: string;
     recipeInstanceId?: string;
@@ -145,7 +147,7 @@ export interface MealPlan {
 }
 
 export interface WeeklyCookPlanItem {
-    recipeName: string;
+    recipeId: string; // UUID reference to Recipe
     servings: number;
     multiplier?: number;
     manualUsed?: number;

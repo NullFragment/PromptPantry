@@ -24,16 +24,16 @@ export const isTransferredItem = (item: WeeklyCookPlanItem): boolean => {
 };
 
 /** Find all instances of a recipe in a week's cook plan */
-export const findRecipeInstances = (weekPlan: WeeklyCookPlan, recipeName: string): { id: string; item: WeeklyCookPlanItem }[] => {
+export const findRecipeInstances = (weekPlan: WeeklyCookPlan, recipeId: string): { id: string; item: WeeklyCookPlanItem }[] => {
     return Object.entries(weekPlan)
-        .filter(([, item]) => item.recipeName === recipeName)
+        .filter(([, item]) => item.recipeId === recipeId)
         .map(([id, item]) => ({ id, item }));
 };
 
 /** Find the non-transferred (base) instance of a recipe in a week's cook plan */
-export const findBaseRecipeInstance = (weekPlan: WeeklyCookPlan, recipeName: string): { id: string; item: WeeklyCookPlanItem } | null => {
+export const findBaseRecipeInstance = (weekPlan: WeeklyCookPlan, recipeId: string): { id: string; item: WeeklyCookPlanItem } | null => {
     const entry = Object.entries(weekPlan).find(([, item]) =>
-        item.recipeName === recipeName && !item.transferredFromDate
+        item.recipeId === recipeId && !item.transferredFromDate
     );
     return entry ? { id: entry[0], item: entry[1] } : null;
 };
@@ -127,7 +127,7 @@ export const isRecipeFitForParticipant = (recipe: Recipe, p: Participant): boole
     );
 };
 
-export const getUsedServingsForWeek = (mealPlan: MealPlan, recipeName: string, weekStartDate: Date, instanceId?: string): number => {
+export const getUsedServingsForWeek = (mealPlan: MealPlan, recipeId: string, weekStartDate: Date, instanceId?: string): number => {
     let used = 0;
     const start = startOfWeek(weekStartDate, {weekStartsOn: 0});
     for (let i = 0; i < 7; i++) {
@@ -136,7 +136,7 @@ export const getUsedServingsForWeek = (mealPlan: MealPlan, recipeName: string, w
         if (dayPlan) {
             used += getAllMealsForDay(dayPlan)
                 .filter(m => {
-                    if (m.recipe.name !== recipeName) return false;
+                    if (m.recipe.id !== recipeId) return false;
                     // If instanceId is provided, filter by it; otherwise match any
                     if (instanceId && m.recipeInstanceId) {
                         return m.recipeInstanceId === instanceId;
@@ -148,7 +148,7 @@ export const getUsedServingsForWeek = (mealPlan: MealPlan, recipeName: string, w
     }
     return used;
 };
-export const getRecipeCookCount = (multiWeeklyCookPlan: MultiWeeklyCookPlan = {}, mealPlan: MealPlan = {}, recipeName: string): number => {
+export const getRecipeCookCount = (multiWeeklyCookPlan: MultiWeeklyCookPlan = {}, mealPlan: MealPlan = {}, recipeId: string): number => {
     let count = 0;
 
     // Get all unique week starts from both plans
@@ -171,7 +171,7 @@ export const getRecipeCookCount = (multiWeeklyCookPlan: MultiWeeklyCookPlan = {}
         let foundInWeek = false;
 
         Object.values(weekPlan).forEach((item) => {
-            if (item.recipeName !== recipeName) return;
+            if (item.recipeId !== recipeId) return;
 
             // Only count non-transferred items
             const transferred = isTransferredItem(item);
@@ -191,7 +191,7 @@ export const getRecipeCookCount = (multiWeeklyCookPlan: MultiWeeklyCookPlan = {}
         if (!foundInWeek) {
             const d = parseISO(weekStr);
             if (d && !isNaN(d.getTime())) {
-                const usedInWeek = getUsedServingsForWeek(mealPlan || {}, recipeName, d);
+                const usedInWeek = getUsedServingsForWeek(mealPlan || {}, recipeId, d);
                 if (usedInWeek > 0) {
                     count += 1;
                 }
@@ -219,7 +219,7 @@ export const dehydrateMealPlan = (mealPlan: MealPlan): CompactMealPlan => {
 
             compact[date][mealType] = slots.map(slot => {
                 const compactSlot: CompactMealSlot = {
-                    recipeName: slot.recipe.name,
+                    recipeId: slot.recipe.id,
                     servings: slot.servings,
                 };
                 if (slot.participant) {
@@ -237,13 +237,13 @@ export const dehydrateMealPlan = (mealPlan: MealPlan): CompactMealPlan => {
 };
 
 /**
- * Check if a meal slot is in compact format (has recipeName) vs full format (has recipe object).
+ * Check if a meal slot is in compact format (has recipeId) vs full format (has recipe object).
  */
 const isCompactSlot = (slot: unknown): slot is CompactMealSlot => {
     return slot !== null &&
         typeof slot === 'object' &&
-        'recipeName' in slot &&
-        typeof (slot as CompactMealSlot).recipeName === 'string' &&
+        'recipeId' in slot &&
+        typeof (slot as CompactMealSlot).recipeId === 'string' &&
         !('recipe' in slot);
 };
 
@@ -255,7 +255,7 @@ export const hydrateMealPlan = (
     compactOrFull: CompactMealPlan,
     recipes: Recipe[]
 ): MealPlan => {
-    const recipeMap = new Map(recipes.map(r => [r.name, r]));
+    const recipeMap = new Map(recipes.map(r => [r.id, r]));
     const hydrated: MealPlan = {};
     const missingRecipes = new Set<string>();
 
@@ -271,11 +271,10 @@ export const hydrateMealPlan = (
 
             slots.forEach(slot => {
                 if (isCompactSlot(slot)) {
-                    // Compact format - need to hydrate
-                    const recipe = recipeMap.get(slot.recipeName);
+                    const recipe = recipeMap.get(slot.recipeId);
                     if (!recipe) {
-                        missingRecipes.add(slot.recipeName);
-                        return; // Skip this slot
+                        missingRecipes.add(slot.recipeId ?? 'unknown');
+                        return;
                     }
 
                     const resolvedRecipe = resolveVariantRecipe(recipe, recipes);

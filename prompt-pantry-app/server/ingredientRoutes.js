@@ -2,7 +2,7 @@
  * Ingredient Routes - Ingredient CRUD, merge, alias management
  */
 import crypto from 'crypto';
-import { createIngredientHelpers, toTitleCase, forEachRecipeIngredient } from './ingredientHelpers.js';
+import { createIngredientHelpers, forEachRecipeIngredient } from './ingredientHelpers.js';
 
 export function registerIngredientRoutes(app, { dataAccess, middleware, validators }) {
     const { readIngredients, saveIngredients, readRecipes, saveRecipes, validateOrFail } = dataAccess;
@@ -63,10 +63,6 @@ export function registerIngredientRoutes(app, { dataAccess, middleware, validato
 
         ingredient.id = crypto.randomUUID();
 
-        if (ingredient.storeSection && ingredient.storeSection !== 'Unassigned') {
-            ingredient.storeSection = toTitleCase(ingredient.storeSection);
-        }
-
         if (!validateOrFail(res, ingredientValidator, ingredient, 'ingredient', req)) return;
 
         if (checkIngredientNameConflict(ingredient.name)) {
@@ -94,10 +90,6 @@ export function registerIngredientRoutes(app, { dataAccess, middleware, validato
 
         const ingredient = req.body;
         ingredient.id = id;
-
-        if (ingredient.storeSection && ingredient.storeSection !== 'Unassigned') {
-            ingredient.storeSection = toTitleCase(ingredient.storeSection);
-        }
 
         if (!validateOrFail(res, ingredientValidator, ingredient, 'ingredient', req)) return;
 

@@ -7,6 +7,7 @@ import {renderWithAppContext} from '../testHelpers';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'recipe-pasta-1',
         name: 'Pasta',
         categories: ['Dinner'],
         prepTime: '10',
@@ -42,7 +43,7 @@ describe('ShoppingList', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
                 'uuid-pasta-1': {
-                    recipeName: 'Pasta',
+                    recipeId: 'recipe-pasta-1',
                     servings: 5,
                     multiplier: 5
                 }
@@ -73,7 +74,7 @@ describe('ShoppingList', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
                 'uuid-pasta-1': {
-                    recipeName: 'Pasta',
+                    recipeId: 'recipe-pasta-1',
                     servings: 6,
                     multiplier: 2
                 }
@@ -103,7 +104,7 @@ describe('ShoppingList', () => {
     it('exports the shopping list to clipboard', async () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 1, multiplier: 1}
+                'uuid-pasta-1': {recipeId: 'recipe-pasta-1', servings: 1, multiplier: 1}
             }
         };
 
@@ -212,7 +213,7 @@ describe('ShoppingList', () => {
     it('displays the recipe multiplier instead of servings in the weekly recipes section', () => {
         const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
             [weekStartStr]: {
-                'uuid-pasta-1': {recipeName: 'Pasta', servings: 4, multiplier: 4}
+                'uuid-pasta-1': {recipeId: 'recipe-pasta-1', servings: 4, multiplier: 4}
             }
         };
 
@@ -238,13 +239,18 @@ describe('ShoppingList', () => {
     // Store section grouping tests
     describe('store section grouping', () => {
         it('groups ingredients by store section', () => {
+            const storeSections = [
+                {id: 'sec-1', name: 'Pasta & Grains'},
+                {id: 'sec-2', name: 'Produce'}
+            ];
             const ingredientsWithSections: IngredientDefinition[] = [
-                {id: 'ing-1', name: 'pasta', storeSection: 'Pasta & Grains'},
-                {id: 'ing-2', name: 'tomato', storeSection: 'Produce'}
+                {id: 'ing-1', name: 'pasta', storeSectionId: 'sec-1'},
+                {id: 'ing-2', name: 'tomato', storeSectionId: 'sec-2'}
             ];
 
             const recipesWithLinkedIngredients: Recipe[] = [
                 {
+                    id: 'recipe-pasta-tomato-1',
                     name: 'Pasta with Tomato',
                     categories: ['Dinner'],
                     prepTime: '10',
@@ -262,7 +268,7 @@ describe('ShoppingList', () => {
 
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-1': {recipeName: 'Pasta with Tomato', servings: 1, multiplier: 1}
+                    'uuid-1': {recipeId: 'recipe-pasta-tomato-1', servings: 1, multiplier: 1}
                 }
             };
 
@@ -277,6 +283,7 @@ describe('ShoppingList', () => {
                     setSelectedDate={() => {}}
                     setSelectedRecipe={() => {}}
                     ingredients={ingredientsWithSections}
+                    storeSections={storeSections}
                 />
             );
 
@@ -288,7 +295,7 @@ describe('ShoppingList', () => {
         it('shows Unassigned section last with muted styling for ingredients without ingredientId', () => {
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-pasta-1': {recipeName: 'Pasta', servings: 1, multiplier: 1}
+                    'uuid-pasta-1': {recipeId: 'recipe-pasta-1', servings: 1, multiplier: 1}
                 }
             };
 
@@ -311,13 +318,15 @@ describe('ShoppingList', () => {
         });
 
         it('shows item count in section headers', () => {
+            const storeSections = [{id: 'sec-1', name: 'Pasta & Grains'}];
             const ingredientsWithSections: IngredientDefinition[] = [
-                {id: 'ing-1', name: 'pasta', storeSection: 'Pasta & Grains'},
-                {id: 'ing-2', name: 'rice', storeSection: 'Pasta & Grains'}
+                {id: 'ing-1', name: 'pasta', storeSectionId: 'sec-1'},
+                {id: 'ing-2', name: 'rice', storeSectionId: 'sec-1'}
             ];
 
             const recipesWithLinkedIngredients: Recipe[] = [
                 {
+                    id: 'recipe-pasta-rice-1',
                     name: 'Pasta and Rice',
                     categories: ['Dinner'],
                     prepTime: '10',
@@ -335,7 +344,7 @@ describe('ShoppingList', () => {
 
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-1': {recipeName: 'Pasta and Rice', servings: 1, multiplier: 1}
+                    'uuid-1': {recipeId: 'recipe-pasta-rice-1', servings: 1, multiplier: 1}
                 }
             };
 
@@ -350,6 +359,7 @@ describe('ShoppingList', () => {
                     setSelectedDate={() => {}}
                     setSelectedRecipe={() => {}}
                     ingredients={ingredientsWithSections}
+                    storeSections={storeSections}
                 />
             );
 
@@ -357,12 +367,14 @@ describe('ShoppingList', () => {
         });
 
         it('collapses and expands sections when clicked', () => {
+            const storeSections = [{id: 'sec-1', name: 'Pasta & Grains'}];
             const ingredientsWithSections: IngredientDefinition[] = [
-                {id: 'ing-1', name: 'pasta', storeSection: 'Pasta & Grains'}
+                {id: 'ing-1', name: 'pasta', storeSectionId: 'sec-1'}
             ];
 
             const recipesWithLinkedIngredients: Recipe[] = [
                 {
+                    id: 'recipe-simple-pasta-1',
                     name: 'Simple Pasta',
                     categories: ['Dinner'],
                     prepTime: '10',
@@ -379,7 +391,7 @@ describe('ShoppingList', () => {
 
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-1': {recipeName: 'Simple Pasta', servings: 1, multiplier: 1}
+                    'uuid-1': {recipeId: 'recipe-simple-pasta-1', servings: 1, multiplier: 1}
                 }
             };
 
@@ -394,6 +406,7 @@ describe('ShoppingList', () => {
                     setSelectedDate={() => {}}
                     setSelectedRecipe={() => {}}
                     ingredients={ingredientsWithSections}
+                    storeSections={storeSections}
                 />
             );
 
@@ -415,12 +428,14 @@ describe('ShoppingList', () => {
         });
 
         it('displays canonical ingredient name instead of alias', () => {
+            const storeSections = [{id: 'sec-produce', name: 'Produce'}];
             const ingredientsWithAliases: IngredientDefinition[] = [
-                {id: 'ing-1', name: 'garlic', storeSection: 'Produce', aliases: ['garlic, minced', 'garlic clove']}
+                {id: 'ing-1', name: 'garlic', storeSectionId: 'sec-produce', aliases: ['garlic, minced', 'garlic clove']}
             ];
 
             const recipesWithAlias: Recipe[] = [
                 {
+                    id: 'recipe-garlic-1',
                     name: 'Garlic Dish',
                     categories: ['Dinner'],
                     prepTime: '10',
@@ -437,7 +452,7 @@ describe('ShoppingList', () => {
 
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-1': {recipeName: 'Garlic Dish', servings: 1, multiplier: 1}
+                    'uuid-1': {recipeId: 'recipe-garlic-1', servings: 1, multiplier: 1}
                 }
             };
 
@@ -452,6 +467,7 @@ describe('ShoppingList', () => {
                     setSelectedDate={() => {}}
                     setSelectedRecipe={() => {}}
                     ingredients={ingredientsWithAliases}
+                    storeSections={storeSections}
                 />
             );
 
@@ -466,6 +482,7 @@ describe('ShoppingList', () => {
             const milkId = 'ing-milk-1';
             const recipesWithMilk: Recipe[] = [
                 {
+                    id: 'recipe-milk-1',
                     name: 'Milk Recipe',
                     categories: ['Dinner'],
                     prepTime: '0',
@@ -492,7 +509,7 @@ describe('ShoppingList', () => {
             ];
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-milk-1': { recipeName: 'Milk Recipe', servings: 1, multiplier: 1 }
+                    'uuid-milk-1': { recipeId: 'recipe-milk-1', servings: 1, multiplier: 1 }
                 }
             };
 
@@ -517,6 +534,7 @@ describe('ShoppingList', () => {
         it('hides container recommendation when ingredient has no containerSizes', () => {
             const recipesWithMilk: Recipe[] = [
                 {
+                    id: 'recipe-milk-2',
                     name: 'Milk Recipe',
                     categories: ['Dinner'],
                     prepTime: '0',
@@ -533,7 +551,7 @@ describe('ShoppingList', () => {
 
             const multiWeeklyCookPlan: MultiWeeklyCookPlan = {
                 [weekStartStr]: {
-                    'uuid-milk-1': { recipeName: 'Milk Recipe', servings: 1, multiplier: 1 }
+                    'uuid-milk-1': { recipeId: 'recipe-milk-2', servings: 1, multiplier: 1 }
                 }
             };
 

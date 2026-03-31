@@ -6,6 +6,7 @@ import {renderWithAppContext} from '../testHelpers';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'recipe-pasta-carbonara',
         name: 'Pasta Carbonara',
         categories: ['Dinner', 'Italian'],
         tags: ['quick', 'comfort-food'],
@@ -17,6 +18,7 @@ const mockRecipes: Recipe[] = [
         macros: {calories: 500, protein: 25, carbs: 60, fat: 15}
     },
     {
+        id: 'recipe-greek-salad',
         name: 'Greek Salad',
         categories: ['Lunch', 'Mediterranean'],
         tags: ['healthy', 'vegetarian'],
@@ -185,7 +187,7 @@ describe('RecipeView', () => {
 
         fireEvent.click(deleteButton);
 
-        expect(onDeleteRecipes).toHaveBeenCalledWith(['Pasta Carbonara', 'Greek Salad']);
+        expect(onDeleteRecipes).toHaveBeenCalledWith(['recipe-pasta-carbonara', 'recipe-greek-salad']);
         expect(screen.queryByTitle('Delete Selected')).not.toBeInTheDocument();
     });
 

@@ -7,6 +7,7 @@ import {renderWithAppContext} from '../testHelpers';
 
 const mockRecipes: Recipe[] = [
     {
+        id: 'uuid-recipe-pasta',
         name: 'Pasta',
         categories: ['Dinner'],
         prepTime: '10',
@@ -144,7 +145,7 @@ describe('WeeklyPlanner Participant Features', () => {
             preventDefault: vi.fn(),
             dataTransfer: {
                 getData: (key: string) => {
-                    if (key === 'recipeName') return 'Pasta';
+                    if (key === 'recipeId') return 'uuid-recipe-pasta';
                     if (key === 'isMove') return 'false';
                     return '';
                 }

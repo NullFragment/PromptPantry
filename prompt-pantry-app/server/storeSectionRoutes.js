@@ -1,6 +1,7 @@
 /**
  * Store Section Routes - CRUD for store sections with ingredient reassignment on delete.
  */
+import crypto from 'crypto';
 
 export function registerStoreSectionRoutes(app, { dataAccess, middleware, validators }) {
     const { readStoreSections, writeStoreSections, readIngredients, saveIngredients, validateOrFail } = dataAccess;
@@ -26,7 +27,7 @@ export function registerStoreSectionRoutes(app, { dataAccess, middleware, valida
             return res.status(400).json({ error: 'A section with this name already exists' });
         }
 
-        const newSection = { name: trimmedName };
+        const newSection = { id: crypto.randomUUID(), name: trimmedName };
         if (emoji && typeof emoji === 'string') {
             newSection.emoji = emoji;
         }
@@ -38,16 +39,17 @@ export function registerStoreSectionRoutes(app, { dataAccess, middleware, valida
         res.status(201).json(newSection);
     });
 
-    app.put('/api/store-sections/:name', authenticate, requireEditor, (req, res) => {
-        const oldName = decodeURIComponent(req.params.name);
+    app.put('/api/store-sections/:id', authenticate, requireEditor, (req, res) => {
+        const id = req.params.id;
         const { name: newName, emoji } = req.body;
 
         const sections = readStoreSections();
-        const idx = sections.findIndex(s => s.name === oldName);
+        const idx = sections.findIndex(s => s.id === id);
         if (idx === -1) {
             return res.status(404).json({ error: 'Section not found' });
         }
 
+        const oldName = sections[idx].name;
         const trimmedName = (newName && typeof newName === 'string') ? newName.trim() : oldName;
 
         if (trimmedName !== oldName) {
@@ -58,7 +60,7 @@ export function registerStoreSectionRoutes(app, { dataAccess, middleware, valida
         }
 
         const updated = [...sections];
-        const updatedSection = { name: trimmedName };
+        const updatedSection = { id: sections[idx].id, name: trimmedName };
         if (emoji !== undefined) {
             // Allow explicit empty string to clear the emoji
             if (typeof emoji === 'string' && emoji.trim() !== '') {
@@ -74,22 +76,11 @@ export function registerStoreSectionRoutes(app, { dataAccess, middleware, valida
 
         writeStoreSections(updated);
 
-        if (trimmedName !== oldName) {
-            const ingredients = readIngredients();
-            const affected = ingredients.filter(i => i.storeSection === oldName);
-            if (affected.length > 0) {
-                const updatedIngredients = ingredients.map(i =>
-                    i.storeSection === oldName ? { ...i, storeSection: trimmedName } : i
-                );
-                saveIngredients(updatedIngredients);
-            }
-        }
-
         res.json(updatedSection);
     });
 
-    app.delete('/api/store-sections/:name', authenticate, requireEditor, (req, res) => {
-        const name = decodeURIComponent(req.params.name);
+    app.delete('/api/store-sections/:id', authenticate, requireEditor, (req, res) => {
+        const id = req.params.id;
         const { action, targetSection } = req.body || {};
 
         if (!action || !['uncategorize', 'merge'].includes(action)) {
@@ -101,17 +92,17 @@ export function registerStoreSectionRoutes(app, { dataAccess, middleware, valida
         }
 
         const sections = readStoreSections();
-        const idx = sections.findIndex(s => s.name === name);
+        const idx = sections.findIndex(s => s.id === id);
         if (idx === -1) {
             return res.status(404).json({ error: 'Section not found' });
         }
 
         if (action === 'merge') {
-            const targetExists = sections.some(s => s.name === targetSection);
+            const targetExists = sections.some(s => s.id === targetSection);
             if (!targetExists) {
                 return res.status(400).json({ error: `Target section "${targetSection}" does not exist` });
             }
-            if (targetSection === name) {
+            if (targetSection === id) {
                 return res.status(400).json({ error: 'Cannot merge a section into itself' });
             }
         }
@@ -123,12 +114,13 @@ export function registerStoreSectionRoutes(app, { dataAccess, middleware, valida
             }
         }
 
-        const replacement = action === 'uncategorize' ? 'Unassigned' : targetSection;
+        const unassignedSection = sections.find(s => s.name === 'Unassigned');
+        const replacement = action === 'uncategorize' ? unassignedSection.id : targetSection;
         const ingredients = readIngredients();
-        const affected = ingredients.filter(i => i.storeSection === name);
+        const affected = ingredients.filter(i => i.storeSectionId === id);
         if (affected.length > 0) {
             const updatedIngredients = ingredients.map(i =>
-                i.storeSection === name ? { ...i, storeSection: replacement } : i
+                i.storeSectionId === id ? { ...i, storeSectionId: replacement } : i
             );
             saveIngredients(updatedIngredients);
         }

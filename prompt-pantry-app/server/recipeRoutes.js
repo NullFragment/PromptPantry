@@ -1,7 +1,7 @@
 /**
  * Recipe Routes - Recipe CRUD endpoints
  */
-import { safeDecodeURIComponent } from './middleware.js';
+import crypto from 'crypto';
 
 export function registerRecipeRoutes(app, { dataAccess, middleware, validators }) {
     const { readRecipes, readIngredients, saveRecipes, validateOrFail } = dataAccess;
@@ -76,6 +76,7 @@ export function registerRecipeRoutes(app, { dataAccess, middleware, validators }
 
     app.post('/api/recipes', authenticate, requireEditor, (req, res) => {
         const {_isValid, _errors, ...recipe} = req.body;
+        recipe.id = crypto.randomUUID();
         if (!validateOrFail(res, recipeValidator, recipe, 'recipe', req)) return;
         const recipes = readRecipes('all');
         if (recipes.find(r => r.name === recipe.name)) {
@@ -86,17 +87,17 @@ export function registerRecipeRoutes(app, { dataAccess, middleware, validators }
         res.status(201).json(recipe);
     });
 
-    app.put('/api/recipes/:name', authenticate, requireEditor, (req, res) => {
-        const name = safeDecodeURIComponent(req.params.name);
-        if (name === null) return res.status(400).json({error: 'Invalid URL encoding'});
+    app.put('/api/recipes/:id', authenticate, requireEditor, (req, res) => {
+        const id = req.params.id;
         const {_isValid, _errors, ...recipe} = req.body;
+        recipe.id = id;
         if (!validateOrFail(res, recipeValidator, recipe, 'recipe', req)) return;
         const recipes = readRecipes('all');
-        const idx = recipes.findIndex(r => r.name === name);
+        const idx = recipes.findIndex(r => r.id === id);
         if (idx === -1) {
             return res.status(404).json({error: 'Recipe not found'});
         }
-        if (recipe.name !== name && recipes.find(r => r.name === recipe.name)) {
+        if (recipes.find(r => r.name === recipe.name && r.id !== id)) {
             return res.status(400).json({error: 'A recipe with this name already exists'});
         }
         recipes[idx] = recipe;
@@ -104,11 +105,10 @@ export function registerRecipeRoutes(app, { dataAccess, middleware, validators }
         res.json(recipe);
     });
 
-    app.delete('/api/recipes/:name', authenticate, requireEditor, (req, res) => {
-        const name = safeDecodeURIComponent(req.params.name);
-        if (name === null) return res.status(400).json({error: 'Invalid URL encoding'});
+    app.delete('/api/recipes/:id', authenticate, requireEditor, (req, res) => {
+        const id = req.params.id;
         const recipes = readRecipes('all');
-        const idx = recipes.findIndex(r => r.name === name);
+        const idx = recipes.findIndex(r => r.id === id);
         if (idx === -1) {
             return res.status(404).json({error: 'Recipe not found'});
         }

@@ -10,7 +10,7 @@ export interface WeeklyRecipesSidebarProps {
     canEdit: boolean;
     onClear: () => void;
     onAddRecipe: () => void;
-    onDragStart: (e: React.DragEvent, recipeName: string, instanceId: string) => void;
+    onDragStart: (e: React.DragEvent, recipeId: string, instanceId: string) => void;
     onRemove: (instanceId: string) => void;
     onUpdateMultiplier: (instanceId: string, value: number) => void;
     onViewRecipe: (recipe: Recipe) => void;

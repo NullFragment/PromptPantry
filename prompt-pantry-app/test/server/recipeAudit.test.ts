@@ -2,7 +2,9 @@ import request from 'supertest';
 import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 import {createTestEnvironment, writeTestFile, type TestEnvironment} from './testDataIsolation.js';
 
+let recipeCounter = 0;
 const makeRecipe = (overrides: Record<string, unknown>) => ({
+    id: `00000000-0000-0000-0000-0000000${String(++recipeCounter).padStart(5, '0')}`,
     name: 'Test Recipe',
     categories: ['Dinner'],
     prepTime: '10',
@@ -15,10 +17,12 @@ const makeRecipe = (overrides: Record<string, unknown>) => ({
     ...overrides,
 });
 
+const SPICES_SECTION_ID = 'g0000000-0000-0000-0000-000000000001';
+
 const ingredientDef = {
     id: '00000000-0000-0000-0000-000000000001',
     name: 'Salt',
-    storeSection: 'Spices',
+    storeSectionId: SPICES_SECTION_ID,
 };
 
 describe('GET /api/recipes/audit', () => {

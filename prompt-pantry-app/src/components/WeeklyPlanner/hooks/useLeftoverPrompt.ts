@@ -1,6 +1,6 @@
 import { format, parseISO, startOfWeek, subWeeks } from 'date-fns';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import type { MealPlan, MultiWeeklyCookPlan } from '../../../types';
+import type { MealPlan, MultiWeeklyCookPlan, Recipe } from '../../../types';
 import { generateUUID, getOriginalSourceWeek, getUsedServingsForWeek } from '../../../utils/mealPlanUtils';
 import type { LeftoverItem } from '../weeklyPlannerTypes';
 
@@ -13,6 +13,7 @@ export interface UseLeftoverPromptParams {
     setPromptedRecipes: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
     mealPlan: MealPlan;
     canEdit: boolean;
+    recipes?: Recipe[];
 }
 
 export interface UseLeftoverPromptResult {
@@ -47,15 +48,16 @@ export function useLeftoverPrompt({
     promptedRecipes,
     setPromptedRecipes,
     mealPlan,
-    canEdit
+    canEdit,
+    recipes = []
 }: UseLeftoverPromptParams): UseLeftoverPromptResult {
     const [showLeftoverPrompt, setShowLeftoverPrompt] = useState(false);
     const [leftovers, setLeftovers] = useState<LeftoverItem[]>([]);
 
     const getUsedServings = useCallback(
-        (recipeName: string, date?: Date, instanceId?: string) => {
+        (recipeId: string, date?: Date, instanceId?: string) => {
             const effectiveDate = date || parseISO(weekStartStr);
-            return getUsedServingsForWeek(mealPlan, recipeName, effectiveDate, instanceId);
+            return getUsedServingsForWeek(mealPlan, recipeId, effectiveDate, instanceId);
         },
         [mealPlan, weekStartStr]
     );
@@ -86,6 +88,7 @@ export function useLeftoverPrompt({
             const weeksToCheck = 1;
             const instanceLeftovers: {
                 name: string;
+                recipeId?: string;
                 count: number;
                 fromWeek: string;
                 originalWeek: string;
@@ -107,19 +110,24 @@ export function useLeftoverPrompt({
 
                 if (prevWeekPlan) {
                     Object.entries(prevWeekPlan).forEach(([instanceId, item]) => {
-                        const recipeName = item.recipeName;
-                        if (!recipeName) return;
+                        const recipeId = item.recipeId;
+                        const recipeName = recipeId
+                            ? (recipes.find(r => r.id === recipeId)?.name ?? recipeId)
+                            : undefined;
+                        if (!recipeId || !recipeName) return;
                         if (promptedForThisWeek.includes(instanceId)) return;
                         if (alreadyTransferredIds.has(instanceId)) return;
 
-                        const used = getUsedServings(recipeName, prevWeekStart, instanceId);
+                        const lookupId = recipeId ?? recipeName ?? '';
+                        const used = getUsedServings(lookupId, prevWeekStart, instanceId);
                         const totalUsed = used + (item.manualUsed || 0);
                         if (item.servings > totalUsed) {
                             const count = item.servings - totalUsed;
                             const originalWeek =
                                 getOriginalSourceWeek(multiWeeklyCookPlan, item) || prevWeekStartStr;
                             instanceLeftovers.push({
-                                name: recipeName,
+                                name: recipeName ?? recipeId ?? '',
+                                recipeId: recipeId ?? undefined,
                                 count,
                                 fromWeek: prevWeekStartStr,
                                 originalWeek,
@@ -132,15 +140,16 @@ export function useLeftoverPrompt({
 
             const groupedByRecipe: Record<
                 string,
-                { name: string; totalCount: number; instances: { instanceId: string; weekStr: string; count: number }[] }
+                { name: string; recipeId?: string; totalCount: number; instances: { instanceId: string; weekStr: string; count: number }[] }
             > = {};
 
             instanceLeftovers.forEach((lo) => {
-                if (!groupedByRecipe[lo.name]) {
-                    groupedByRecipe[lo.name] = { name: lo.name, totalCount: 0, instances: [] };
+                const groupKey = lo.recipeId ?? lo.name;
+                if (!groupedByRecipe[groupKey]) {
+                    groupedByRecipe[groupKey] = { name: lo.name, recipeId: lo.recipeId, totalCount: 0, instances: [] };
                 }
-                groupedByRecipe[lo.name].totalCount += lo.count;
-                groupedByRecipe[lo.name].instances.push({
+                groupedByRecipe[groupKey].totalCount += lo.count;
+                groupedByRecipe[groupKey].instances.push({
                     instanceId: lo.instanceId,
                     weekStr: lo.fromWeek,
                     count: lo.count
@@ -149,6 +158,7 @@ export function useLeftoverPrompt({
 
             const foundLeftovers: LeftoverItem[] = Object.values(groupedByRecipe).map((data) => ({
                 name: data.name,
+                recipeId: data.recipeId,
                 count: data.totalCount,
                 fromWeek: data.instances[0].weekStr,
                 instanceId: data.instances[0].instanceId,
@@ -205,7 +215,8 @@ export function useLeftoverPrompt({
                         const weekPlan = { ...newMultiPlan[weekStr] };
                         const item = weekPlan[instanceId];
                         if (item) {
-                            const used = getUsedServings(recipeName, parseISO(weekStr), instanceId);
+                            const lookupKey = item.recipeId ?? recipeName;
+                            const used = getUsedServings(lookupKey, parseISO(weekStr), instanceId);
                             const left = item.servings - (used + (item.manualUsed || 0));
                             if (left > 0) {
                                 weekPlan[instanceId] = {
@@ -221,8 +232,9 @@ export function useLeftoverPrompt({
                     weeksToZero.forEach((wStr) => {
                         const weekPlan = { ...newMultiPlan[wStr] };
                         Object.entries(weekPlan).forEach(([instanceId, item]) => {
-                            if (item.recipeName === recipeName) {
-                                const used = getUsedServings(recipeName, parseISO(wStr), instanceId);
+                            if (recipes.find(r => r.id === item.recipeId)?.name === recipeName) {
+                                const lookupKey = item.recipeId ?? recipeName;
+                                const used = getUsedServings(lookupKey, parseISO(wStr), instanceId);
                                 const left = item.servings - (used + (item.manualUsed || 0));
                                 if (left > 0) {
                                     weekPlan[instanceId] = {
@@ -263,7 +275,8 @@ export function useLeftoverPrompt({
                         const item = prevWeekPlan[instanceId];
 
                         if (item) {
-                            const used = getUsedServings(recipeName, parseISO(weekStr), instanceId);
+                            const lookupKey = item.recipeId ?? recipeName;
+                            const used = getUsedServings(lookupKey, parseISO(weekStr), instanceId);
                             const totalUsed = used + (item.manualUsed || 0);
                             if (item.servings > totalUsed) {
                                 const left = item.servings - totalUsed;
@@ -271,7 +284,7 @@ export function useLeftoverPrompt({
                                 newMultiPlan[weekStr] = prevWeekPlan;
                                 const newInstanceId = generateUUID();
                                 currentWeekPlan[newInstanceId] = {
-                                    recipeName,
+                                    recipeId: item.recipeId,
                                     servings: left,
                                     transferredFromDate: weekStr,
                                     transferredFromId: instanceId
@@ -283,21 +296,24 @@ export function useLeftoverPrompt({
                     const weeksToTransfer = allWeeks || [fromWeekStr];
                     let totalTransferred = 0;
                     let lastSourceId = sourceInstanceId;
+                    let transferRecipeId: string | undefined;
 
                     weeksToTransfer.forEach((wStr) => {
                         const prevWeekPlan = { ...newMultiPlan[wStr] };
                         const instanceEntry = Object.entries(prevWeekPlan).find(
-                            ([, item]) => item.recipeName === recipeName
+                            ([, item]) => recipes.find(r => r.id === item.recipeId)?.name === recipeName
                         );
 
                         if (instanceEntry) {
                             const [instId, item] = instanceEntry;
-                            const used = getUsedServings(recipeName, parseISO(wStr), instId);
+                            const lookupKey = item.recipeId ?? recipeName;
+                            const used = getUsedServings(lookupKey, parseISO(wStr), instId);
                             const totalUsed = used + (item.manualUsed || 0);
                             if (item.servings > totalUsed) {
                                 const left = item.servings - totalUsed;
                                 totalTransferred += left;
                                 lastSourceId = instId;
+                                transferRecipeId = item.recipeId ?? transferRecipeId;
                                 prevWeekPlan[instId] = { ...item, servings: totalUsed };
                                 newMultiPlan[wStr] = prevWeekPlan;
                             }
@@ -307,7 +323,7 @@ export function useLeftoverPrompt({
                     if (totalTransferred > 0) {
                         const newInstanceId = generateUUID();
                         currentWeekPlan[newInstanceId] = {
-                            recipeName,
+                            recipeId: transferRecipeId ?? '',
                             servings: totalTransferred,
                             transferredFromDate: fromWeekStr,
                             transferredFromId: lastSourceId

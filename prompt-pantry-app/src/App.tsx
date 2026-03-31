@@ -34,7 +34,6 @@ function App() {
     const {participants, fetchParticipants, saveParticipants: saveParticipantsApi} = useParticipants();
     const {
         ingredients,
-        storeSections: ingredientSections,
         fetchIngredients,
         saveIngredient: saveIngredientApi,
         deleteIngredient: deleteIngredientApi,
@@ -167,9 +166,9 @@ function App() {
     };
 
     const saveRecipe = async (recipe: Recipe, originalName: string | null, keepOpen: boolean = false) => {
-        const result = await saveRecipeApi(recipe, originalName);
+        const result = await saveRecipeApi(recipe, originalName === null);
         if (result.success) {
-            updateMealPlanForRecipe(originalName || recipe.name, recipe);
+            updateMealPlanForRecipe(recipe.id, recipe);
             if (!keepOpen) {
                 setSelectedRecipe(null);
             } else {
@@ -187,16 +186,17 @@ function App() {
         }
     };
 
-    const removeRecipe = async (name: string) => {
+    const removeRecipe = async (id: string) => {
+        const displayName = recipes.find(r => r.id === id)?.name ?? id;
         showConfirmation({
             title: 'Delete Recipe',
-            message: `Are you sure you want to delete "${name}"?`,
+            message: `Are you sure you want to delete "${displayName}"?`,
             confirmLabel: 'Delete',
             variant: 'danger',
             onConfirm: async () => {
-                const success = await deleteRecipeApi(name);
+                const success = await deleteRecipeApi(id);
                 if (success) {
-                    updateMealPlanForRecipe(name, null);
+                    updateMealPlanForRecipe(id, null);
                     setSelectedRecipe(null);
                 } else {
                     showConfirmation({
@@ -216,18 +216,18 @@ function App() {
         });
     };
 
-    const removeRecipes = async (names: string[]) => {
+    const removeRecipes = async (ids: string[]) => {
         showConfirmation({
             title: 'Delete Recipes',
-            message: `Are you sure you want to delete ${names.length} recipes?`,
+            message: `Are you sure you want to delete ${ids.length} recipes?`,
             confirmLabel: 'Delete All',
             variant: 'danger',
             onConfirm: async () => {
                 let allSuccess = true;
-                for (const name of names) {
-                    const success = await deleteRecipeApi(name);
+                for (const id of ids) {
+                    const success = await deleteRecipeApi(id);
                     if (success) {
-                        updateMealPlanForRecipe(name, null);
+                        updateMealPlanForRecipe(id, null);
                     } else {
                         allSuccess = false;
                     }
@@ -256,7 +256,7 @@ function App() {
     const handleCreateIngredient = useCallback(async (
         ingredient: Omit<IngredientDefinition, 'id'>
     ): Promise<IngredientDefinition | null> => {
-        const result = await saveIngredientApi(ingredient as IngredientDefinition & { name: string; storeSection: string }, true);
+        const result = await saveIngredientApi(ingredient as IngredientDefinition & { name: string; storeSectionId: string }, true);
         if (result.success && result.ingredient) {
             return result.ingredient;
         }
@@ -473,7 +473,7 @@ function App() {
                     multiWeeklyCookPlan={multiWeeklyCookPlan}
                     allTags={allTags}
                     ingredientDefinitions={ingredients}
-                    storeSections={ingredientSections}
+                    storeSections={storeSections}
                     onCreateIngredient={handleCreateIngredient}
                     onAddIngredientAlias={handleAddIngredientAlias}
                 />

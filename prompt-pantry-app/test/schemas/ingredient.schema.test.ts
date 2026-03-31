@@ -11,13 +11,19 @@ const schemaPath = path.join(__dirname, '../../..', 'schemas', 'ingredient.schem
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
 const validate = ajv.compile(schema);
 
+// Test UUID constants
+const PRODUCE_SECTION_ID = 'a0000000-0000-0000-0000-000000000001';
+const BAKING_SECTION_ID  = 'a0000000-0000-0000-0000-000000000002';
+const DAIRY_SECTION_ID   = 'a0000000-0000-0000-0000-000000000003';
+const UNASSIGNED_ID      = 'a0000000-0000-0000-0000-000000000000';
+
 describe('ingredient.schema.json', () => {
     describe('valid ingredients', () => {
         it('accepts a minimal valid ingredient', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440000',
                 name: 'garlic',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
             const valid = validate(ingredient);
             expect(valid).toBe(true);
@@ -28,7 +34,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440001',
                 name: 'garlic',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['garlic, minced', 'garlic clove', 'garlic, chopped']
             };
             const valid = validate(ingredient);
@@ -40,7 +46,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440002',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: BAKING_SECTION_ID,
                 conversions: {
                     weightToVolume: {
                         weight: {quantity: 120, unit: 'g'},
@@ -57,7 +63,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440003',
                 name: 'garlic',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 conversions: {
                     portionToVolume: {
                         portion: {quantity: 1, description: 'clove'},
@@ -74,7 +80,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440004',
                 name: 'butter',
-                storeSection: 'Dairy',
+                storeSectionId: DAIRY_SECTION_ID,
                 aliases: ['unsalted butter', 'salted butter'],
                 conversions: {
                     weightToVolume: {
@@ -92,11 +98,11 @@ describe('ingredient.schema.json', () => {
             expect(validate.errors).toBeNull();
         });
 
-        it('accepts Unassigned as a store section', () => {
+        it('accepts Unassigned as a store section ID', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440005',
                 name: 'mystery ingredient',
-                storeSection: 'Unassigned'
+                storeSectionId: UNASSIGNED_ID
             };
             const valid = validate(ingredient);
             expect(valid).toBe(true);
@@ -107,7 +113,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440020',
                 name: 'milk',
-                storeSection: 'Dairy',
+                storeSectionId: DAIRY_SECTION_ID,
                 containerSizes: [
                     { quantity: 3.78, unit: 'l', label: 'gallon' },
                     { quantity: 1.89, unit: 'l', label: 'half gallon' },
@@ -124,7 +130,7 @@ describe('ingredient.schema.json', () => {
         it('rejects an ingredient without id', () => {
             const ingredient = {
                 name: 'garlic',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
             const valid = validate(ingredient);
             expect(valid).toBe(false);
@@ -135,14 +141,14 @@ describe('ingredient.schema.json', () => {
         it('rejects an ingredient without name', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440006',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
             const valid = validate(ingredient);
             expect(valid).toBe(false);
             expect(validate.errors).toBeDefined();
         });
 
-        it('rejects an ingredient without storeSection', () => {
+        it('rejects an ingredient without storeSectionId', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440007',
                 name: 'garlic'
@@ -156,18 +162,18 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440008',
                 name: '',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
             const valid = validate(ingredient);
             expect(valid).toBe(false);
             expect(validate.errors).toBeDefined();
         });
 
-        it('rejects an ingredient with empty storeSection', () => {
+        it('rejects an ingredient with non-UUID storeSectionId', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440009',
                 name: 'garlic',
-                storeSection: ''
+                storeSectionId: 'not-a-valid-uuid'
             };
             const valid = validate(ingredient);
             expect(valid).toBe(false);
@@ -178,7 +184,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: 'not-a-valid-uuid',
                 name: 'garlic',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
             const valid = validate(ingredient);
             expect(valid).toBe(false);
@@ -189,7 +195,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440010',
                 name: 'garlic',
-                storeSection: 'Produce',
+                storeSectionId: PRODUCE_SECTION_ID,
                 aliases: ['garlic, minced', '']
             };
             const valid = validate(ingredient);
@@ -201,7 +207,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440011',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: BAKING_SECTION_ID,
                 conversions: {
                     weightToVolume: {
                         weight: {quantity: 0, unit: 'g'},
@@ -218,7 +224,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440012',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: BAKING_SECTION_ID,
                 conversions: {
                     weightToVolume: {
                         weight: {quantity: -100, unit: 'g'},
@@ -235,7 +241,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440013',
                 name: 'flour',
-                storeSection: 'Baking',
+                storeSectionId: BAKING_SECTION_ID,
                 conversions: {
                     weightToVolume: {
                         weight: {quantity: 120, unit: ''},
@@ -248,11 +254,23 @@ describe('ingredient.schema.json', () => {
             expect(validate.errors).toBeDefined();
         });
 
+        it('rejects storeSection as an additional property', () => {
+            const ingredient = {
+                id: '550e8400-e29b-41d4-a716-446655440014',
+                name: 'garlic',
+                storeSectionId: PRODUCE_SECTION_ID,
+                storeSection: 'Produce'
+            };
+            const valid = validate(ingredient);
+            expect(valid).toBe(false);
+            expect(validate.errors).toBeDefined();
+        });
+
         it('rejects containerSizes with missing quantity', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440021',
                 name: 'milk',
-                storeSection: 'Dairy',
+                storeSectionId: DAIRY_SECTION_ID,
                 containerSizes: [{ unit: 'l', label: 'gallon' }]
             };
             const valid = validate(ingredient);
@@ -264,7 +282,7 @@ describe('ingredient.schema.json', () => {
             const ingredient = {
                 id: '550e8400-e29b-41d4-a716-446655440022',
                 name: 'milk',
-                storeSection: 'Dairy',
+                storeSectionId: DAIRY_SECTION_ID,
                 containerSizes: [{ quantity: 3.78, label: 'gallon' }]
             };
             const valid = validate(ingredient);
@@ -273,4 +291,3 @@ describe('ingredient.schema.json', () => {
         });
     });
 });
-

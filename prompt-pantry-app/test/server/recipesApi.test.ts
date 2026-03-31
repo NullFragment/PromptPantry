@@ -2,7 +2,11 @@ import request from 'supertest';
 import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 import {createTestEnvironment, writeTestFile, readTestFile, type TestEnvironment} from './testDataIsolation.js';
 
+const VALID_RECIPE_ID = 'a0000000-0000-0000-0000-000000000001';
+const INVALID_RECIPE_ID = 'a0000000-0000-0000-0000-000000000002';
+
 const validRecipe = {
+    id: VALID_RECIPE_ID,
     name: 'Valid Recipe',
     categories: ['Dinner'],
     prepTime: '10',
@@ -15,6 +19,7 @@ const validRecipe = {
 };
 
 const invalidRecipe = {
+    id: INVALID_RECIPE_ID,
     name: 'Invalid Recipe',
     categories: ['InvalidCategory'], // Invalid category
     prepTime: '10',
@@ -50,7 +55,7 @@ describe('Recipes API - Invalid Recipes Handling', () => {
         const {app} = env;
         const updatedInvalidRecipe = {...invalidRecipe, cookTime: '30', categories: ['Dinner']}; // Now valid
         const res = await request(app)
-            .put(`/api/recipes/${encodeURIComponent(invalidRecipe.name)}`)
+            .put(`/api/recipes/${INVALID_RECIPE_ID}`)
             .send(updatedInvalidRecipe);
 
         // CURRENT BEHAVIOR: returns 404 Recipe not found
@@ -60,7 +65,7 @@ describe('Recipes API - Invalid Recipes Handling', () => {
     it('fails to delete an invalid recipe (reproducing the issue)', async () => {
         const {app} = env;
         const res = await request(app)
-            .delete(`/api/recipes/${encodeURIComponent(invalidRecipe.name)}`);
+            .delete(`/api/recipes/${INVALID_RECIPE_ID}`);
 
         // CURRENT BEHAVIOR: returns 404 Recipe not found
         expect(res.status).toBe(204);
@@ -88,8 +93,11 @@ describe('Recipes API - Variant recipes', () => {
         env = createTestEnvironment('recipes-api-variant');
     });
 
+    const BASE_RECIPE_ID = 'b0000000-0000-0000-0000-000000000001';
+
     beforeEach(() => {
         const baseRecipe = {
+            id: BASE_RECIPE_ID,
             name: 'Overnight Oats',
             categories: ['Breakfast'],
             prepTime: '5 min',
@@ -110,7 +118,7 @@ describe('Recipes API - Variant recipes', () => {
         env.cleanup();
     });
 
-    it('accepts POST of a variant recipe (baseRecipeName, ingredientAdditions, instructionAdditions)', async () => {
+    it('accepts POST of a variant recipe (baseRecipeId, ingredientAdditions, instructionAdditions)', async () => {
         const variantRecipe = {
             name: 'Overnight Oats: Chocolate',
             categories: ['Breakfast'],
@@ -121,7 +129,7 @@ describe('Recipes API - Variant recipes', () => {
             ingredients: [],
             instructions: [],
             macros: {calories: 220, protein: 9, carbs: 35, fat: 6},
-            baseRecipeName: 'Overnight Oats',
+            baseRecipeId: BASE_RECIPE_ID,
             ingredientAdditions: [{ingredient: 'Cocoa powder', quantity: '1', measure: 'tbsp'}],
             instructionAdditions: ['Stir in cocoa before serving.']
         };
@@ -131,7 +139,7 @@ describe('Recipes API - Variant recipes', () => {
             .send(variantRecipe);
         expect(res.status).toBe(201);
         expect(res.body.name).toBe('Overnight Oats: Chocolate');
-        expect(res.body.baseRecipeName).toBe('Overnight Oats');
+        expect(res.body.baseRecipeId).toBe(BASE_RECIPE_ID);
         expect(res.body.ingredientAdditions).toHaveLength(1);
         expect(res.body.instructionAdditions).toHaveLength(1);
     });

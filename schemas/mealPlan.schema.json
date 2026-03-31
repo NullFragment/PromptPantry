@@ -39,9 +39,10 @@
     "mealSlot": {
       "type": "object",
       "properties": {
-        "recipeName": {
+        "recipeId": {
           "type": "string",
-          "description": "Name of the recipe (used to look up full recipe data)"
+          "format": "uuid",
+          "description": "UUID of the recipe"
         },
         "servings": {
           "type": "number",
@@ -56,7 +57,7 @@
         }
       },
       "required": [
-        "recipeName",
+        "recipeId",
         "servings"
       ],
       "additionalProperties": false

@@ -53,9 +53,9 @@ export function useWeeklyPlanActions({
     participants: _participants
 }: UseWeeklyPlanActionsParams): UseWeeklyPlanActionsResult {
     const getUsedServings = useCallback(
-        (recipeName: string, date?: Date, instanceId?: string) => {
+        (recipeId: string, date?: Date, instanceId?: string) => {
             const effectiveDate = date || parseISO(weekStartStr);
-            return getUsedServingsForWeek(mealPlan, recipeName, effectiveDate, instanceId);
+            return getUsedServingsForWeek(mealPlan, recipeId, effectiveDate, instanceId);
         },
         [mealPlan, weekStartStr]
     );
@@ -98,6 +98,7 @@ export function useWeeklyPlanActions({
         ) => {
             const instancesToRemove: {
                 instanceId: string;
+                recipeId: string;
                 recipeName: string;
                 chain: { instanceId: string; weekStr: string }[];
             }[] = [];
@@ -106,9 +107,10 @@ export function useWeeklyPlanActions({
             instanceIds.forEach((instanceId) => {
                 const item = currentWeeklyCookPlan[instanceId];
                 if (!item) return;
-                const recipeName = item.recipeName;
+                const recipeId = item.recipeId;
+                const recipeName = recipes.find((r) => r.id === recipeId)?.name ?? recipeId;
                 const chain = findTransferChain(instanceId, weekStartStr);
-                instancesToRemove.push({ instanceId, recipeName, chain });
+                instancesToRemove.push({ instanceId, recipeId, recipeName, chain });
                 if (chain.length > 1) recipesWithFutureTransfers.push(recipeName);
             });
 
@@ -127,7 +129,7 @@ export function useWeeklyPlanActions({
 
                 setMultiWeeklyCookPlan((prev) => {
                     const newMultiPlan = { ...prev };
-                    instancesToRemove.forEach(({ recipeName, chain }) => {
+                    instancesToRemove.forEach(({ recipeId, chain }) => {
                         const reversedChain = [...chain].reverse();
                         let servingsToReturn = 0;
 
@@ -138,7 +140,7 @@ export function useWeeklyPlanActions({
                             if (!chainItem) return;
 
                             const usedInInstance = getUsedServings(
-                                recipeName,
+                                recipeId,
                                 parseISO(weekStr),
                                 chainInstanceId
                             );
@@ -184,7 +186,7 @@ export function useWeeklyPlanActions({
                 setMealPlan((prev) => {
                     const newPlan = { ...prev };
                     let changed = false;
-                    instancesToRemove.forEach(({ recipeName, chain }) => {
+                    instancesToRemove.forEach(({ recipeId, chain }) => {
                         chain.forEach(({ instanceId: chainInstanceId, weekStr }) => {
                             const wStart = parseISO(weekStr);
                             for (let i = 0; i < 7; i++) {
@@ -194,7 +196,7 @@ export function useWeeklyPlanActions({
                                     const filtered = getAllMealsForDay(dayPlan).filter(
                                         (m) =>
                                             !(
-                                                m.recipe.name === recipeName &&
+                                                m.recipe.id === recipeId &&
                                                 (!m.recipeInstanceId ||
                                                     m.recipeInstanceId === chainInstanceId)
                                             )
@@ -206,7 +208,7 @@ export function useWeeklyPlanActions({
                                                     ? dayPlan[slot].filter(
                                                           (m) =>
                                                               !(
-                                                                  m.recipe.name === recipeName &&
+                                                                  m.recipe.id === recipeId &&
                                                                   (!m.recipeInstanceId ||
                                                                       m.recipeInstanceId ===
                                                                           chainInstanceId)
@@ -250,6 +252,7 @@ export function useWeeklyPlanActions({
             findTransferChain,
             getUsedServings,
             weekStartStr,
+            recipes,
             setPromptedRecipes,
             setMultiWeeklyCookPlan,
             setMealPlan,
@@ -264,7 +267,7 @@ export function useWeeklyPlanActions({
                 selections.forEach(({ recipe, multiplier }) => {
                     const existingEntry = Object.entries(nextWeekPlan).find(
                         ([, item]) =>
-                            item.recipeName === recipe.name && !isTransferredItem(item)
+                            item.recipeId === recipe.id && !isTransferredItem(item)
                     );
                     if (existingEntry) {
                         const [existingId, existingItem] = existingEntry;
@@ -277,7 +280,7 @@ export function useWeeklyPlanActions({
                     } else {
                         const newId = generateUUID();
                         nextWeekPlan[newId] = {
-                            recipeName: recipe.name,
+                            recipeId: recipe.id,
                             multiplier,
                             servings: recipe.servings * multiplier
                         };
@@ -310,9 +313,10 @@ export function useWeeklyPlanActions({
                 } else break;
             }
 
+            const displayName = recipes.find((r) => r.id === item.recipeId)?.name ?? item.recipeId;
             const message = hasFutureTransfers
-                ? `Removing "${item.recipeName}" will also remove it from future weeks where it was transferred. Do you want to continue?`
-                : `Are you sure you want to remove "${item.recipeName}" from the weekly plan?`;
+                ? `Removing "${displayName}" will also remove it from future weeks where it was transferred. Do you want to continue?`
+                : `Are you sure you want to remove "${displayName}" from the weekly plan?`;
 
             setConfirmation({
                 title: 'Remove Recipe',
@@ -326,6 +330,7 @@ export function useWeeklyPlanActions({
             currentWeeklyCookPlan,
             weekStart,
             multiWeeklyCookPlan,
+            recipes,
             setConfirmation,
             handleRemoveRecipesWithCascade
         ]
@@ -336,7 +341,7 @@ export function useWeeklyPlanActions({
             const item = currentWeeklyCookPlan[instanceId];
             if (!item) return;
             if (isTransferredItem(item)) return;
-            const recipe = recipes.find((r) => r.name === item.recipeName);
+            const recipe = recipes.find((r) => r.id === item.recipeId);
             if (!recipe) return;
 
             setMultiWeeklyCookPlan((prev) => ({
@@ -358,7 +363,7 @@ export function useWeeklyPlanActions({
         const hasScheduledMeals = weekDays.some((day) => {
             const dStr = format(day, 'yyyy-MM-dd');
             const dayPlan = mealPlan[dStr];
-            return dayPlan && getAllMealsForDay(dayPlan).length > 0;
+            return dayPlan !== undefined && dayPlan !== null;
         });
 
         const performClear = () => {
@@ -368,7 +373,7 @@ export function useWeeklyPlanActions({
                 weekDays.forEach((day) => {
                     const dStr = format(day, 'yyyy-MM-dd');
                     const dayPlan = newPlan[dStr];
-                    if (dayPlan && getAllMealsForDay(dayPlan).length > 0) {
+                    if (dayPlan) {
                         delete newPlan[dStr];
                         changed = true;
                     }

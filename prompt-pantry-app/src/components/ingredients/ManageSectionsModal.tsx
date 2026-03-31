@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Check, ChevronDown, Plus, Pencil, Trash2, X } from 'lucide-react';
 import type { IngredientDefinition, StoreSectionDefinition } from '../../types';
+import { NewSectionForm } from './NewSectionForm';
 
 interface ManageSectionsModalProps {
     storeSections: StoreSectionDefinition[];
     ingredients: IngredientDefinition[];
-    onSaveSection: (section: { name: string; emoji?: string }, isNew: boolean) => Promise<{ success: boolean; error?: string }>;
-    onDeleteSection: (name: string, action: 'uncategorize' | 'merge', targetSection?: string) => Promise<{ success: boolean; error?: string }>;
+    onSaveSection: (section: { id?: string; name: string; emoji?: string }, isNew: boolean) => Promise<{ success: boolean; error?: string }>;
+    onDeleteSection: (id: string, action: 'uncategorize' | 'merge', targetSection?: string) => Promise<{ success: boolean; error?: string }>;
     onClose: () => void;
 }
 
 type DeleteConfirmState = {
+    sectionId: string;
     sectionName: string;
     itemCount: number;
     action: 'uncategorize' | 'merge';
@@ -27,20 +29,20 @@ export function ManageSectionsModal({
     const [editingSection, setEditingSection] = useState<string | null>(null);
     const [editName, setEditName] = useState('');
     const [editEmoji, setEditEmoji] = useState('');
-    const [newName, setNewName] = useState('');
-    const [newEmoji, setNewEmoji] = useState('');
+    const [isAdding, setIsAdding] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isSaving, setIsSaving] = useState(false);
+    const [isEditSaving, setIsEditSaving] = useState(false);
+    const [isDeleteSaving, setIsDeleteSaving] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState | null>(null);
 
     const itemCounts = useMemo(() => {
         const counts: Record<string, number> = {};
         for (const section of storeSections) {
-            counts[section.name] = 0;
+            counts[section.id] = 0;
         }
         for (const ing of ingredients) {
-            if (counts[ing.storeSection] !== undefined) {
-                counts[ing.storeSection]++;
+            if (ing.storeSectionId && counts[ing.storeSectionId] !== undefined) {
+                counts[ing.storeSectionId]++;
             }
         }
         return counts;
@@ -64,7 +66,7 @@ export function ManageSectionsModal({
     }, [onClose, editingSection, deleteConfirm]);
 
     const startEdit = (section: StoreSectionDefinition) => {
-        setEditingSection(section.name);
+        setEditingSection(section.id);
         setEditName(section.name);
         setEditEmoji(section.emoji || '');
         setError(null);
@@ -83,15 +85,16 @@ export function ManageSectionsModal({
             setError('Section name is required.');
             return;
         }
-        // Check for duplicate name (different from current editing section)
-        if (trimmedName !== editingSection && storeSections.some(s => s.name.toLowerCase() === trimmedName.toLowerCase())) {
+        // Check for duplicate name (different from the section currently being edited)
+        const currentSectionName = storeSections.find(s => s.id === editingSection)?.name;
+        if (trimmedName !== currentSectionName && storeSections.some(s => s.name.toLowerCase() === trimmedName.toLowerCase())) {
             setError('A section with that name already exists.');
             return;
         }
-        setIsSaving(true);
+        setIsEditSaving(true);
         setError(null);
-        const result = await onSaveSection({ name: trimmedName, emoji: editEmoji.trim() || undefined }, false);
-        setIsSaving(false);
+        const result = await onSaveSection({ id: editingSection!, name: trimmedName, emoji: editEmoji.trim() || undefined }, false);
+        setIsEditSaving(false);
         if (result.success) {
             setEditingSection(null);
         } else {
@@ -99,13 +102,14 @@ export function ManageSectionsModal({
         }
     };
 
-    const handleDeleteClick = (sectionName: string) => {
-        const count = itemCounts[sectionName] || 0;
+    const handleDeleteClick = (section: StoreSectionDefinition) => {
+        const count = itemCounts[section.id] || 0;
         if (count === 0) {
-            performDelete(sectionName, 'uncategorize');
+            performDelete(section.id, 'uncategorize');
         } else {
             setDeleteConfirm({
-                sectionName,
+                sectionId: section.id,
+                sectionName: section.name,
                 itemCount: count,
                 action: 'uncategorize',
                 targetSection: ''
@@ -113,11 +117,11 @@ export function ManageSectionsModal({
         }
     };
 
-    const performDelete = async (name: string, action: 'uncategorize' | 'merge', target?: string) => {
-        setIsSaving(true);
+    const performDelete = async (id: string, action: 'uncategorize' | 'merge', target?: string) => {
+        setIsDeleteSaving(true);
         setError(null);
-        const result = await onDeleteSection(name, action, target);
-        setIsSaving(false);
+        const result = await onDeleteSection(id, action, target);
+        setIsDeleteSaving(false);
         if (result.success) {
             setDeleteConfirm(null);
         } else {
@@ -127,38 +131,16 @@ export function ManageSectionsModal({
 
     const confirmDelete = () => {
         if (!deleteConfirm) return;
-        const { sectionName, action, targetSection } = deleteConfirm;
+        const { sectionId, action, targetSection } = deleteConfirm;
         if (action === 'merge' && !targetSection) {
             setError('Please select a section to merge into.');
             return;
         }
-        performDelete(sectionName, action, action === 'merge' ? targetSection : undefined);
+        performDelete(sectionId, action, action === 'merge' ? targetSection : undefined);
     };
 
-    const handleAddSection = async () => {
-        const trimmedName = newName.trim();
-        if (!trimmedName) {
-            setError('Section name is required.');
-            return;
-        }
-        if (storeSections.some(s => s.name.toLowerCase() === trimmedName.toLowerCase())) {
-            setError('A section with that name already exists.');
-            return;
-        }
-        setIsSaving(true);
-        setError(null);
-        const result = await onSaveSection({ name: trimmedName, emoji: newEmoji.trim() || undefined }, true);
-        setIsSaving(false);
-        if (result.success) {
-            setNewName('');
-            setNewEmoji('');
-        } else {
-            setError(result.error || 'Failed to add section.');
-        }
-    };
-
-    const otherSections = (excludeName: string) =>
-        storeSections.filter(s => s.name !== excludeName);
+    const otherSections = (excludeId: string) =>
+        storeSections.filter(s => s.id !== excludeId);
 
     return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -190,8 +172,8 @@ export function ManageSectionsModal({
                     {/* Section List */}
                     <div className="space-y-2">
                         {storeSections.map(section => (
-                            <div key={section.name}>
-                                {editingSection === section.name ? (
+                            <div key={section.id}>
+                                {editingSection === section.id ? (
                                     /* Edit Mode */
                                     <div className="flex items-center gap-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg">
                                         <input
@@ -211,7 +193,7 @@ export function ManageSectionsModal({
                                         />
                                         <button
                                             onClick={saveEdit}
-                                            disabled={isSaving}
+                                            disabled={isEditSaving}
                                             className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors disabled:opacity-50"
                                             title="Save"
                                         >
@@ -225,7 +207,7 @@ export function ManageSectionsModal({
                                             <X className="h-4 w-4" />
                                         </button>
                                     </div>
-                                ) : deleteConfirm?.sectionName === section.name ? (
+                                ) : deleteConfirm?.sectionId === section.id ? (
                                     /* Delete Confirmation */
                                     <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg space-y-3">
                                         <p className="text-sm text-red-700 dark:text-red-300 font-medium">
@@ -260,8 +242,8 @@ export function ManageSectionsModal({
                                                         className="appearance-none w-full px-3 py-1.5 pr-8 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                                     >
                                                         <option value="">Select section...</option>
-                                                        {otherSections(section.name).map(s => (
-                                                            <option key={s.name} value={s.name}>
+                                                        {otherSections(section.id).map(s => (
+                                                            <option key={s.id} value={s.id}>
                                                                 {s.emoji ? `${s.emoji} ` : ''}{s.name}
                                                             </option>
                                                         ))}
@@ -279,10 +261,10 @@ export function ManageSectionsModal({
                                             </button>
                                             <button
                                                 onClick={confirmDelete}
-                                                disabled={isSaving}
+                                                disabled={isDeleteSaving}
                                                 className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
                                             >
-                                                {isSaving ? 'Deleting...' : 'Delete Section'}
+                                                {isDeleteSaving ? 'Deleting...' : 'Delete Section'}
                                             </button>
                                         </div>
                                     </div>
@@ -296,7 +278,7 @@ export function ManageSectionsModal({
                                             {section.name}
                                         </span>
                                         <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums shrink-0">
-                                            {itemCounts[section.name] || 0} item{(itemCounts[section.name] || 0) !== 1 ? 's' : ''}
+                                            {itemCounts[section.id] || 0} item{(itemCounts[section.id] || 0) !== 1 ? 's' : ''}
                                         </span>
                                         <button
                                             onClick={() => startEdit(section)}
@@ -307,7 +289,7 @@ export function ManageSectionsModal({
                                         </button>
                                         {storeSections.length > 1 && (
                                             <button
-                                                onClick={() => handleDeleteClick(section.name)}
+                                                onClick={() => handleDeleteClick(section)}
                                                 className="p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
                                                 title="Delete section"
                                             >
@@ -322,32 +304,25 @@ export function ManageSectionsModal({
 
                     {/* Add New Section */}
                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="text"
-                                value={newEmoji}
-                                onChange={(e) => setNewEmoji(e.target.value)}
-                                maxLength={2}
-                                placeholder="🏷️"
-                                className="w-12 px-2 py-1.5 text-center border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        {isAdding ? (
+                            <NewSectionForm
+                                existingSections={storeSections.map(s => s.name)}
+                                onSave={async (name, emoji) => {
+                                    const result = await onSaveSection({ name, emoji: emoji || undefined }, true);
+                                    if (result.success) setIsAdding(false);
+                                    return result;
+                                }}
+                                onCancel={() => setIsAdding(false)}
                             />
-                            <input
-                                type="text"
-                                value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleAddSection()}
-                                placeholder="New section name"
-                                className="flex-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            />
+                        ) : (
                             <button
-                                onClick={handleAddSection}
-                                disabled={isSaving || !newName.trim()}
-                                className="flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                onClick={() => setIsAdding(true)}
+                                className="flex items-center gap-2 w-full px-3 py-2 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
                             >
-                                <Plus className="h-4 w-4 mr-1" />
-                                Add
+                                <Plus className="h-4 w-4" />
+                                Add Section
                             </button>
-                        </div>
+                        )}
                     </div>
                 </div>
 

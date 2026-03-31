@@ -1,18 +1,87 @@
 [
-  { "name": "Bakery",              "emoji": "🥐" },
-  { "name": "Baking",             "emoji": "🧁" },
-  { "name": "Beverages",          "emoji": "🥤" },
-  { "name": "Canned Goods",       "emoji": "🥫" },
-  { "name": "Condiments",         "emoji": "🫙" },
-  { "name": "Dairy",              "emoji": "🥛" },
-  { "name": "Deli",               "emoji": "🥪" },
-  { "name": "Frozen",             "emoji": "🧊" },
-  { "name": "Health & Supplements", "emoji": "💊" },
-  { "name": "International",      "emoji": "🌍" },
-  { "name": "Meat & Seafood",     "emoji": "🥩" },
-  { "name": "Pantry",             "emoji": "🏪" },
-  { "name": "Produce",            "emoji": "🥦" },
-  { "name": "Snacks",             "emoji": "🍿" },
-  { "name": "Spices",             "emoji": "🌶️" },
-  { "name": "Unassigned",         "emoji": "❓" }
+  {
+    "name": "Bakery",
+    "emoji": "🥐",
+    "id": "3b3b05b2-65b9-47c1-b2ce-47bf4c637c05"
+  },
+  {
+    "name": "Baking",
+    "emoji": "🧁",
+    "id": "325ed32e-62a1-46ff-9dc5-2d106c426fb5"
+  },
+  {
+    "name": "Beverages",
+    "emoji": "🥤",
+    "id": "a32132b1-2d19-44bf-b104-cc268e43844e"
+  },
+  {
+    "name": "Canned Goods",
+    "emoji": "🥫",
+    "id": "19ca6eb6-3794-4c10-9d96-0d4d223bfcb1"
+  },
+  {
+    "name": "Condiments",
+    "emoji": "🫙",
+    "id": "85a21416-e728-4927-a915-258ea93948a6"
+  },
+  {
+    "name": "Dairy",
+    "emoji": "🥛",
+    "id": "ca91a2d7-e526-4cd3-ab21-9c0d77f8779e"
+  },
+  {
+    "name": "Deli",
+    "emoji": "🥪",
+    "id": "85863d28-b6bd-49cb-a58b-641473162509"
+  },
+  {
+    "name": "Frozen",
+    "emoji": "🧊",
+    "id": "b547baca-c8f6-46a4-a7b2-aafdad2d0d82"
+  },
+  {
+    "name": "Health & Supplements",
+    "emoji": "💊",
+    "id": "c6b0c285-a80a-40e3-93e1-41193dee13ac"
+  },
+  {
+    "name": "International",
+    "emoji": "🌍",
+    "id": "19b83079-6e2a-489a-ba67-2bc86c4b1e54"
+  },
+  {
+    "name": "Meat & Seafood",
+    "emoji": "🥩",
+    "id": "af33891e-8c66-4440-9123-003360d33693"
+  },
+  {
+    "name": "Pantry",
+    "emoji": "🏪",
+    "id": "c592a6be-8b7f-47a5-9790-d982da69c006"
+  },
+  {
+    "name": "Produce",
+    "emoji": "🥦",
+    "id": "ef351df8-769f-423d-a3c5-b31fcc27b761"
+  },
+  {
+    "name": "Snacks",
+    "emoji": "🍿",
+    "id": "e3b46423-7ab6-41ca-8279-ba6ebe1fb628"
+  },
+  {
+    "name": "Spices",
+    "emoji": "🌶️",
+    "id": "c87ae5f1-40f3-4b59-87d8-732b70ad5c85"
+  },
+  {
+    "name": "Unassigned",
+    "emoji": "❓",
+    "id": "4533b7dc-f9b6-4ba3-9228-15502fb4ef91"
+  },
+  {
+    "id": "55858d62-ec69-47d3-b222-d0dd9aef0ffb",
+    "name": "Alcohol",
+    "emoji": "🍷"
+  }
 ]

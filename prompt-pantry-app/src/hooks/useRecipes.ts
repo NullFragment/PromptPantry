@@ -23,23 +23,22 @@ export function useRecipes() {
         }
     }, []);
 
-    const saveRecipe = useCallback(async (recipe: Recipe, originalName: string | null) => {
-        const isNew = !originalName;
-        const url = isNew ? '/api/recipes' : `/api/recipes/${encodeURIComponent(originalName)}`;
+    const saveRecipe = useCallback(async (recipe: Recipe, isNew: boolean) => {
+        const url = isNew ? '/api/recipes' : `/api/recipes/${recipe.id}`;
         const method = isNew ? 'POST' : 'PUT';
 
         const result = await apiJson(url, method, recipe);
         if (result.success) {
             await fetchRecipes();
-            return {success: true, name: recipe.name};
+            return {success: true, id: recipe.id};
         }
         return {success: false, error: result.error || 'Failed to save recipe'};
     }, [fetchRecipes]);
 
-    const deleteRecipe = useCallback(async (name: string) => {
-        const result = await apiJson(`/api/recipes/${encodeURIComponent(name)}`, 'DELETE');
+    const deleteRecipe = useCallback(async (id: string) => {
+        const result = await apiJson(`/api/recipes/${id}`, 'DELETE');
         if (result.success) {
-            setRecipes(prev => prev.filter(r => r.name !== name));
+            setRecipes(prev => prev.filter(r => r.id !== id));
             setError(null);
             return true;
         }

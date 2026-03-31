@@ -5,11 +5,16 @@ import {
 } from '../../src/utils/ingredientFormUtils';
 import type { IngredientDefinition } from '../../src/types';
 
+// UUID constants for test sections
+const PRODUCE_SECTION_ID = 'h0000000-0000-0000-0000-000000000001';
+const DAIRY_SECTION_ID   = 'h0000000-0000-0000-0000-000000000002';
+const BAKING_SECTION_ID  = 'h0000000-0000-0000-0000-000000000003';
+
 describe('ingredientFormUtils', () => {
     const baseIngredient: IngredientDefinition = {
         id: 'id-1',
         name: 'Garlic',
-        storeSection: 'Produce',
+        storeSectionId: PRODUCE_SECTION_ID,
         aliases: ['minced garlic']
     };
 
@@ -36,7 +41,7 @@ describe('ingredientFormUtils', () => {
             const other: IngredientDefinition = {
                 id: 'id-2',
                 name: 'Onion',
-                storeSection: 'Produce'
+                storeSectionId: PRODUCE_SECTION_ID
             };
             expect(
                 validateAliases(['Onion'], 'Garlic', [baseIngredient, other], null)
@@ -57,16 +62,16 @@ describe('ingredientFormUtils', () => {
     });
 
     describe('buildIngredientPayload', () => {
-        it('builds payload with name, storeSection, aliases', () => {
+        it('builds payload with name, storeSectionId, aliases', () => {
             const payload = buildIngredientPayload(
                 'Garlic',
-                'Produce',
+                PRODUCE_SECTION_ID,
                 ['clove', 'minced'],
                 { containerSizes: [], conversions: {} },
                 null
             );
             expect(payload.name).toBe('Garlic');
-            expect(payload.storeSection).toBe('Produce');
+            expect(payload.storeSectionId).toBe(PRODUCE_SECTION_ID);
             expect(payload.aliases).toEqual(['clove', 'minced']);
             expect(payload.containerSizes).toBeUndefined();
             expect(payload.conversions).toBeUndefined();
@@ -75,7 +80,7 @@ describe('ingredientFormUtils', () => {
         it('adds id when editingId is set', () => {
             const payload = buildIngredientPayload(
                 'Garlic',
-                'Produce',
+                PRODUCE_SECTION_ID,
                 [],
                 { containerSizes: [], conversions: {} },
                 'id-1'
@@ -86,7 +91,7 @@ describe('ingredientFormUtils', () => {
         it('filters and normalizes container sizes', () => {
             const payload = buildIngredientPayload(
                 'Milk',
-                'Dairy',
+                DAIRY_SECTION_ID,
                 [],
                 {
                     containerSizes: [
@@ -108,7 +113,7 @@ describe('ingredientFormUtils', () => {
         it('includes valid weightToVolume and portionToVolume conversions', () => {
             const payload = buildIngredientPayload(
                 'Flour',
-                'Baking',
+                BAKING_SECTION_ID,
                 [],
                 {
                     containerSizes: [],

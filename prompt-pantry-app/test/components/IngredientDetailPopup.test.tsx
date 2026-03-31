@@ -1,13 +1,20 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {IngredientDetailPopup} from '../../src/components/IngredientDetailPopup';
-import type {IngredientDefinition} from '../../src/types';
+import type {IngredientDefinition, StoreSectionDefinition} from '../../src/types';
+
+// UUID constant for the test section
+const PRODUCE_SECTION_ID = 'd0000000-0000-0000-0000-000000000001';
+
+const testStoreSections: StoreSectionDefinition[] = [
+    { id: PRODUCE_SECTION_ID, name: 'Produce' }
+];
 
 describe('IngredientDetailPopup', () => {
     const baseIngredient: IngredientDefinition = {
         id: 'ing-1',
         name: 'garlic',
-        storeSection: 'Produce',
+        storeSectionId: PRODUCE_SECTION_ID,
         aliases: ['garlic, minced', 'garlic clove']
     };
 
@@ -23,6 +30,7 @@ describe('IngredientDetailPopup', () => {
                 onClose={vi.fn()}
                 onCheckUsage={onCheckUsage}
                 onRecipeClick={vi.fn()}
+                storeSections={testStoreSections}
             />
         );
 

@@ -141,7 +141,7 @@ export function useMealPlan(recipes: Recipe[] = []) {
 
     useEffect(() => {
         if (!hydrated || recipes.length === 0) return;
-        const recipesByName = new Map(recipes.map(r => [r.name, r]));
+        const recipesById = new Map(recipes.map(r => [r.id, r]));
         setMealPlan(prev => {
             let changed = false;
             const newPlan = {...prev};
@@ -152,7 +152,7 @@ export function useMealPlan(recipes: Recipe[] = []) {
                     const slots = day[type];
                     if (!Array.isArray(slots)) return;
                     const updated = slots.map(slot => {
-                        const fresh = recipesByName.get(slot.recipe.name);
+                        const fresh = recipesById.get(slot.recipe.id);
                         if (fresh && fresh !== slot.recipe) {
                             return {...slot, recipe: fresh};
                         }
@@ -172,7 +172,7 @@ export function useMealPlan(recipes: Recipe[] = []) {
         });
     }, [hydrated, recipes]);
 
-    const updateMealPlanForRecipe = useCallback((oldName: string, updatedRecipe: Recipe | null) => {
+    const updateMealPlanForRecipe = useCallback((oldRecipeId: string, updatedRecipe: Recipe | null) => {
         setMultiWeeklyCookPlan(prev => {
             const newMultiPlan = {...prev};
             let planChanged = false;
@@ -180,18 +180,15 @@ export function useMealPlan(recipes: Recipe[] = []) {
                 const weekPlan = {...newMultiPlan[week]};
                 let weekChanged = false;
 
-                // Handle UUID-keyed entries (new format) - look for items with matching recipeName
+                // Clean up cook plan entries if recipe is deleted
                 Object.keys(weekPlan).forEach(instanceId => {
                     const item = weekPlan[instanceId];
-                    if (item.recipeName === oldName) {
-                        if (updatedRecipe) {
-                            // Update the recipeName to the new name
-                            weekPlan[instanceId] = { ...item, recipeName: updatedRecipe.name };
-                        } else {
-                            // Delete the entry if recipe is being removed
+                    if (item.recipeId === oldRecipeId) {
+                        if (!updatedRecipe) {
                             delete weekPlan[instanceId];
+                            weekChanged = true;
                         }
-                        weekChanged = true;
+                        // On rename/update: recipeId is stable, nothing to update here
                     }
                 });
 
@@ -214,14 +211,14 @@ export function useMealPlan(recipes: Recipe[] = []) {
                     if (Array.isArray(slots)) {
                         if (updatedRecipe) {
                             const updated = slots.map(slot =>
-                                slot.recipe.name === oldName ? {...slot, recipe: updatedRecipe} : slot
+                                slot.recipe.id === oldRecipeId ? {...slot, recipe: updatedRecipe} : slot
                             );
                             if (updated.some((s, i) => s.recipe !== slots[i].recipe)) {
                                 day[type] = updated;
                                 dayChanged = true;
                             }
                         } else {
-                            const filtered = slots.filter(slot => slot.recipe.name !== oldName);
+                            const filtered = slots.filter(slot => slot.recipe.id !== oldRecipeId);
                             if (filtered.length !== slots.length) {
                                 day[type] = filtered;
                                 dayChanged = true;

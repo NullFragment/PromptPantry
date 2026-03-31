@@ -1,5 +1,6 @@
 import { Plus, RotateCcw, Save, X } from 'lucide-react';
 import type * as React from 'react';
+import type { StoreSectionDefinition } from '../../types';
 import { AliasChipList } from '../AliasChipList';
 import { ContainerSizesSection } from './ContainerSizesSection';
 import { ConversionsSection } from './ConversionsSection';
@@ -9,7 +10,7 @@ import { NameAndSectionFields } from './NameAndSectionFields';
 export interface IngredientEditFormProps {
     formData: EditFormData;
     setFormData: React.Dispatch<React.SetStateAction<EditFormData>>;
-    storeSections: string[];
+    storeSections: StoreSectionDefinition[];
     isInline?: boolean;
     hasAliasApis: boolean;
     editingAliasIndex: number | null;
@@ -36,6 +37,7 @@ export interface IngredientEditFormProps {
     removeContainerSize: (index: number) => void;
     aliasActionError: string | null;
     selectSection: (section: string) => void;
+    saveSection: (section: { name: string; emoji?: string }, isNew: boolean) => Promise<{ success: boolean; error?: string; section?: StoreSectionDefinition }>;
 }
 
 export function IngredientEditForm({
@@ -67,20 +69,19 @@ export function IngredientEditForm({
     addContainerSize,
     removeContainerSize,
     aliasActionError,
-    selectSection
+    selectSection,
+    saveSection
 }: IngredientEditFormProps) {
     return (
         <div className={`space-y-4 ${isInline ? 'p-4 bg-gray-50 dark:bg-gray-800 rounded-lg' : ''}`}>
             <NameAndSectionFields
                 name={formData.name}
                 onNameChange={(v) => setFormData((prev) => ({ ...prev, name: v }))}
-                storeSection={formData.storeSection}
-                isNewSection={formData.isNewSection}
-                newSectionName={formData.newSectionName}
-                onNewSectionNameChange={(v) => setFormData((prev) => ({ ...prev, newSectionName: v }))}
+                storeSectionId={formData.storeSectionId}
                 onSelectSection={selectSection}
                 storeSections={storeSections}
                 nameAutoFocus={!isInline}
+                saveSection={saveSection}
             />
 
             <div>

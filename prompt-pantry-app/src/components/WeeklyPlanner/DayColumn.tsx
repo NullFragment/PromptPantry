@@ -19,9 +19,9 @@ export interface DayColumnProps {
     canEdit: boolean;
     onDrop: (e: React.DragEvent, date: Date, slot: MealType) => void;
     onDragOver: (e: React.DragEvent) => void;
-    onMealDragStart: (e: React.DragEvent, recipeName: string, dateStr: string, slot: MealType, participant: string | undefined, recipeInstanceId: string | undefined) => void;
-    onUpdateSlotServings: (day: Date, slot: MealType, recipeName: string, servings: number, recipeInstanceId: string | undefined, participant: string | undefined) => void;
-    onRemoveSlotMeal: (day: Date, slot: MealType, recipeName: string, recipeInstanceId: string | undefined, participant: string | undefined) => void;
+    onMealDragStart: (e: React.DragEvent, recipeId: string, dateStr: string, slot: MealType, participant: string | undefined, recipeInstanceId: string | undefined) => void;
+    onUpdateSlotServings: (day: Date, slot: MealType, recipeId: string, servings: number, recipeInstanceId: string | undefined, participant: string | undefined) => void;
+    onRemoveSlotMeal: (day: Date, slot: MealType, recipeId: string, recipeInstanceId: string | undefined, participant: string | undefined) => void;
     onQuickAdd: (date: string, slot: MealType) => void;
 }
 
@@ -112,7 +112,7 @@ export function DayColumn({
                                     onUpdateSlotServings(
                                         day,
                                         slot,
-                                        meal.recipe.name,
+                                        meal.recipe.id,
                                         meal.servings - 1,
                                         meal.recipeInstanceId,
                                         meal.participant
@@ -122,7 +122,7 @@ export function DayColumn({
                                     onUpdateSlotServings(
                                         day,
                                         slot,
-                                        meal.recipe.name,
+                                        meal.recipe.id,
                                         meal.servings + 1,
                                         meal.recipeInstanceId,
                                         meal.participant
@@ -132,7 +132,7 @@ export function DayColumn({
                                     onRemoveSlotMeal(
                                         day,
                                         slot,
-                                        meal.recipe.name,
+                                        meal.recipe.id,
                                         meal.recipeInstanceId,
                                         meal.participant
                                     )
@@ -142,7 +142,7 @@ export function DayColumn({
                                         ? (e) =>
                                               onMealDragStart(
                                                   e,
-                                                  meal.recipe.name,
+                                                  meal.recipe.id,
                                                   dStr,
                                                   slot,
                                                   meal.participant,

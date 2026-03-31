@@ -4,31 +4,37 @@ import {Ingredients} from '../../src/components/Ingredients';
 import {IngredientDefinition, StoreSectionDefinition} from '../../src/types';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
+// UUID constants for store sections used in tests
+const DAIRY_SECTION_ID   = 'c0000000-0000-0000-0000-000000000001';
+const MEAT_SECTION_ID    = 'c0000000-0000-0000-0000-000000000002';
+const PRODUCE_SECTION_ID = 'c0000000-0000-0000-0000-000000000003';
+const UNASSIGNED_ID      = 'c0000000-0000-0000-0000-000000000000';
+
 const mockIngredients: IngredientDefinition[] = [
     {
         id: '1',
         name: 'garlic',
-        storeSection: 'Produce',
+        storeSectionId: PRODUCE_SECTION_ID,
         aliases: ['garlic, minced', 'garlic clove']
     },
     {
         id: '2',
         name: 'chicken breast',
-        storeSection: 'Meat',
+        storeSectionId: MEAT_SECTION_ID,
         aliases: ['boneless chicken breast']
     },
     {
         id: '3',
         name: 'milk',
-        storeSection: 'Dairy'
+        storeSectionId: DAIRY_SECTION_ID
     }
 ];
 
 const mockStoreSections: StoreSectionDefinition[] = [
-    { name: 'Dairy' },
-    { name: 'Meat' },
-    { name: 'Produce' },
-    { name: 'Unassigned' }
+    { id: DAIRY_SECTION_ID,   name: 'Dairy' },
+    { id: MEAT_SECTION_ID,    name: 'Meat' },
+    { id: PRODUCE_SECTION_ID, name: 'Produce' },
+    { id: UNASSIGNED_ID,      name: 'Unassigned' }
 ];
 
 describe('Ingredients', () => {
@@ -141,7 +147,7 @@ describe('Ingredients', () => {
         );
 
         const sectionSelect = screen.getByRole('combobox');
-        fireEvent.change(sectionSelect, {target: {value: 'Dairy'}});
+        fireEvent.change(sectionSelect, {target: {value: DAIRY_SECTION_ID}});
 
         expect(screen.queryByText('garlic')).not.toBeInTheDocument();
         expect(screen.queryByText('chicken breast')).not.toBeInTheDocument();
@@ -263,13 +269,17 @@ describe('Ingredients', () => {
         const nameInput = screen.getByPlaceholderText('e.g., garlic');
         fireEvent.change(nameInput, {target: {value: 'onion'}});
 
+        // Select a store section (required)
+        const sectionSelect = screen.getByRole('option', { name: 'Add new section...' }).closest('select')!;
+        fireEvent.change(sectionSelect, {target: {value: PRODUCE_SECTION_ID}});
+
         fireEvent.click(screen.getByText('Save'));
 
         await waitFor(() => {
             expect(onSave).toHaveBeenCalledWith(
                 expect.objectContaining({
                     name: 'onion',
-                    storeSection: 'Unassigned'
+                    storeSectionId: PRODUCE_SECTION_ID
                 }),
                 true
             );
@@ -311,6 +321,10 @@ describe('Ingredients', () => {
 
         const nameInput = screen.getByPlaceholderText('e.g., garlic');
         fireEvent.change(nameInput, {target: {value: 'onion'}});
+
+        // Select a store section (required)
+        const sectionSelect = screen.getByRole('option', { name: 'Add new section...' }).closest('select')!;
+        fireEvent.change(sectionSelect, {target: {value: PRODUCE_SECTION_ID}});
 
         fireEvent.click(screen.getByText('Add alias'));
         const aliasInput = screen.getByPlaceholderText('e.g., garlic, minced');
@@ -424,12 +438,12 @@ describe('Ingredients', () => {
 
         await waitFor(() => expect(screen.getByText(/2 ingredients selected/)).toBeInTheDocument());
 
-        fireEvent.change(screen.getByLabelText(/Set section to/i), { target: { value: 'Dairy' } });
+        fireEvent.change(screen.getByLabelText(/Set section to/i), { target: { value: DAIRY_SECTION_ID } });
 
         await waitFor(() => {
             expect(onSave).toHaveBeenCalledTimes(2);
-            expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ name: 'garlic', storeSection: 'Dairy' }), false);
-            expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ name: 'milk', storeSection: 'Dairy' }), false);
+            expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ name: 'garlic', storeSectionId: DAIRY_SECTION_ID }), false);
+            expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ name: 'milk', storeSectionId: DAIRY_SECTION_ID }), false);
         });
     });
 
@@ -556,6 +570,10 @@ describe('Ingredients', () => {
         fireEvent.click(screen.getByText('Add Ingredient'));
         fireEvent.change(screen.getByPlaceholderText('e.g., garlic'), {target: {value: 'onion'}});
 
+        // Select a store section (required)
+        const sectionSelect = screen.getByRole('option', { name: 'Add new section...' }).closest('select')!;
+        fireEvent.change(sectionSelect, {target: {value: PRODUCE_SECTION_ID}});
+
         fireEvent.click(screen.getByText('Add alias'));
         fireEvent.change(screen.getByPlaceholderText('e.g., garlic, minced'), {target: {value: 'Sweet Onion'}});
 
@@ -586,6 +604,10 @@ describe('Ingredients', () => {
         fireEvent.click(screen.getByText('Add Ingredient'));
         fireEvent.change(screen.getByPlaceholderText('e.g., garlic'), {target: {value: 'cream'}});
 
+        // Select a store section (required)
+        const sectionSelect = screen.getByRole('option', { name: 'Add new section...' }).closest('select')!;
+        fireEvent.change(sectionSelect, {target: {value: DAIRY_SECTION_ID}});
+
         fireEvent.click(screen.getByText('Add alias'));
         fireEvent.change(screen.getByPlaceholderText('e.g., garlic, minced'), {target: {value: 'milk'}});
 
@@ -595,14 +617,16 @@ describe('Ingredients', () => {
         expect(onSave).not.toHaveBeenCalled();
     });
 
-    it('normalizes new store section to title case before saving', async () => {
-        const onSave = vi.fn().mockResolvedValue({success: true});
+    it('calls onSaveSection when a new section is created inline during add', async () => {
+        const onSave = vi.fn().mockResolvedValue({ success: true });
+        const onSaveSection = vi.fn().mockResolvedValue({ success: true });
 
         renderWithAppContext(
             <Ingredients
                 ingredients={mockIngredients}
                 storeSections={mockStoreSections}
                 onSave={onSave}
+                onSaveSection={onSaveSection}
                 onDelete={vi.fn()}
                 onCheckUsage={vi.fn()}
                 canEdit={true}
@@ -610,26 +634,21 @@ describe('Ingredients', () => {
         );
 
         fireEvent.click(screen.getByText('Add Ingredient'));
+        fireEvent.change(screen.getByPlaceholderText('e.g., garlic'), { target: { value: 'tofu' } });
 
-        const sectionButton = screen.getByRole('button', {name: 'Unassigned'});
-        fireEvent.click(sectionButton);
-        fireEvent.click(screen.getByText('Add new section...'));
+        // Open new section inline form — find the section select by its "Add new section..." option
+        const sectionSelect = screen.getByRole('option', { name: 'Add new section...' }).closest('select')!;
+        fireEvent.change(sectionSelect, { target: { value: '__new__' } });
 
-        const newSectionInput = screen.getByPlaceholderText('New section name');
-        fireEvent.change(newSectionInput, {target: {value: 'bulk foods'}});
+        // Type in the new section name
+        await waitFor(() => expect(screen.getByPlaceholderText('Section name')).toBeInTheDocument());
+        fireEvent.change(screen.getByPlaceholderText('Section name'), { target: { value: 'International' } });
 
-        const nameInput = screen.getByPlaceholderText('e.g., garlic');
-        fireEvent.change(nameInput, {target: {value: 'bagels'}});
-
-        fireEvent.click(screen.getByText('Save'));
+        // Confirm the new section
+        fireEvent.click(screen.getByRole('button', { name: /^Add$/i }));
 
         await waitFor(() => {
-            expect(onSave).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    storeSection: 'Bulk Foods'
-                }),
-                true
-            );
+            expect(onSaveSection).toHaveBeenCalledWith({ name: 'International', emoji: '' }, true);
         });
     });
 
@@ -898,7 +917,7 @@ describe('Ingredients', () => {
             const milkWithContainers: IngredientDefinition = {
                 id: '3',
                 name: 'milk',
-                storeSection: 'Dairy',
+                storeSectionId: DAIRY_SECTION_ID,
                 containerSizes: [{ quantity: 3.78, unit: 'l', label: 'gallon' }]
             };
 
@@ -953,7 +972,7 @@ describe('Ingredients', () => {
                 expect(onSave).toHaveBeenCalledWith(
                     expect.objectContaining({
                         name: 'milk',
-                        storeSection: 'Dairy',
+                        storeSectionId: DAIRY_SECTION_ID,
                         containerSizes: expect.arrayContaining([
                             expect.objectContaining({ quantity: 3.78, unit: 'l', label: 'gallon' })
                         ])

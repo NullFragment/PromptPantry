@@ -24,7 +24,7 @@ export interface UsePlannerDragDropParams {
     selectedParticipants: string[];
     setConfirmation: React.Dispatch<React.SetStateAction<PlannerConfirmation | null>>;
     setQuickAddSlot: React.Dispatch<React.SetStateAction<{ date: string; slot: string } | null>>;
-    getUsedServings: (recipeName: string, date?: Date, instanceId?: string) => number;
+    getUsedServings: (recipeId: string, date?: Date, instanceId?: string) => number;
     canEdit: boolean;
 }
 
@@ -43,21 +43,21 @@ export function usePlannerDragDrop({
     getUsedServings,
     canEdit
 }: UsePlannerDragDropParams) {
-    const onDragStart = useCallback((e: React.DragEvent, recipeName: string, instanceId: string) => {
-        e.dataTransfer.setData('recipeName', recipeName);
+    const onDragStart = useCallback((e: React.DragEvent, recipeId: string, instanceId: string) => {
+        e.dataTransfer.setData('recipeId', recipeId);
         e.dataTransfer.setData('instanceId', instanceId);
     }, []);
 
     const onMealDragStart = useCallback(
         (
             e: React.DragEvent,
-            recipeName: string,
+            recipeId: string,
             sourceDate: string,
             sourceSlot: string,
             participant?: string,
             recipeInstanceId?: string
         ) => {
-            e.dataTransfer.setData('recipeName', recipeName);
+            e.dataTransfer.setData('recipeId', recipeId);
             e.dataTransfer.setData('sourceDate', sourceDate);
             e.dataTransfer.setData('sourceSlot', sourceSlot);
             e.dataTransfer.setData('isMove', 'true');
@@ -75,7 +75,7 @@ export function usePlannerDragDrop({
         (
             date: Date,
             slot: keyof MealPlan[string],
-            recipeName: string,
+            recipeId: string,
             instanceId?: string,
             participant?: string
         ) => {
@@ -88,7 +88,7 @@ export function usePlannerDragDrop({
                     dayPlan[slot] = dayPlan[slot]!.filter(
                         (m) =>
                             !(
-                                m.recipe.name === recipeName &&
+                                m.recipe.id === recipeId &&
                                 m.participant === participant &&
                                 (!instanceId || m.recipeInstanceId === instanceId)
                             )
@@ -105,7 +105,7 @@ export function usePlannerDragDrop({
         (e: React.DragEvent, date: Date, slot: keyof MealPlan[string]) => {
             e.preventDefault();
             if (!canEdit) return;
-            const recipeName = e.dataTransfer.getData('recipeName');
+            const recipeId = e.dataTransfer.getData('recipeId');
             const instanceId = e.dataTransfer.getData('instanceId');
             const sourceDateStr = e.dataTransfer.getData('sourceDate');
             const sourceSlot = e.dataTransfer.getData('sourceSlot') as keyof MealPlan[string];
@@ -116,7 +116,7 @@ export function usePlannerDragDrop({
 
             if (isMove && sourceDateStr === targetDateStr && sourceSlot === slot) return;
 
-            const recipe = recipes.find((r) => r.name === recipeName);
+            const recipe = recipes.find((r) => r.id === recipeId);
             if (!recipe) return;
 
             const participantsToAdd = isMove
@@ -144,7 +144,7 @@ export function usePlannerDragDrop({
             const servingsToMove = isMove
                 ? (mealPlan[sourceDateStr]?.[sourceSlot]?.find(
                       (m) =>
-                          m.recipe.name === recipeName &&
+                          m.recipe.id === recipeId &&
                           m.participant === sourceParticipant &&
                           (!instanceId || m.recipeInstanceId === instanceId)
                   )?.servings || 1)
@@ -161,7 +161,7 @@ export function usePlannerDragDrop({
                             sourceDayPlan[sourceSlot] = sourceDayPlan[sourceSlot].filter(
                                 (m) =>
                                     !(
-                                        m.recipe.name === recipeName &&
+                                        m.recipe.id === recipeId &&
                                         m.participant === sourceParticipant &&
                                         (!instanceId || m.recipeInstanceId === instanceId)
                                     )
@@ -176,7 +176,7 @@ export function usePlannerDragDrop({
                     participantsToAdd.forEach((pName) => {
                         const existingMealIndex = slotMeals.findIndex(
                             (m) =>
-                                m.recipe.name === recipeName &&
+                                m.recipe.id === recipeId &&
                                 m.participant === pName &&
                                 m.recipeInstanceId === effectiveInstanceId
                         );
@@ -221,7 +221,7 @@ export function usePlannerDragDrop({
                     getAllMealsForDay(dayPlan)
                         .filter(
                             (m) =>
-                                m.recipe.name === recipeName &&
+                                m.recipe.id === recipeId &&
                                 m.recipeInstanceId === instanceId
                         )
                         .reduce((s, m) => s + m.servings, 0)
@@ -239,13 +239,13 @@ export function usePlannerDragDrop({
 
                 setConfirmation({
                     title: 'Increase Servings?',
-                    message: `Adding this meal will exceed the planned servings for "${recipeName}" by ${overflow} serving(s). Would you like to increase the shopping list count by adding another ${neededMulti * recipe.servings} servings?`,
+                    message: `Adding this meal will exceed the planned servings for "${recipe.name}" by ${overflow} serving(s). Would you like to increase the shopping list count by adding another ${neededMulti * recipe.servings} servings?`,
                     confirmLabel: 'Increase & Add',
                     onConfirm: () => {
                         if (isTransferred) {
                             const baseInstance = findBaseRecipeInstance(
                                 currentWeeklyCookPlan,
-                                recipeName
+                                recipeId
                             );
                             let baseInstanceId: string;
 
@@ -274,7 +274,7 @@ export function usePlannerDragDrop({
                                     [weekStartStr]: {
                                         ...(prev[weekStartStr] || {}),
                                         [baseInstanceId]: {
-                                            recipeName,
+                                            recipeId,
                                             multiplier: neededMulti,
                                             servings: neededMulti * recipe.servings
                                         }
@@ -299,7 +299,7 @@ export function usePlannerDragDrop({
                                     if (servingsFromTransferred > 0) {
                                         const existingTransferredIdx = slotMeals.findIndex(
                                             (m) =>
-                                                m.recipe.name === recipeName &&
+                                                m.recipe.id === recipeId &&
                                                 m.participant === pName &&
                                                 m.recipeInstanceId === instanceId
                                         );
@@ -323,7 +323,7 @@ export function usePlannerDragDrop({
                                     if (servingsFromBase > 0) {
                                         const existingBaseIdx = slotMeals.findIndex(
                                             (m) =>
-                                                m.recipe.name === recipeName &&
+                                                m.recipe.id === recipeId &&
                                                 m.participant === pName &&
                                                 m.recipeInstanceId === baseInstanceId
                                         );
@@ -387,8 +387,7 @@ export function usePlannerDragDrop({
             weekStartStr,
             setMealPlan,
             setMultiWeeklyCookPlan,
-            setConfirmation,
-            getUsedServings
+            setConfirmation
         ]
     );
 
@@ -401,13 +400,13 @@ export function usePlannerDragDrop({
         ) => {
             if (!canEdit) return;
             const targetDateStr = format(date, 'yyyy-MM-dd');
-            const recipeName = recipe.name;
+            const recipeIdToAdd = recipe.id;
 
             let targetInstanceId: string | undefined;
             let needsNewInstance = true;
 
             const existingInstances = Object.entries(currentWeeklyCookPlan).filter(
-                ([, item]) => item.recipeName === recipeName
+                ([, item]) => item.recipeId === recipeIdToAdd
             );
 
             if (existingInstances.length > 0) {
@@ -423,7 +422,7 @@ export function usePlannerDragDrop({
 
                     const existingMealIndex = slotMeals.findIndex(
                         (m) =>
-                            m.recipe.name === recipeName &&
+                            m.recipe.id === recipeIdToAdd &&
                             m.participant === participant &&
                             m.recipeInstanceId === instanceId
                     );
@@ -457,7 +456,7 @@ export function usePlannerDragDrop({
                     [weekStartStr]: {
                         ...(prev[weekStartStr] || {}),
                         [newInstanceId]: {
-                            recipeName,
+                            recipeId: recipeIdToAdd,
                             multiplier: 1,
                             servings: recipe.servings
                         }
@@ -480,7 +479,7 @@ export function usePlannerDragDrop({
                     getAllMealsForDay(dayPlan)
                         .filter(
                             (m) =>
-                                m.recipe.name === recipeName &&
+                                m.recipe.id === recipeIdToAdd &&
                                 m.recipeInstanceId === targetInstanceId
                         )
                         .reduce((s, m) => s + m.servings, 0)
@@ -495,7 +494,7 @@ export function usePlannerDragDrop({
 
                 setConfirmation({
                     title: 'Increase Servings?',
-                    message: `Adding this meal will exceed the planned servings for "${recipeName}" by ${overflow} serving(s). Would you like to increase the shopping list count by adding another ${neededMulti * recipe.servings} servings?`,
+                    message: `Adding this meal will exceed the planned servings for "${recipe.name}" by ${overflow} serving(s). Would you like to increase the shopping list count by adding another ${neededMulti * recipe.servings} servings?`,
                     confirmLabel: 'Increase & Add',
                     onConfirm: () => {
                         if (targetInstanceId) {
@@ -505,7 +504,7 @@ export function usePlannerDragDrop({
                                     ...(prev[weekStartStr] || {}),
                                     [targetInstanceId]: {
                                         ...(prev[weekStartStr]?.[targetInstanceId] || {
-                                            recipeName,
+                                            recipeId: recipeIdToAdd,
                                             multiplier: 0,
                                             servings: 0
                                         }),
@@ -544,7 +543,7 @@ export function usePlannerDragDrop({
         (
             date: Date,
             slot: keyof MealPlan[string],
-            recipeName: string,
+            recipeId: string,
             servings: number,
             instanceId?: string,
             participant?: string
@@ -555,7 +554,7 @@ export function usePlannerDragDrop({
             const currentServings =
                 mealPlan[dStr]?.[slot]?.find(
                     (m) =>
-                        m.recipe.name === recipeName &&
+                        m.recipe.id === recipeId &&
                         m.participant === participant &&
                         (!instanceId || m.recipeInstanceId === instanceId)
                 )?.servings || 0;
@@ -566,7 +565,7 @@ export function usePlannerDragDrop({
                     const dayPlan = { ...(newPlan[dStr] || {}) };
                     if (Array.isArray(dayPlan[slot])) {
                         dayPlan[slot] = dayPlan[slot].map((m) =>
-                            m.recipe.name === recipeName &&
+                            m.recipe.id === recipeId &&
                             m.participant === participant &&
                             (!instanceId || m.recipeInstanceId === instanceId)
                                 ? { ...m, servings: Math.max(1, servings) }
@@ -580,17 +579,17 @@ export function usePlannerDragDrop({
             };
 
             if (servings > currentServings) {
-                const recipe = recipes.find((r) => r.name === recipeName);
+                const recipe = recipes.find((r) => r.id === recipeId);
                 if (recipe) {
                     const allInstances = findRecipeInstances(
                         currentWeeklyCookPlan,
-                        recipeName
+                        recipe.id
                     );
                     const totalPlanned = allInstances.reduce(
                         (sum, { item }) => sum + (item.servings || 0),
                         0
                     );
-                    const used = getUsedServings(recipeName);
+                    const used = getUsedServings(recipe.id);
                     const manualUsed = allInstances.reduce(
                         (sum, { item }) => sum + (item.manualUsed || 0),
                         0
@@ -600,12 +599,12 @@ export function usePlannerDragDrop({
                     if (used + manualUsed + diff > totalPlanned) {
                         setConfirmation({
                             title: 'Increase Servings?',
-                            message: `Increasing servings will exceed the planned batch for "${recipeName}". Would you like to increase the shopping list count by adding another ${recipe.servings} servings?`,
+                            message: `Increasing servings will exceed the planned batch for "${recipe.name}". Would you like to increase the shopping list count by adding another ${recipe.servings} servings?`,
                             confirmLabel: 'Increase & Update',
                             onConfirm: () => {
                                 const baseInstance = findBaseRecipeInstance(
                                     currentWeeklyCookPlan,
-                                    recipeName
+                                    recipe.id
                                 );
 
                                 if (baseInstance) {
@@ -631,7 +630,7 @@ export function usePlannerDragDrop({
                                         [weekStartStr]: {
                                             ...(prev[weekStartStr] || {}),
                                             [newId]: {
-                                                recipeName,
+                                                recipeId: recipe.id,
                                                 multiplier: 1,
                                                 servings: recipe.servings
                                             }

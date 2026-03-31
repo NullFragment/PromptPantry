@@ -151,10 +151,17 @@ export function ShoppingList({
         return lookup;
     }, [ingredients]);
 
-    // Build lookup map for recipes by name (avoids repeated .find in loops)
-    const recipesByName = useMemo(() => {
+    // Build lookup map for store section definitions by ID (for getIngredientStoreSection)
+    const storeSectionsById = useMemo(() => {
+        const map = new Map<string, StoreSectionDefinition>();
+        storeSections.forEach(s => map.set(s.id, s));
+        return map;
+    }, [storeSections]);
+
+    // Build lookup map for recipes by ID (avoids repeated .find in loops)
+    const recipesById = useMemo(() => {
         const map = new Map<string, Recipe>();
-        recipes.forEach(r => map.set(r.name, r));
+        recipes.forEach(r => map.set(r.id, r));
         return map;
     }, [recipes]);
 
@@ -184,8 +191,7 @@ export function ShoppingList({
             // Skip transferred items - they were already cooked in a previous week
             if (isTransferredItem(item)) return;
 
-            const recipeName = item.recipeName;
-            const recipe = recipesByName.get(recipeName);
+            const recipe = recipesById.get(item.recipeId);
             if (!recipe) return;
 
             const totalServings = item.multiplier !== undefined
@@ -212,7 +218,7 @@ export function ShoppingList({
                 // Get the first ingredient to determine canonical name and store section
                 const firstIng = items[0].ingredient;
                 const canonicalName = resolveCanonicalName(firstIng, ingredientsLookup);
-                const storeSection = getIngredientStoreSection(firstIng, ingredientsLookup);
+                const storeSection = getIngredientStoreSection(firstIng, ingredientsLookup, storeSectionsById);
                 const ingredientDef = ingredientsLookup.get(key) ?? null;
 
                 return {
@@ -224,7 +230,7 @@ export function ShoppingList({
                 };
             })
             .sort((a, b) => a.name.localeCompare(b.name));
-    }, [recipesByName, multiWeeklyCookPlan, weekStartStr, ingredientsLookup]);
+    }, [recipesById, multiWeeklyCookPlan, weekStartStr, ingredientsLookup, storeSectionsById]);
 
     // Group ingredients by store section
     const groupedBySection = useMemo(() => {
@@ -368,7 +374,7 @@ export function ShoppingList({
             {Object.entries(multiWeeklyCookPlan[weekStartStr] || {}).some(([_instanceId, item]) => {
                 // Skip transferred items for the visibility check
                 if (isTransferredItem(item)) return false;
-                const recipe = recipesByName.get(item.recipeName);
+                const recipe = recipesById.get(item.recipeId);
                 if (!recipe) return false;
                 return (item.servings || 0) > 0;
             }) && (
@@ -380,8 +386,7 @@ export function ShoppingList({
                         {Object.entries(multiWeeklyCookPlan[weekStartStr] || {}).map(([instanceId, item]) => {
                             // Skip transferred items - they don't need to be cooked
                             if (isTransferredItem(item)) return null;
-                            const recipeName = item.recipeName;
-                            const recipe = recipesByName.get(recipeName);
+                            const recipe = recipesById.get(item.recipeId);
                             if (!recipe) return null;
                             const totalServings = item.multiplier !== undefined
                                 ? (item.multiplier || 0) * (recipe.servings || 0)
@@ -396,7 +401,7 @@ export function ShoppingList({
                                 >
                                     <span
                                         className="bg-indigo-200 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-1.5 py-0.5 rounded mr-2">x{displayMultiplier}</span>
-                                    {recipeName}
+                                    {recipe.name}
                                 </button>
                             );
                         })}

@@ -1,4 +1,4 @@
-import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe} from '../types';
+import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe, StoreSectionDefinition} from '../types';
 import {convertVolume, convertWeight, isImperialUnit, isMetricUnit, isVolumeUnit, isWeightUnit} from './unitConversions';
 
 export const flattenInstructions = (instructions: string[] | InstructionGroup[]): string[] => {
@@ -257,11 +257,12 @@ export const resolveCanonicalName = (
  */
 export const getIngredientStoreSection = (
     ingredient: Ingredient,
-    lookup: Map<string, IngredientDefinition>
+    lookup: Map<string, IngredientDefinition>,
+    sectionMap: Map<string, StoreSectionDefinition>
 ): string => {
     if (ingredient.ingredientId) {
         const def = lookup.get(ingredient.ingredientId);
-        if (def) return def.storeSection;
+        if (def) return sectionMap.get(def.storeSectionId)?.name ?? 'Unassigned';
     }
     return 'Unassigned';
 };
@@ -272,16 +273,21 @@ export const getIngredientStoreSection = (
  * Output uses grouped ingredients/instructions: "Base (baseName)" and "Additions".
  */
 export function resolveVariantRecipe(recipe: Recipe, recipes: Recipe[]): Recipe {
-    const baseName = recipe.baseRecipeName;
-    if (!baseName || !baseName.trim()) {
+    const baseId = recipe.baseRecipeId;
+
+    if (!baseId) {
         return recipe;
     }
 
-    const base = recipes.find(r => r.name === baseName);
+    const base = recipes.find(r => r.id === baseId);
+
     if (!base) {
         // Orphaned variant: return as-is; caller may have stored ingredients/instructions from before
         return recipe;
     }
+
+    // Always derive group labels from the resolved recipe, not the stored field
+    const baseTitleForGroups = base.name;
 
     const baseIngredients = flattenIngredients(base.ingredients ?? []);
     const baseInstructions = flattenInstructions(base.instructions ?? []);
@@ -290,7 +296,7 @@ export function resolveVariantRecipe(recipe: Recipe, recipes: Recipe[]): Recipe 
 
     const ingredientGroups: IngredientGroup[] = [];
     if (baseIngredients.length > 0) {
-        ingredientGroups.push({ name: `Base (${baseName})`, ingredients: baseIngredients });
+        ingredientGroups.push({ name: `Base (${baseTitleForGroups})`, ingredients: baseIngredients });
     }
     if (additionsIngredients.length > 0) {
         ingredientGroups.push({ name: 'Additions', ingredients: additionsIngredients });
@@ -301,7 +307,7 @@ export function resolveVariantRecipe(recipe: Recipe, recipes: Recipe[]): Recipe 
 
     const instructionGroups: InstructionGroup[] = [];
     if (baseInstructions.length > 0) {
-        instructionGroups.push({ name: `Base (${baseName})`, steps: baseInstructions });
+        instructionGroups.push({ name: `Base (${baseTitleForGroups})`, steps: baseInstructions });
     }
     if (additionsInstructions.length > 0) {
         instructionGroups.push({ name: 'Additions', steps: additionsInstructions });

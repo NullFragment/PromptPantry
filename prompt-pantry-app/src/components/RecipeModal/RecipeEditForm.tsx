@@ -1,6 +1,6 @@
 import React from 'react';
 import {Heart, Minus, Plus, ThumbsDown, ThumbsUp, Trash, X} from 'lucide-react';
-import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe} from '../../types';
+import {Ingredient, IngredientDefinition, IngredientGroup, InstructionGroup, Recipe, StoreSectionDefinition} from '../../types';
 import {ValidationError} from '../../utils/recipeValidation';
 import {flattenIngredients, flattenInstructions} from '../../utils/recipeUtils';
 import {IngredientAutocomplete} from '../IngredientAutocomplete';
@@ -11,7 +11,7 @@ interface IngredientRowProps {
     onSelect: (name: string, id?: string) => void;
     onDelete: () => void;
     ingredientDefinitions: IngredientDefinition[];
-    storeSections: string[];
+    storeSections: StoreSectionDefinition[];
     onCreateIngredient?: (ingredient: Omit<IngredientDefinition, 'id'>) => Promise<IngredientDefinition | null>;
     onAddIngredientAlias?: (alias: string, ingredientId: string) => Promise<boolean>;
 }
@@ -93,7 +93,7 @@ interface RecipeEditFormProps {
     setTagInput: (t: string) => void;
     allTags: string[];
     ingredientDefinitions: IngredientDefinition[];
-    storeSections: string[];
+    storeSections: StoreSectionDefinition[];
     onCreateIngredient?: (ingredient: Omit<IngredientDefinition, 'id'>) => Promise<IngredientDefinition | null>;
     onAddIngredientAlias?: (alias: string, ingredientId: string) => Promise<boolean>;
     firstInputRef: React.Ref<HTMLInputElement>;
@@ -128,8 +128,8 @@ export function RecipeEditForm({
     saveErrors = [],
     isImported = false
 }: RecipeEditFormProps) {
-    const isVariant = !!editedRecipe.baseRecipeName;
-    const baseRecipe = availableRecipes.find(r => r.name === editedRecipe.baseRecipeName);
+    const isVariant = !!editedRecipe.baseRecipeId;
+    const baseRecipe = availableRecipes.find(r => r.id === editedRecipe.baseRecipeId);
     const baseIngredients = baseRecipe ? flattenIngredients(baseRecipe.ingredients ?? []) : [];
     const baseInstructions = baseRecipe ? flattenInstructions(baseRecipe.instructions ?? []) : [];
     const isIngredientsGrouped = !isVariant && editedRecipe.ingredients.length > 0 && 'ingredients' in editedRecipe.ingredients[0];
@@ -137,8 +137,8 @@ export function RecipeEditForm({
     const variantIngredientAdditions = editedRecipe.ingredientAdditions ?? [];
     const variantInstructionAdditions = editedRecipe.instructionAdditions ?? [];
 
-    const variantName = isVariant && editedRecipe.name.startsWith(editedRecipe.baseRecipeName + ': ')
-        ? editedRecipe.name.slice(editedRecipe.baseRecipeName!.length + 2)
+    const variantName = isVariant && baseRecipe
+        ? (editedRecipe.name.startsWith(baseRecipe.name + ': ') ? editedRecipe.name.slice(baseRecipe.name.length + 2) : '')
         : '';
 
     const addTag = (tag: string) => {
@@ -270,7 +270,7 @@ export function RecipeEditForm({
                         {isVariant ? (
                             <div className="flex items-stretch rounded-lg border dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
                                 <span className="flex items-center px-3 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80 border-r dark:border-gray-700 shrink-0">
-                                    {editedRecipe.baseRecipeName}:
+                                    {baseRecipe?.name ?? ''}:
                                 </span>
                                 <input
                                     ref={firstInputRef}
@@ -280,9 +280,10 @@ export function RecipeEditForm({
                                     onChange={e => {
                                         const val = e.target.value;
                                         if (val.includes(':')) return;
+                                        const baseName = baseRecipe?.name ?? '';
                                         setEditedRecipe(prev => ({
                                             ...prev,
-                                            name: (prev.baseRecipeName || '') + ': ' + val
+                                            name: baseName + ': ' + val
                                         }));
                                     }}
                                     placeholder="e.g. Chocolate"
@@ -531,7 +532,7 @@ export function RecipeEditForm({
                             {baseIngredients.length > 0 && (
                                 <div className="space-y-2 p-4 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200 dark:border-gray-700">
                                     <h5 className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">
-                                        Base ({editedRecipe.baseRecipeName}) — read-only
+                                        Base ({baseRecipe?.name ?? ''}) — read-only
                                     </h5>
                                     <ul className="space-y-1.5 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
                                         {baseIngredients.map((ing, idx) => (
@@ -705,7 +706,7 @@ export function RecipeEditForm({
                             {baseInstructions.length > 0 && (
                                 <div className="space-y-2 p-4 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200 dark:border-gray-700">
                                     <h5 className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">
-                                        Base ({editedRecipe.baseRecipeName}) — read-only
+                                        Base ({baseRecipe?.name ?? ''}) — read-only
                                     </h5>
                                     <ol className="space-y-2 pl-6 list-decimal border-l-2 border-gray-200 dark:border-gray-700">
                                         {baseInstructions.map((step, idx) => (

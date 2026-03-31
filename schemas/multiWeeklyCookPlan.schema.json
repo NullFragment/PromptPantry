@@ -10,9 +10,10 @@
     "additionalProperties": {
       "type": "object",
       "properties": {
-        "recipeName": {
+        "recipeId": {
           "type": "string",
-          "description": "The name of the recipe"
+          "format": "uuid",
+          "description": "UUID of the recipe"
         },
         "servings": {
           "type": "number",
@@ -41,7 +42,7 @@
         }
       },
       "required": [
-        "recipeName",
+        "recipeId",
         "servings"
       ],
       "additionalProperties": false

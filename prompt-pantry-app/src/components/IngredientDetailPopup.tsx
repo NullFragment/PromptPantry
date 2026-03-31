@@ -1,6 +1,6 @@
 import type React from 'react';
 import {useEffect, useRef, useState} from 'react';
-import {IngredientDefinition} from '../types';
+import {IngredientDefinition, StoreSectionDefinition} from '../types';
 import type {AliasUpdateResult} from '../hooks/useIngredients';
 import { Package, Tag, MapPin, BookOpen, X, Loader2 } from 'lucide-react';
 import { AliasChipList } from './AliasChipList';
@@ -18,8 +18,9 @@ interface IngredientDetailPopupProps {
     onUpdateAlias?: (ingredientId: string, aliasIndex: number, newAlias: string, updateRecipes: boolean) => Promise<AliasUpdateResult>;
     onDeleteAlias?: (ingredientId: string, aliasIndex: number, options?: { useCanonicalName?: boolean; replacementAlias?: string }) => Promise<AliasUpdateResult>;
     onMergeAlias?: (ingredientId: string, sourceIndex: number, targetIndex: number | 'canonical') => Promise<AliasUpdateResult>;
-    onSave?: (ingredient: Partial<IngredientDefinition> & { name: string; storeSection: string }, isNew: boolean) => Promise<{ success: boolean; error?: string; ingredient?: IngredientDefinition }>;
+    onSave?: (ingredient: Partial<IngredientDefinition> & { name: string; storeSectionId: string }, isNew: boolean) => Promise<{ success: boolean; error?: string; ingredient?: IngredientDefinition }>;
     onIngredientUpdated?: (ingredient: IngredientDefinition) => void;
+    storeSections?: StoreSectionDefinition[];
 }
 
 export function IngredientDetailPopup({
@@ -33,7 +34,8 @@ export function IngredientDetailPopup({
     onDeleteAlias,
     onMergeAlias,
     onSave,
-    onIngredientUpdated
+    onIngredientUpdated,
+    storeSections = []
 }: IngredientDetailPopupProps) {
     const [usage, setUsage] = useState<{ recipeCount: number; recipeNames: string[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -244,7 +246,6 @@ export function IngredientDetailPopup({
         const updatedIngredient = {
             ...ingredient,
             name: ingredient.name,
-            storeSection: ingredient.storeSection,
             aliases: [...aliases, trimmed]
         };
         const result = await onSave(updatedIngredient, false);
@@ -287,7 +288,7 @@ export function IngredientDetailPopup({
                         <MapPin className="h-4 w-4 text-gray-400" />
                         <span className="text-sm text-gray-500 dark:text-gray-400">Store Section:</span>
                         <span className="px-2 py-0.5 text-sm font-medium rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                            {ingredient.storeSection}
+                            {storeSections.find(s => s.id === ingredient.storeSectionId)?.name ?? ingredient.storeSectionId}
                         </span>
                     </div>
 
