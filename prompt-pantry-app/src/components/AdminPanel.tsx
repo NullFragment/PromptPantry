@@ -398,7 +398,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({isOpen, onClose, onSav
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Create New User</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
                     <div>
                         <label htmlFor="new-username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Username
@@ -407,6 +407,8 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({isOpen, onClose, onSav
                             ref={usernameInputRef}
                             id="new-username"
                             type="text"
+                            autoComplete="off"
+                            data-1p-ignore
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-100"
@@ -421,6 +423,8 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({isOpen, onClose, onSav
                         <input
                             id="new-password"
                             type="password"
+                            autoComplete="off"
+                            data-1p-ignore
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-100"
